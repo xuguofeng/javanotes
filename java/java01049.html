@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十九节&nbsp;&nbsp;&nbsp;&nbsp;Panel （面板）</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Panel 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	核心 API</a></li>
+						<li><a href="#f1-2">2、	paint(g) 方法</a></li>
+						<li><a href="#f1-3">3、	repaint() 方法</a></li>
+						<li><a href="#f1-4">4、	Graphics 类的核心方法</a></li>
+						<!--<li><a href="#f2-5">5、	Color 和 Font</a></li>-->
+					</ul>
+				</li>
+				<li><a href="#f2">二、演示</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Panel 类</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	核心 API</h5>
+
+			<pre>
+java.awt;
+
+public class Panel extends Container implements Accessible {}
+</pre>
+			<p>
+				最简单的容器类
+			</p>
+			<p>
+				可以将其他组件（包括其他面板）放在面板内
+			</p>
+			<p>
+				默认使用FlowLayout布局管理器
+			</p>
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Panel()</span>
+	使用默认的布局管理器创建新面板
+
+<span class="methodClassName">public Panel(LayoutManager layout)</span>
+	创建具有指定布局管理器的新面板
+</pre>
+
+			<h5 id="f1-2" class="title-2th">2、	paint(g) 方法</h5>
+
+			<p>
+				该方法在 <code>Component</code> 类中定义，主要用于绘制面板内容。在初次显示面板、重绘面板时会调用此方法。调用时会传入 <code>Graphics</code> 图形上下文作为参数。
+			</p>
+			<p>
+				在我们的案例代码中，就把绘制面板内容的代码都写在了 <code>paint</code> 方法中
+			</p>
+<pre>
+@Override
+public void paint(Graphics g) {
+
+	super.paint(g);
+
+	this.setBackground(Color.yellow);
+
+	<span class="annotation">// 设置画笔颜色</span>
+	g.setColor(Color.black);</span>
+
+	<span class="annotation">// 创建字体Font</span>
+	<span class="annotation">// name - 字体名称</span>
+	<span class="annotation">// style - Font 的样式常量：可以为 PLAIN、BOLD、ITALIC</span>
+	<span class="annotation">// size - Font 的磅值大小</span>
+	g.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+	g.drawString("第一个Panel，边界布局：CENTER", 30, 50);
+
+	<span class="annotation">// 设置画笔颜色</span>
+	g.setColor(Color.black);
+
+	g.setFont(new Font(null, Font.PLAIN, 14));
+	g.drawString("第一个Panel，边界布局：CENTER", 30, 70);
+
+	<span class="annotation">// 绘制一个图片</span>
+	<span class="annotation">// (this.getWidth() - 160) / 2 作用是让图片水平居中显示</span>
+	g.drawImage(img, (this.getWidth() - 160) / 2, 120, 160, 160, this);
+}</pre>
+
+			<h5 id="f1-3" class="title-2th">3、	repaint() 方法</h5>
+
+			<p>
+				在 <code>Component</code> 类中定义，该方法一般情况下会调用 <code>paint(g)</code> 方法重新绘制面板
+			</p>
+			<p>
+				在通常情况下，自定义的面板组件除了继承 <code>Panel</code> 类，还要实现 <code>Runnable</code> 接口，重写 <code>run</code> 方法以多线程的方式不断重新绘制面板
+			</p>
+			<p>
+				如下：
+			</p>
+
+<pre>
+public class PanelStart extends Panel implements Runnable {
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+	}
+
+	@Override
+	public void run() {
+		<span class="annotation">// 此线程实现每个500毫秒重新绘制面板</span>
+		while (true) {
+			this.repaint();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}</pre>
+
+			<h5 id="f1-4" class="title-2th">4、	Graphics 类的核心方法</h5>
+
+			<pre>
+java.awt;
+
+public abstract class Graphics {}
+</pre>
+			<p>
+				所有图形上下文（简单说就是画笔）的抽象基类，该类提供了大量绘制文字、形状、图片的方法，使应用程序可以在组件上进行绘制。
+			</p>
+			<p>
+				简单介绍几个常用的方法：
+			</p>
+			<pre>
+<span class="methodClassName">public void drawRect(int x, int y, int width, int height)</span>
+	绘制指定矩形的边框
+
+<span class="methodClassName">public void draw3DRect(int x, int y, int width, int height, boolean raised)</span>
+	绘制指定矩形的3D高亮边框
+
+<span class="methodClassName">public abstract void fillRect(int x, int y, int width, int height)</span>
+	填充指定的矩形
+
+<span class="methodClassName">public void fill3DRect(int x, int y, int width, int height, boolean raised)</span>
+	绘制用当前颜色填充的3D高亮矩形
+
+<span class="methodClassName">public abstract void drawOval(int x, int y, int width, int height)</span>
+	绘制椭圆的边框
+
+<span class="methodClassName">public abstract void fillOval(int x, int y, int width, int height)</span>
+	使用当前颜色填充指定矩形框的椭圆
+
+<span class="methodClassName">public abstract boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)</span>
+	绘制指定图像
+
+<span class="methodClassName">public abstract void drawLine(int x1, int y1, int x2, int y2)</span>
+	在此图形上下文坐标系中，使用当前颜色在点(x1, y1)和(x2, y2)之间画一条线
+
+<span class="methodClassName">public abstract void setColor(Color c)</span>
+	将此图形上下文的当前颜色设置为指定颜色
+
+<span class="methodClassName">public abstract void setFont(Font font)</span>
+	将此图形上下文的字体设置为指定字体
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、演示</h4>
+
+			<pre>
+/**
+ * <span class="annotation">演示Panel</span>
+ * 
+ * <span class="annotation">1.自定义PanelStart类型继承Panel</span>
+ * 
+ * <span class="annotation">2.重写paint方法来绘制面板内容，这是我们常用的开发方式。比如坦克大战的例子里面，所有的坦克、子弹其实都是Panel里面的元素，</span>
+ * <span class="annotation">使用paint方法绘制图形、或者图片即可实现坦克、子弹的显示（我们会在讲解swing组件的时候以坦克大战为例）</span>
+ * 
+ * <span class="annotation">3.PanelStart继承Runnable接口，实现run方法。run方法里面使用死循环每隔500毫秒重新绘制面板，重新绘制的原因很简单：</span>
+ * <span class="annotation">面板里面的元素是会动的（比如坦克和子弹）</span>
+ * 
+ * <span class="annotation">4.Color、Font以及BorderLayout此处不做详细说明，后面会有详细的介绍</span>
+ * 
+ * @author soft01
+ *
+ */
+public class PanelStart extends Panel implements Runnable {
+
+	<span class="annotation">// 用来控制字体颜色切换</span>
+	private int colorFlag = 0;
+
+	private Image img = new ImageIcon("images/320x320.jpg").getImage();
+
+	public PanelStart() {
+		this(null);
+	}
+
+	public PanelStart(LayoutManager layout) {
+		super(layout);
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+
+		// this.setSize(200, 200);
+		this.setBackground(Color.yellow);
+
+		<span class="annotation">// 设置画笔颜色</span>
+		<span class="annotation">// 使用colorFlag的值实现黑色、蓝色切换</span>
+		g.setColor(this.colorFlag == 0 ? Color.black : Color.blue);
+
+		<span class="annotation">// 创建字体Font</span>
+		<span class="annotation">// name - 字体名称</span>
+		<span class="annotation">// style - Font 的样式常量：可以为 PLAIN、BOLD、ITALIC</span>
+		<span class="annotation">// size - Font 的磅值大小</span>
+		g.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+		g.drawString("第一个Panel，边界布局：CENTER", 30, 50);
+
+		<span class="annotation">// 设置画笔颜色</span>
+		<span class="annotation">// 使用colorFlag的值实现黑色、蓝色切换</span>
+		g.setColor(this.colorFlag == 0 ? Color.blue : Color.black);
+
+		g.setFont(new Font(null, Font.PLAIN, 14));
+		g.drawString("第一个Panel，边界布局：CENTER", 30, 70);
+
+		<span class="annotation">// 文字闪烁效果</span>
+		if (this.colorFlag == 0) {
+			g.setColor(Color.blue);
+			g.setFont(new Font("微软雅黑", Font.BOLD, 14));
+			g.drawString("文字闪烁效果", 100, 90);
+		}
+
+		<span class="annotation">// 绘制一个图片</span>
+		<span class="annotation">// (this.getWidth() - 160) / 2 作用是让图片水平居中显示</span>
+		g.drawImage(img, (this.getWidth() - 160) / 2, 120, 160, 160, this);
+
+		<span class="annotation">// 切换控制颜色的变量</span>
+		this.colorFlag = this.colorFlag == 0 ? 1 : 0;
+	}
+
+	@Override
+	public void run() {
+		<span class="annotation">// 线程实现每个500毫秒重新绘制面板</span>
+		while (true) {
+			this.repaint();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		<span class="annotation">// 创建frameStart</span>
+		FrameStart frameStart = new FrameStart("演示Panel");
+		frameStart.setBackground(Color.pink);
+
+		<span class="annotation">// 设置窗体为边界布局</span>
+		frameStart.setLayout(new BorderLayout());
+
+		<span class="annotation">// 创建4个Label</span>
+		Label label1 = new Label("边界布局：NORTH", Label.CENTER);
+		frameStart.add(label1, BorderLayout.NORTH);
+		Label label2 = new Label("边界布局：SOUTH", Label.CENTER);
+		frameStart.add(label2, BorderLayout.SOUTH);
+		Label label3 = new Label("边界布局：WEST", Label.CENTER);
+		frameStart.add(label3, BorderLayout.WEST);
+		Label label4 = new Label("边界布局：EAST", Label.CENTER);
+		frameStart.add(label4, BorderLayout.EAST);
+
+		<span class="annotation">// 创建一个PanelStart对象</span>
+		PanelStart panelStart = new PanelStart();
+		panelStart.setVisible(true);
+		<span class="annotation">// 把PanelStart对象添加到Frame</span>
+		frameStart.add(panelStart);
+
+		<span class="annotation">// 启动线程</span>
+		new Thread(panelStart).start();
+
+		frameStart.validate();
+	}
+}
+</pre>
+
+			<p>
+				运行程序可以显示窗口
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01049/01049001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01048.html" style="font-size:12px;">第四十八节&nbsp;&nbsp;&nbsp;&nbsp;Dialog 和 FileDialog</a>
+			<br />
+			<a href="java01050.html" style="font-size:12px;">第五十节&nbsp;&nbsp;&nbsp;&nbsp;Menu （菜单）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

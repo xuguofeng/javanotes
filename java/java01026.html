@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十六节&nbsp;&nbsp;&nbsp;&nbsp;String 和 StringBuffer</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、String 类型</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	简单概述</a></li>
+						<li><a href="#f1-2">2、	构造方法</a></li>
+						<li><a href="#f1-3">3、	创建和比较</a></li>
+						<li><a href="#f1-4">4、	主要方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、StringBuffer 类型</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	简单概述</a></li>
+						<li><a href="#f2-2">2、	构造方法</a></li>
+						<li><a href="#f2-3">3、	主要方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、StringBuilder 类</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、String 类型</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	简单概述</h5>
+
+			<pre>
+java.lang;
+
+public final class String extends Object implements Serializable, Comparable<String>, CharSequence
+</pre>
+
+			<p>
+				<code>String</code> 类代表字符串。Java 程序中的所有字符串字面值（如"abc"）都作为此类的实例实现。字符串是常量；它们的值在创建之后不能更改。字符串缓冲区支持可变的字符串。因为 String 对象是不可变的，所以可以共享。例如：
+			</p>
+
+			<pre>
+String str = "abc";
+</pre>
+			<p>等效于：</p>
+			<pre>
+char data[] = {'a', 'b', 'c'};
+String str = new String(data);
+</pre>
+
+			<p>
+				<code>String</code> 类包括的方法可用于检查单个字符、比较字符串、搜索字符串、提取子字符串、创建字符串副本并将所有字符全部转换为大写或小写。Java 语言提供对字符串连接符号（"+"）以及将其他对象转换为字符串的特殊支持。字符串转换是通过 <code>toString</code> 方法实现的，该方法由 <code>Object</code> 类定义，并可被 Java 中的所有类继承。
+			</p>
+
+			<h5 id="f1-2" class="title-2th">2、	构造方法</h5>
+
+			<pre>
+<span class="methodClassName">public String()</span>
+	初始化一个新创建的 String 对象，使其表示一个空字符序列。注意，由于 String 是不可变的，所以无需使用此构造方法。
+
+<span class="methodClassName">public String(byte[] bytes)</span>
+	通过使用平台的默认字符集解码指定的byte数组，构造一个新的String。
+
+<span class="methodClassName">public String(byte[] bytes, String charsetName)</span>
+	通过使用指定的charset解码指定的byte数组，构造一个新的String。
+
+<span class="methodClassName">public String(byte[] bytes, int offset, int length)</span>
+	通过使用平台的默认字符集解码指定的byte子数组，构造一个新的String。
+
+<span class="methodClassName">public String(byte[] bytes, int offset, int length, String charsetName)</span>
+	通过使用指定的charset解码指定的byte子数组，构造一个新的String。
+
+<span class="methodClassName">public String(char[] value)</span>
+	分配一个新的 String，使其表示字符数组参数中当前包含的字符序列。该字符数组的内容已被复制；后续对字符数组的修改不会影响新创建的字符串。
+
+<span class="methodClassName">public String(char[] value, int offset, int count)</span>
+	分配一个新的 String，它包含取自字符数组参数一个子数组的字符。offset 参数是子数组第一个字符的索引，count 参数指定子数组的长度。
+
+<span class="methodClassName">public String(String original)</span>
+
+<span class="methodClassName">public String(StringBuffer buffer)</span>
+
+<span class="methodClassName">public String(StringBuilder builder)</span>
+</pre>
+
+			<h5 id="f1-3" class="title-2th">3、	创建和比较</h5>
+
+			<p>
+				字符串是一个特殊的对象，一旦初始化就不可以被改变。
+			</p>
+
+			<p>
+				字符串常量
+			</p>
+
+			<pre>
+String str1 = "abc";  <span class="annotation">// 创建字符串abc常量，存储在字符串常量池</span>
+</pre>
+
+			<p>
+				字符串对象
+			</p>
+
+			<pre>
+String str2 = new String("abc");
+</pre>
+
+			<pre>
+public static void main(String[] args){
+
+	<span class="annotation">// 创建字符串abc常量，存储在字符串常量池</span>
+	<span class="annotation">// 如果有直接使用，没有则创建</span>
+	<span class="annotation">// 所以str1和str3使用==比较为true</span>
+	String str1 = "abc";
+
+	<span class="annotation">// 在堆内存创建一个字符串对象，赋值给str2</span>
+	String str2 = new String( "abc" );
+
+	String str3 = "abc";
+	System.out.println( str1 == str2 ); // false
+	System.out.println( str1 == str3 ); // true
+
+	<span class="annotation">// String重写了Object的equals方法</span>
+	<span class="annotation">// 建立了自己的比较方式，就是比较字符串的内容</span>
+	System.out.println( str1.equals(str2) );
+}
+
+<span class="phase-title">输出：</span>
+
+false
+true
+true
+</pre>
+
+			<h5 id="f1-4" class="title-2th">4、	主要方法</h5>
+
+			<pre>
+<span class="methodClassName">public int length()</span>
+	返回此字符串的长度
+
+	例：
+	System.out.println( "abc".length() ); // 3
+
+<span class="methodClassName">public char charAt(int index)</span>
+	返回指定索引处的char值。索引范围为从0到length()-1。序列的第一个char值位于索引0处，第二个位于索引1处，类似于数组索引
+	如果index参数为负或小于此字符串的长度，会抛出IndexOutOfBoundsException
+	
+	例：
+	System.out.println( "abc".charAt(2) ); // c
+
+<span class="methodClassName">public int compareTo(String anotherString)</span>
+	按字典顺序比较两个字符串。
+
+<span class="methodClassName">public int compareToIgnoreCase(String str)</span>
+	按字典顺序比较两个字符串，不考虑大小写。
+
+<span class="methodClassName">public boolean contains(CharSequence s)</span>
+	当且仅当此字符串包含指定的char序列时，返回true。
+
+<span class="methodClassName">public boolean endsWith(String suffix)</span>
+	测试此字符串是否以指定的后缀结束。
+	
+	例：
+	System.out.println( "abc".endsWith("c") ); // true
+	System.out.println( "abc".endsWith("d") ); // false
+
+<span class="methodClassName">public boolean equalsIgnoreCase(String anotherString)</span>
+	将此String与另一个String比较，不考虑大小写。
+
+<span class="methodClassName">public byte[] getBytes()</span>
+	使用平台的默认字符集将此String编码为byte序列，并将结果存储到一个新的byte数组中。
+
+<span class="methodClassName">public byte[] getBytes(String charsetName) throws UnsupportedEncodingException</span>
+	使用指定的字符集将此String编码为byte序列，并将结果存储到一个新的byte数组中。
+
+	例：
+	String str = "我是Java程序员";
+	System.out.println(str); // 我是Java程序员
+
+	// 使用默认字符集将Str编码为byte序列
+	byte[] buf = str.getBytes();
+	System.out.println(Arrays.toString(buf)); // [-50, -46, -54, -57, 74, 97, 118, 97, -77, -52, -48, -14, -44, -79]
+
+	// 使用默认字符集解码buf数组，构造String。
+	String copy1 = new String(buf);
+	System.out.println(copy1); // 我是Java程序员
+
+	// 使用UTF-8字符集将Str编码为byte序列
+	buf = str.getBytes("UTF-8");
+	System.out.println(Arrays.toString(buf)); // [-26, -120, -111, -26, -104, -81, 74, 97, 118, 97, -25, -88, -117, -27, -70, -113, -27, -111, -104]
+
+	// 使用UTF-8字符集解码buf数组，构造String。
+	String copy2 = new String(buf, "UTF-8");
+	System.out.println(copy2); // 我是Java程序员
+
+<span class="methodClassName">public int indexOf(String str)</span>
+	返回指定子字符串在此字符串中第一次出现处的索引。
+
+<span class="methodClassName">public int indexOf(String str, int fromIndex)</span>
+	返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始，如果不存在则返回-1。
+
+	例：
+	String str = "我是一个java程序员，主要方向是java web开发";
+
+	System.out.println(str.indexOf("java"));    // 4
+	System.out.println(str.indexOf("java", 5)); // 17
+	System.out.println(str.indexOf("php"));     // -1
+
+<span class="methodClassName">public int lastIndexOf(String str)</span>
+	返回指定子字符串在此字符串中最右边出现处的索引。
+
+<span class="methodClassName">public int lastIndexOf(String str, int fromIndex)</span>
+	返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索。
+
+	例：
+	String str = "我是一个java程序员，主要方向是java web开发";
+
+	System.out.println(str.lastIndexOf("java"));    // 17
+	System.out.println(str.lastIndexOf("java", 5)); // 4
+	System.out.println(str.lastIndexOf("php"));     // -1
+
+<span class="methodClassName">public boolean matches(String regex)</span>
+	验证字符串是否匹配给定的正则表达式。
+	调用此方法的str.matches(regex)形式与以下表达式产生的结果完全相同：Pattern.matches( regex , str )
+
+<span class="methodClassName">public String replace(char oldChar, char newChar)</span>
+	返回一个新的字符串，它是通过用newChar替换此字符串中出现的所有oldChar得到的。
+
+<span class="methodClassName">public String replace(CharSequence target, CharSequence replacement)</span>
+
+<span class="methodClassName">public String replaceAll(String regex, String replacement)</span>
+
+<span class="methodClassName">public String replaceFirst(String regex, String replacement)</span>
+
+	例：
+	String str = "我是一个java程序员，主要方向是java web开发";
+
+	System.out.println(str.replace("java", "php")); // 我是一个php程序员，主要方向是php web开发
+	System.out.println(str.replaceAll("java", "php")); // 我是一个php程序员，主要方向是php web开发
+
+	System.out.println(str.replaceFirst("程序员", "工程师")); // 我是一个java工程师，主要方向是java web开发
+
+<span class="methodClassName">public String[] split(String regex)</span>
+	根据给定正则表达式的匹配拆分此字符串。
+	这个方法比较常用，当我们需要批量存储数据时，可以把数据以逗号方式分隔保存在文本文件里面，然后逐行读取文件，将每行文本按照逗号切割，再把切割后的数组封装成对象，进行操作。
+
+	例：
+	String userInfo = "Xuguofeng,23,中国天津西青,未婚";
+	String[] userInfoArray = userInfo.split(",");
+	System.out.println( Arrays.toString(userInfoArray) ); // [Xuguofeng, 23, 中国天津西青, 未婚]
+
+<span class="methodClassName">public boolean startsWith(String prefix)</span>
+	测试此字符串是否以指定的前缀开始。
+
+<span class="methodClassName">public String substring(int beginIndex)</span>
+	返回一个新的字符串，它是此字符串的一个子字符串。该子字符串从指定索引处的字符开始，直到此字符串末尾。
+
+<span class="methodClassName">public String substring(int beginIndex, int endIndex)</span>
+	返回一个新字符串，它是此字符串的一个子字符串。该子字符串从指定的beginIndex处开始，直到索引endIndex - 1处的字符。
+
+	例：
+	String userInfo = "Xuguofeng,23,中国天津西青,未婚";
+	System.out.println(userInfo.substring(10, 12)); // 23
+
+<span class="methodClassName">public char[] toCharArray()</span>
+	将此字符串转换为一个新的字符数组。
+
+<span class="methodClassName">public String toLowerCase()</span>
+
+<span class="methodClassName">public String toUpperCase()</span>
+
+<span class="methodClassName">public String trim()</span>
+	返回字符串的副本，忽略前导空白和尾部空白。
+
+	例：
+	String str = "				abc					";
+	System.out.println("*" + str + "*"); // *				abc					*
+	System.out.println("*" + str.trim() + "*"); // *abc*
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、StringBuffer 类型</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	简单概述</h5>
+
+			<pre>
+java.lang;
+
+public final class StringBuffer extends Object implements Serializable, CharSequence {}
+</pre>
+
+			<p>
+				线程安全的可变字符序列。可将字符串缓冲区安全地用于多个线程。可以在必要时对这些方法进行同步。<code>StringBuffer</code> 上的主要操作是 <code>append</code> 和 <code>insert</code> 方法，可以接受任意类型的数据。<code>append</code> 方法始终将给定字符添加到缓冲区的末端；而 <code>insert</code> 方法则在指定的点添加字符。每个字符串缓冲区都有一定的容量，只要字符串缓冲区所包含的字符序列的长度没有超出此容量，就无需分配新的内部缓冲区数组。如果内部缓冲区溢出，则此容量自动增大。
+			</p>
+			<p>
+				从 JDK 5 开始，为该类补充了一个单个线程使用的等价类，即 <code>StringBuilder</code>，通常应该优先使用 <code>StringBuilder</code> 类，因为它支持所有相同的操作，但由于它不执行同步，所以速度更快。
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	构造方法</h5>
+
+			<pre>
+<span class="methodClassName">public StringBuffer()</span>
+	构造一个不带字符的字符串缓冲区，初始容量为 16 个字符。
+
+<span class="methodClassName">public StringBuffer(String str)</span>
+	构造一个字符串缓冲区，并将其内容初始化为指定的字符串内容。该字符串的初始容量为 16 加上字符串参数的长度。
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	主要方法</h5>
+
+			<p>
+				在此只列出 <code>StringBuffer</code> 类特有的方法
+			</p>
+
+			<pre>
+<span class="methodClassName">public StringBuffer append(String str)</span>
+	将指定的字符串追加到此字符序列，如果str为null，则追加4个字符"null"。
+
+<span class="methodClassName">public StringBuffer append(StringBuffer sb)</span>
+	将指定的StringBuffer追加到此序列中。
+
+<span class="methodClassName">public StringBuffer append(char c)</span>
+
+<span class="methodClassName">public StringBuffer append(char[] str)</span>
+
+<span class="methodClassName">public StringBuffer append(char[] str, int offset, int len)</span>
+
+<span class="methodClassName">public StringBuffer append(CharSequence s)</span>
+
+<span class="methodClassName">public StringBuffer append(CharSequence s, int start, int end)</span>
+
+<span class="methodClassName">public StringBuffer append(Object obj)</span>
+
+<span class="methodClassName">public StringBuffer delete(int start, int end)</span>
+	移除此序列的子字符串中的字符。该子字符串从指定的start处开始，一直到索引end - 1处的字符，如果不存在这种字符，则一直到序列尾部。如果start等于end，则不发生任何更改。
+
+<span class="methodClassName">public StringBuffer insert(int offset, char c)</span>
+	将char参数的字符串表示形式插入此序列中。
+
+<span class="methodClassName">public StringBuffer insert(int offset, char[] str)</span>
+	将char数组参数的字符串表示形式插入此序列中。数组参数的字符将被插入此序列中offset所指示的位置处。此字符将增加该参数的长度。
+
+<span class="methodClassName">public StringBuffer insert(int index, char[] str, int offset, int len)</span>
+
+<span class="methodClassName">public StringBuffer insert(int dstOffset, CharSequence s)</span>
+	将指定CharSequence插入此序列中。
+
+<span class="methodClassName">public StringBuffer insert(int dstOffset, CharSequence s, int start, int end)</span>
+
+<span class="methodClassName">public StringBuffer insert(int offset, String str)</span>
+
+	例：
+	StringBuffer buf = new StringBuffer( "我是一个java程序员" );
+	System.out.println( buf ); // 我是一个java程序员
+
+	// 演示append
+	buf.append( "，方向是java web开发" );
+	System.out.println( buf ); // 我是一个java程序员，方向是java web开发
+
+	// 演示delete
+	buf.delete( 4, 8 );
+	System.out.println( buf ); // 我是一个程序员，方向是java web开发
+
+	// 演示insert
+	buf.insert( 4, "java" );
+	System.out.println( buf ); // 我是一个java程序员，方向是java web开发
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、StringBuilder 类</h4>
+
+			<pre>
+java.lang;
+
+public final class StringBuilder extends Object implements Serializable, CharSequence {}
+</pre>
+
+			<p>
+				一个可变的字符序列。此类提供一个与 <code>StringBuffer</code> 兼容的 API，但不保证同步。
+			</p>
+			<p>
+				该类被设计用作 <code>StringBuffer</code> 的一个简易替换，用在字符串缓冲区被单个线程使用的时候（这种情况很普遍）。
+			</p>
+			<p>
+				如果可能，建议优先采用该类，因为在大多数实现中，它比 <code>StringBuffer</code> 要快。如果需要同步，则建议使用 <code>StringBuffer</code>。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.string 包。</span>
+
+			<br /><br />
+
+			<a href="java01025.html" style="font-size:12px;">第二十五节&nbsp;&nbsp;&nbsp;&nbsp;线程的停止</a>
+			<br />
+			<a href="java01027.html" style="font-size:12px;">第二十七节&nbsp;&nbsp;&nbsp;&nbsp;基本数据类型包装类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

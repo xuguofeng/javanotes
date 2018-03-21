@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十六节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发目录树功能）</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、FileTreeDialog 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	类定义和字段</a></li>
+						<li><a href="#f2-2">2、	添加菜单栏</a></li>
+						<li><a href="#f2-3">3、	设置主面板内容</a></li>
+						<li><a href="#f2-4">4、	添加主面板</a></li>
+						<li><a href="#f2-5">5、	保存文件树信息</a></li>
+						<li><a href="#f2-6">6、	构造方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、ExplorerFrame 类整合 FileTreeDialog</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	功能概述</a></li>
+						<li><a href="#f3-2">2、	核心字段</a></li>
+						<li><a href="#f3-3">3、	获取目录树信息</a></li>
+						<li><a href="#f3-4">4、	菜单项点击事件</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、代码下载</a></li>
+			</ul>
+			<br />
+			<h4 id="f1" class="title-1th">一、概述</h4>
+			<p>
+				实现“文件树”显示、保存功能，在点击“文件树”菜单项时显示一个 dialog ，里面是当前目录的文件树信息，点击保存会弹出文件选择对话框，选择文件后会把文件树保存到这个文件，然后关闭这个 dialog
+			</p>
+			<p>
+				效果如下：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01056/01056001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01056/01056002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、FileTreeDialog 类</h4>
+			<h5 id="f2-1" class="title-2th">1、	类定义和字段</h5>
+
+			<p>
+				这是一个通用的信息显示 <code>dialog</code> ，继承 <code>JDialog</code>
+			</p>
+			<p>
+				主要是 <code>dialog</code> 的宽、高，以及核心组件：菜单栏、菜单、菜单项、滑动主面板、显示文件树的文本域、一个文件选择对话框
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 文件树窗口</span>
+<span class="annotation"> * 点击保存菜单可以把文件树信息保存到系统文件中</span>
+<span class="annotation"> */</span>
+public class FileTreeDialog extends JDialog {
+
+	private static final int DIALOG_WDITH = 600;
+	private static final int DIALOG_HEIGHT = 500;
+
+	<span class="annotation">// 菜单栏</span>
+	private JMenuBar menuBar;
+	<span class="annotation">// 菜单</span>
+	private JMenu menu1;
+	<span class="annotation">// 菜单子项</span>
+	private JMenuItem item1;
+
+	<span class="annotation">// 主面板滚动</span>
+	private JScrollPane mainScroller;
+
+	<span class="annotation">// 显示文件树信息的文本域</span>
+	private JTextArea mainTextArea;
+
+	private JFileChooser chooser;
+
+	private ExplorerFrame owner;
+
+}</pre>
+			<h5 id="f2-2" class="title-2th">2、	添加菜单栏</h5>
+
+			<p>
+				菜单栏比较简单，只有一项“保存文件树”
+			</p>
+			<pre>
+private void addMenuBar() {
+	this.menuBar = new JMenuBar();
+
+	<span class="annotation">// 菜单</span>
+	this.menu1 = new JMenu("文件 (F)");
+	this.menu1.setMnemonic(KeyEvent.VK_F);
+
+	<span class="annotation">// 保存菜单项</span>
+	this.item1 = new JMenuItem("保存");
+	this.item1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+
+	<span class="annotation">// 添加监听器，点击时调用saveFileTree()方法显示文件选择对话框、保存文件</span>
+	this.item1.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			saveFileTree(); <span class="annotation">// 在下面定义</span>
+		}
+	});
+
+	<span class="annotation">// 设置菜单项</span>
+	this.menu1.add(this.item1);
+	<span class="annotation">// 设置菜单</span>
+	this.menuBar.add(this.menu1);
+	<span class="annotation">// 设置菜单栏</span>
+	this.setJMenuBar(this.menuBar);
+}</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	设置主面板内容</h5>
+
+			<p>
+				这个方法需要传入一个 <code>List&lt;String&gt;</code> ，方法内部会创建主面板、设置面板显示内容，以及一些外观样式
+			</p>
+			<pre>
+public void setText(List&lt;String&gt; lines) {
+
+	<span class="annotation">// 如果主面板还不存在，就创建一个</span>
+	if (this.mainScroller != null)
+		this.remove(this.mainScroller);
+
+	this.mainTextArea = new JTextArea();
+	this.mainTextArea.setEditable(false);
+
+	<span class="annotation">// 遍历参数集合，向主面板的文本域填充内容</span>
+	if (lines != null) {
+		for (String line : lines) {
+			this.mainTextArea.append(line
+					+ System.getProperty("line.separator"));
+		}
+	} else {
+		this.mainTextArea.append("");
+	}
+
+	<span class="annotation">// 文本域插入符号移动到起始位置</span>
+	this.mainTextArea.setCaretPosition(0);
+
+	this.mainScroller = new JScrollPane(this.mainTextArea);
+
+	<span class="annotation">// 主面板显示外观</span>
+	this.mainScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(204, 204, 204)));
+	this.mainScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	this.mainScroller.getVerticalScrollBar().setUnitIncrement(20);
+	this.add(BorderLayout.CENTER, this.mainScroller);
+}</pre>
+			<h5 id="f2-4" class="title-2th">4、	添加主面板</h5>
+
+			<p>
+				在构造方法中会调用这个方法
+			</p>
+			<pre>
+private void addMainPanel(List&lt;String&gt; lines) {
+	setText(lines);
+}</pre>
+
+			<h5 id="f2-5" class="title-2th">5、	保存文件树信息</h5>
+
+			<p>
+				这个方法有两个功能
+			</p>
+			<p>
+				1）显示一个文件选择对话框，以便用户选择目标文件
+			</p>
+			<p>
+				2）把 <code>dialog</code> 中显示的文件树信息保存到用户选择的文件中去
+			</p>
+			<pre>
+private void saveFileTree() {
+	<span class="annotation">// 创建一个JFileChooser</span>
+	this.chooser = new JFileChooser();
+	this.chooser.setDialogTitle("保存");
+	<span class="annotation">// 添加一个文件过滤器，只显示目录和.txt文件</span>
+	this.chooser.setFileFilter(new FileFilter() {
+		@Override
+		public String getDescription() {
+			return "*.txt";
+		}
+
+		@Override
+		public boolean accept(File f) {
+			return f.isDirectory() || f.getName().endsWith(".txt");
+		}
+	});
+	int result = this.chooser.showSaveDialog(this);
+	<span class="annotation">// 如果用户选择了“确定”</span>
+	if (result == JFileChooser.APPROVE_OPTION) {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(this.chooser.getSelectedFile());
+
+			String text = this.mainTextArea.getText();
+			writer.write(text);
+			writer.flush();
+			text = null;
+
+			<span class="annotation">// 关闭 dialog 并释放屏幕资源</span>
+			this.dispose();
+			FileTreeDialog.this.owner.validateAndGC();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				writer.close();
+				writer = null;
+			}
+		}
+	}
+}</pre>
+
+			<h5 id="f2-6" class="title-2th">6、	构造方法</h5>
+
+			<p>
+				构造方法中除了创建一个 <code>dialog</code> 外，还需要调用 <code>addMenuBar()</code> 添加菜单栏、<code>addMainPanel(lines)</code> 添加主面板显示文件树内容，再有就是点击“关闭”按钮响应的事件
+			</p>
+			<pre>
+public FileTreeDialog(Frame owner, String title, boolean modal, List&lt;String&gt; lines) {
+	super(owner, title, modal);
+
+	<span class="annotation">// 保存父级窗口引用</span>
+	this.owner = (ExplorerFrame) owner;
+
+	this.setSize(DIALOG_WDITH, DIALOG_HEIGHT);
+	this.setResizable(false);
+	<span class="annotation">// 窗口样式设置</span>
+	Font font = new Font("Dialog", Font.PLAIN, 12);
+
+	Enumeration&lt;?&gt; keys = UIManager.getDefaults().keys();
+	while (keys.hasMoreElements()) {
+		Object key = keys.nextElement();
+		Object value = UIManager.get(key);
+		if (value instanceof javax.swing.plaf.FontUIResource) {
+			UIManager.put(key, font);
+		}
+	}
+
+	<span class="annotation">// 居中</span>
+	this.setLocation(
+			(Toolkit.getDefaultToolkit().getScreenSize().width - DIALOG_WDITH) / 2,
+			(Toolkit.getDefaultToolkit().getScreenSize().height - DIALOG_HEIGHT) / 2);
+	<span class="annotation">// 关闭窗口</span>
+	this.addWindowListener(new WindowAdapter() {
+		@Override
+		public void windowClosing(WindowEvent e) {
+			setText(null);
+			mainTextArea = null;
+			chooser = null;
+			dispose();
+			FileTreeDialog.this.owner.refresh();
+			System.gc();
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			FileTreeDialog.this.owner.refresh();
+			System.gc();
+		}
+	});
+
+	<span class="annotation">// 添加菜单</span>
+	this.addMenuBar();
+
+	<span class="annotation">// 添加主面板</span>
+	this.addMainPanel(lines);
+
+	<span class="annotation">// 显示窗口</span>
+	this.validate();
+	this.setVisible(true);
+}</pre>
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、ExplorerFrame 类整合 FileTreeDialog</h4>
+			<h5 id="f3-1" class="title-2th">1、	功能概述</h5>
+
+			<p>
+				在用户点击“文件树”菜单时，显示文件树 <code>dialog</code> ，里面展示当前目录的文件树信息
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	核心字段</h5>
+
+			<p>
+				<code>FileTreeDialog fileTree</code> ：文件树 <code>dialog</code> 对象
+			</p>
+			<p>
+				<code>List&lt;String&gt; lines</code> ：保存当前目录下文件树信息
+			</p>
+
+			<pre>
+private FileTreeDialog fileTree;
+
+private List&lt;String&gt; lines = new ArrayList&lt;String&gt;();</pre>
+
+			<h5 id="f3-3" class="title-2th">3、	获取目录树信息</h5>
+
+			<p>
+				主要是 <code>fileList</code> 方法，该方法使用递归方式获取当前目录的文件信息，向 <code>lines</code> 中添加
+			</p>
+			<p>
+				而 <code>format</code> 方法的作用就是显示目录层次，每深入一层，前面的空格会增加三个，如下图：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01056/01056003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 在指定目录下递归查找文件，把文件名保存到给定的List中</span>
+<span class="annotation"> * </span>
+<span class="annotation"> * @param dir - 目录</span>
+<span class="annotation"> * @param targetList - 目标集合</span>
+<span class="annotation"> * @param level - 当前目录层次</span>
+<span class="annotation"> */</span>
+private static void fileList(File dir, List&lt;String&gt; targetList, int level) {
+	targetList.add(format(level++) + dir.getName());
+	if (dir.isDirectory()) {
+		File[] fs = dir.listFiles();
+		for (int i = 0; i &lt; fs.length; i++)
+			fileList(fs[i], targetList, level);
+	}
+}
+
+<span class="annotation">/**</span>
+<span class="annotation"> * 格式化文件层次字符串</span>
+<span class="annotation"> * </span>
+<span class="annotation"> * @param level - 当前目录层次</span>
+<span class="annotation"> * @return 文件名字符串</span>
+<span class="annotation"> */</span>
+private static String format(int level) {
+	StringBuilder builder = new StringBuilder();
+	builder.append("|--");
+	for (int i = 0; i &lt; level; i++)
+		builder.insert(0, "   ");
+	return builder.toString();
+}</pre>
+
+			<h5 id="f3-4" class="title-2th">4、	菜单项点击事件</h5>
+
+			<p>
+				该步骤的核心是 <code>createFileTreeDialog</code> 方法
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 打开文件树对话框</span>
+<span class="annotation"> */</span>
+private void createFileTreeDialog() {
+
+	if (this.currentDir == null)
+		return;
+
+	fileList(this.currentDir, this.lines, 0);
+
+	if (this.fileTree == null) {
+		this.fileTree = new FileTreeDialog(this, "文件树", true, this.lines);
+	} else {
+		this.fileTree.setText(this.lines);
+		this.fileTree.setVisible(true);
+	}
+
+	this.lines.clear();
+}</pre>
+
+			<p>
+				为“文件树”菜单项添加监听器
+			</p>
+			<pre>
+<span class="annotation">// 文件树菜单项</span>
+this.item1 = new JMenuItem("文件树");
+this.item1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK));
+this.item1.addActionListener(new ActionListener() {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		createFileTreeDialog();
+	}
+});</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、代码下载</h4>
+
+			<p>
+				至此，我们的简单资源管理器就基本完成了。<a target="_blank" href="../attachment/explorer.zip">点击下载</a>
+			</p>
+
+			<br />
+
+			<a href="java01055.html" style="font-size:12px;">第五十五节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发核心功能）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

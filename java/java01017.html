@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十七节&nbsp;&nbsp;&nbsp;&nbsp;package 和 import 关键字</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、单例模式</a></li>
+				<li><a href="#f2">二、package 关键字</a></li>
+				<li><a href="#f3">三、使用不同 package 的类</a></li>
+				<li><a href="#f4">四、import 关键字</a></li>
+			</ul>
+			<br />
+
+			<h4 id="fn" class="title-1th" style="display:none;">一、设计模式概述</h4>
+			<p style="display:none;">
+				设计模式( Design pattern )是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。 
+			</p>
+			<p style="display:none;">
+				设计模式是软件工程的基石，如同大厦的一块块砖石一样。项目中合理的运用设计模式可以完美的解决很多问题，每种模式在现在中都有相应的原理与之对应，每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的核心解决方案，这也是它能被广泛应用的原因。
+			</p>
+			<p style="display:none;">
+				总体来说设计模式分为三大类：
+			</p>
+			<p style="display:none;">
+				创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
+			</p>
+			<p style="display:none;">
+				结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
+			</p>
+			<p style="display:none;">
+				行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
+			</p>
+
+			<span class="src-introduce" style="display:none;">节选自网络《<a href="http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html" target="_blank" style="color:red;">Java开发中的23种设计模式详解(转)</a>》。</span>
+
+			<h4 id="f1" class="title-1th">一、单例模式</h4>
+			<p>
+				保证类对象在内存中只有一个，不允许使用者在程序中随意使用 <code>new</code> 关键字创建对象。
+			</p>
+			<p>
+				实现方式：
+			</p>
+			<p>
+				（1）私有化构造方法；
+			</p>
+			<p>
+				（1）通过 <code>new</code> 关键字在本类中创建一个静态对象；
+			</p>
+			<p>
+				（1）定义一个 <code>public static</code> 方法返回创建的对象。
+			</p>
+
+			<pre>
+public class Person {
+
+	<span class="annotation">// 初始化一个实例</span>
+	private static Person person = new Person();
+
+	<span class="annotation">// 私有构造方法，避免外部程序创建本类实例</span>
+	private Person(){}
+
+	<span class="annotation">// 提供静态方法将实例化的对象返回给调用者</span>
+	public static Person getInstance(){
+		return person;
+	}
+}
+</pre>
+
+			<p>
+				上面的实现方式被称为“饿汉模式”，还有一种延迟实例化对象的“懒汉模式”，其实就是在 <code>getInstance()</code> 方法中做 if 判断，如果实例对象为 null，进行实例化，然后返回对象。
+			</p>
+			<pre>
+public class Person {
+
+	<span class="annotation">// 初始化一个实例</span>
+	private static Person person = null;
+
+	<span class="annotation">// 私有构造方法，避免外部程序创建本类实例</span>
+	private Person(){}
+
+	<span class="annotation">// 提供静态方法将实例化的对象返回给调用者</span>
+	public static Person getInstance(){
+		if(person == null) {
+			person = new Person();
+		}
+		return person;
+	}
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、package 关键字</h4>
+			<p>
+				（1）java 中使用包对类文件进行分类管理，给类提供多层命名空间，在本质上就是一个目录（文件夹）；
+			</p>
+			<p>
+				（2）包名写在.java源代码文件的第一行，类的全名(全限定名)为 <code>包名.类名</code>；
+			</p>
+			<p>
+				（3）包同时也是一种封装形式，包之间的类进行访问，被访问的类必须是 <code>public</code> 的，被访问的类方法也必须是 <code>public</code> 的；
+			</p>
+			<p>
+				（4）在类中使用另外一个类，而这个类既不在 <code>java.lang</code> 包，也不在本包，此时就需要使用这个类的全限定名或使用 <code>import</code>关键字引入。
+			</p>
+
+			<br />
+
+			<p>
+				为了演示 <code>package</code> 关键字的作用，我们需要在 D:\tmp\java\ 工作空间下，新建一个 <code>javanote</code> 项目， 然后在项目目录下创建 <code>src</code> 和 <code>bin</code> 目录，分别来存放源代码和字节码文件。
+			</p>
+
+			<pre>
+D:\tmp\java>md javanote
+
+D:\tmp\java>cd javanote
+
+D:\tmp\java\javanote>md src
+
+D:\tmp\java\javanote>md bin
+</pre>
+
+			<p>
+				以后我们编写的源代码文件（.java文件）存放在 <code>src</code> 目录下，而编译后的字节码文件（.class文件）存放在 <code>bin</code> 目录。
+			</p>
+			<p>
+				在 src 下创建 org\net5ijy\javanote\product1 目录，即包 <code>org.net5ijy.javanote.product1</code>
+			</p>
+
+			<pre>
+D:\tmp\java\javanote>cd src
+
+D:\tmp\java\javanote\src>md org\net5ijy\javanote\product1
+</pre>
+
+			<p>
+				把我们在讲解抽象类（项目Abstract1）时编写的 <code>MobilePhone</code> 等三个类类拷贝到 org\net5ijy\javanote\product1 下，在首行添加包名，其余的内容都不必修改。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01017/01017001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				使用编译工具编译，成功之后查看javanote的目录结构如下：
+			</p>
+
+			<pre>
+javanote
+	src
+		org
+			net5ijy
+				javanote
+					product1
+						Computer.java
+						ElectronicProduct.java
+						MobilePhone.java
+	bin
+		org
+			net5ijy
+				javanote
+					product1
+						Computer.class
+						ElectronicProduct.class
+						MobilePhone.class
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.product1 包中。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、使用不同 package 的类</h4>
+			<p>
+				在 src 下创建 org\net5ijy\javanote\test 目录，即包 <code>org.net5ijy.javanote.test</code> ，在该包下新建一个 <code>TestElectronicProduct.java</code>
+			</p>
+
+			<pre>
+package org.net5ijy.javanote.test;
+
+public class TestElectronicProduct {
+	public static void main(String[] args) {
+		MobilePhone mobile = new MobilePhone();
+
+		String os = mobile.getOs();
+		System.out.println(os);
+	}
+}
+</pre>
+
+			<p>
+				编译失败，原因是 <code>MobilePhone</code> 类既不在 <code>java.lang</code> 包，也不在 <code>org.net5ijy.javanote.test</code> 包。
+			</p>
+
+			<pre>
+D:\tmp\java\javanote\src\org\net5ijy\javanote\test\TestElectronicProduct.java:12: 找不到符号
+符号： 类 MobilePhone
+位置： 类 org.net5ijy.javanote.test.TestElectronicProduct
+		MobilePhone mobile = new MobilePhone();
+		^
+D:\tmp\java\javanote\src\org\net5ijy\javanote\test\TestElectronicProduct.java:12: 找不到符号
+符号： 类 MobilePhone
+位置： 类 org.net5ijy.javanote.test.TestElectronicProduct
+		MobilePhone mobile = new MobilePhone();
+		                         ^
+2 错误
+</pre>
+
+			<p>
+				此时需要使用类的全限定名引用 <code>MobilePhone</code> 类
+			</p>
+			<pre>
+package org.net5ijy.javanote.test;
+
+public class TestElectronicProduct {
+	public static void main(String[] args) {
+
+		<span class="annotation">// 使用权限定名引用 MobilePhone</span>
+		org.net5ijy.javanote.product1.MobilePhone mobile = 
+			new org.net5ijy.javanote.product1.MobilePhone();
+
+		String os = mobile.getOs();
+		System.out.println(os);
+	}
+}
+</pre>
+
+			<p>
+				编译，运行
+			</p>
+			<p>
+				当然，您也可以使用 cmd 命令行切换到 D:\tmp\java\javanote\bin 下，使用 <code>java org.net5ijy.javanote.test.TestElectronicProduct</code> 命令来运行程序，即用类全限定名来运行
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01017/01017002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.test 包中。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、import 关键字</h4>
+			<p>
+				上面的例子我们使用类的全限定名解决了不同包之间类的引用，但是每次写类名都需要使用全名，不是很方便。
+			</p>
+			<p>
+				所以，我们还可以使用 <code>import</code> 关键字导入需要的类、或包。
+			</p>
+
+			<br />
+
+			<p>
+				第一种：使用 <code>import</code> 引入单个类，这样代码就简洁很多了。
+			</p>
+
+			<pre>
+package org.net5ijy.javanote.test;
+
+import org.net5ijy.javanote.product1.MobilePhone;
+
+public class TestElectronicProduct {
+	public static void main(String[] args) {
+
+		MobilePhone mobile = new MobilePhone();
+
+		String os = mobile.getOs();
+		System.out.println(os);
+	}
+}
+</pre>
+
+			<p>
+				第二种：使用 <code>import</code> 引入整个包，这样此包中的类就一次性全部引入了。
+			</p>
+
+			<pre>
+package org.net5ijy.javanote.test;
+
+import org.net5ijy.javanote.product1.*;
+
+public class TestElectronicProduct {
+	public static void main(String[] args) {
+
+		MobilePhone mobile = new MobilePhone();
+
+		String os = mobile.getOs();
+		System.out.println(os);
+	}
+}
+</pre>
+
+			<p>
+				在使用了一个包中许多类的情况下，第二种方式很实用。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.test 包中。</span>
+
+			<br /><br />
+
+			<a href="java01016.html" style="font-size:12px;">第十六节&nbsp;&nbsp;&nbsp;&nbsp;内部类和 Object 类</a>
+			<br />
+			<a href="java01018.html" style="font-size:12px;">第十八节&nbsp;&nbsp;&nbsp;&nbsp;异常</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

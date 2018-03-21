@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十一节&nbsp;&nbsp;&nbsp;&nbsp;集合遍历和 Iterator 接口</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、List 集合特有的遍历方式</a></li>
+				<li><a href="#f2">二、Iterator 接口</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	Iterator 接口概述</a></li>
+						<li><a href="#f2-2">2、	AbstractList 类的 iterator() 方法</a></li>
+						<li><a href="#f2-3">3、	HashSet 类的 iterator() 方法</a></li>
+						<li><a href="#f2-4">4、	使用 iterator 遍历集合</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、ListIterator 接口</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	ListIterator 接口概述</a></li>
+						<li><a href="#f3-2">2、	AbstractList 类的 listIterator() 方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、JDK 1.5 的 for 循环</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、List 集合特有的遍历方式</h4>
+
+			<p>
+				使用索引遍历，类似数组，主要是使用 <code>List</code> 的 <code>get(index)</code> 方法实现遍历操作
+			</p>
+			<pre>
+List list = new ArrayList();
+list.add( "元素1" );
+list.add( "元素2" );
+list.add( "元素3" );
+
+for (int i = 0; i &lt; list.size(); i++) {
+	System.out.println( list.get(i) );
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Iterator 接口</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	Iterator 接口概述</h5>
+
+			<p>
+				通过 <code>Collection</code> 接口的 API 可以看到，该接口有一个 <code>Iterator&lt;E&gt; iterator()</code> 方法用于获取遍历集合元素的迭代器。
+			</p>
+			<p>
+				由于 <code>Collection</code> 实现类的存储方式不一定相同，所以每个实现类需要使用自己特有的方式来获取 <code>Iterator</code> 迭代器。
+			</p>
+			<p>
+				下面看一下 <code>Iterator</code> 接口的 API
+			</p>
+			<pre>
+java.util;
+
+public interface Iterator&lt;E&gt; {}
+</pre>
+			<p>
+				迭代器取代了集合框架中的 <code>Enumeration</code>。迭代器与枚举最大区别在于：
+			</p>
+			<p>
+				迭代器允许调用者利用定义良好的语义在迭代期间从迭代器所指向的集合移除元素。
+			</p>
+			<p>
+				包括以下方法
+			</p>
+			<pre>
+<span class="methodClassName">boolean hasNext()</span>
+	如果仍有元素可以迭代，则返回true
+
+<span class="methodClassName">E next()</span>
+	返回下一个元素
+
+<span class="methodClassName">void remove()</span>
+	从迭代器指向的集合移除迭代器返回的最后一个元素
+	每次调用next只能调用一次此方法
+	如果进行迭代时用调用此方法之外的其他方式修改了该迭代器所指向的集合，则迭代器的行为是不确定的。
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	AbstractList 类的 iterator() 方法</h5>
+
+			<p>
+				以集合框架中的 <code>AbstractList</code> 类为例，可以看到在该类内部，定义了一个私有内部类 <code>Itr</code> 实现了 <code>Iterator</code> 接口，然后在 <code>Iterator&lt;E&gt; iterator()</code> 方法返回该类实例对象。
+			</p>
+			<pre>
+package java.util;
+
+public abstract class AbstractList&lt;E&gt; extends AbstractCollection&lt;E&gt; implements List&lt;E&gt; {
+
+	// 代码
+
+	public Iterator&lt;E&gt; iterator() {
+		return new Itr();
+	}
+
+	private class Itr implements Iterator&lt;E&gt; {
+		public boolean hasNext() {
+			// TODO
+		}
+		public E next() {
+			// TODO
+		}
+		public void remove() {
+			// TODO
+		}
+	}
+
+	// 代码
+}
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	HashSet 类的 iterator() 方法</h5>
+
+			<p>
+				<code>HashSet</code> 的 <code>iterator()</code> 方法较为复杂，与 <code>AbstractMap</code> 的 <code>keySet()</code> 方法密切相关，以下为这两个类的代码片段：
+			</p>
+			<pre>
+public class HashSet&lt;E&gt; extends AbstractSet&lt;E&gt;
+	implements Set&lt;E&gt;, Cloneable, java.io.Serializable {
+
+	// 代码
+
+	private transient HashMap&lt;E,Object&gt; map;
+
+	public Iterator&lt;E&gt; iterator() {
+		return map.keySet().iterator();
+	}
+
+	// 代码
+}
+</pre>
+			<pre>
+public abstract class AbstractMap&lt;K,V&gt; implements Map&lt;K,V&gt; {
+
+	// 代码
+
+	transient volatile Set&lt;K&gt; keySet = null;
+
+	public Set&lt;K&gt; keySet() {
+		if (keySet == null) {
+			keySet = new AbstractSet&lt;K&gt;() {
+				public Iterator&lt;K&gt; iterator() {
+					return new Iterator&lt;K&gt;() {
+						private Iterator&lt;Entry&lt;K,V&gt;&gt; i = entrySet().iterator();
+
+						public boolean hasNext() {
+							return i.hasNext();
+						}
+						public K next() {
+							return i.next().getKey();
+						}
+						public void remove() {
+							i.remove();
+						}
+					};
+				}
+				public int size() {
+					return AbstractMap.this.size();
+				}
+				public boolean contains(Object k) {
+					return AbstractMap.this.containsKey(k);
+				}
+			};
+		}
+		return keySet;
+	}
+
+	// 代码
+}
+</pre>
+
+			<h5 id="f2-4" class="title-2th">4、	使用 iterator 遍历集合</h5>
+
+			<p>
+				使用 <code>iterator()</code> 方法获取到迭代器对象，判断迭代器是否有元素为条件，编写 <code>while</code> 循环，在循环体内部调用 <code>iterator.next()</code> 获取元素，然后操作元素。
+			</p>
+			<pre>
+List list = new ArrayList();
+list.add( "元素1" );
+list.add( "元素2" );
+list.add( "元素3" );
+
+Iterator iterator = list.iterator();
+while(iterator.hasNext()) {
+	System.out.println(iterator.next());
+}
+</pre>
+			<p>
+				如果想把迭代器的作用范围限制在循环结构中，可以这样修改：
+			</p>
+			<pre>
+List list = new ArrayList();
+list.add( "元素3" );
+list.add( "元素2" );
+list.add( "元素1" );
+
+for (Iterator iterator = list.iterator(); iterator.hasNext(); ) {
+	System.out.println(iterator.next());
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、ListIterator 接口</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	ListIterator 接口概述</h5>
+
+			<p>
+				在 <code>List</code> 集合体系中，还可以使用 <code>listIterator()</code> 或 <code>listIterator(int index)</code> 方法获取到 <code>ListIterator</code> 迭代器来遍历元素。
+			</p>
+			<p>
+				<code>ListIterator</code> 接口是 <code>Iterator</code> 的子接口，拥有几个特有的方法用于在遍历 <code>List</code> 集合时添加、设置元素，而且，这个迭代器还允许以倒序方式遍历集合。
+			</p>
+			<pre>
+java.util;
+
+public interface ListIterator&lt;E&gt; extends Iterator&lt;E&gt; {
+
+	boolean hasPrevious();
+		如果以逆向遍历集合，集合迭代器有多个元素，则返回true。
+
+	E previous();
+		返回集合中的前一个元素。
+
+	void add(E e);
+		将指定的元素插入集合。
+
+	void set(E e);
+		用指定元素替换next或previous返回的最后一个元素。
+
+}
+</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	AbstractList 类的 listIterator() 方法</h5>
+
+			<p>
+				可以看一下 <code>AbstractList</code> 类是如何实现这两个方法的，定义了一个 <code>ListItr</code> 类继承 <code>Itr</code> 类，扩展出特有的方法
+			</p>
+			<pre>
+public abstract class AbstractList&lt;E&gt; extends AbstractCollection&lt;E&gt; implements List&lt;E&gt; {
+
+	// 代码
+
+	public ListIterator&lt;E&gt; listIterator() {
+		return listIterator(0);
+	}
+	public ListIterator&lt;E&gt; listIterator(final int index) {
+		if (index&lt;0 || index&gt;size())
+			throw new IndexOutOfBoundsException("Index: "+index);
+		return new ListItr(index);
+	}
+
+	private class Itr implements Iterator&lt;E&gt; {
+		public boolean hasNext() {
+			// TODO
+		}
+		public E next() {
+			// TODO
+		}
+		public void remove() {
+			// TODO
+		}
+	}
+	private class ListItr extends Itr implements ListIterator&lt;E&gt; {
+		public boolean hasPrevious() {
+			// TODO
+		}
+		public E previous() {
+			// TODO
+		}
+		public int nextIndex() {
+			// TODO
+		}
+		public int previousIndex() {
+			// TODO
+		}
+		public void set(E e) {
+			// TODO
+		}
+		public void add(E e) {
+			// TODO
+		}
+	}
+
+	// 代码
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、JDK 1.5 的 for 循环</h4>
+
+			<pre>
+for(数据类型 遍历元素变量名 : 遍历集合) {
+	// 循环体
+}
+</pre>
+
+			<pre>
+List list = new ArrayList();
+list.add( "元素3" );
+list.add( "元素2" );
+list.add( "元素1" );
+
+for(Object ele : list) {
+	System.out.println(ele);
+}
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 CollectionIteratorTest.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01030.html" style="font-size:12px;">第三十节&nbsp;&nbsp;&nbsp;&nbsp;Set 接口</a>
+			<br />
+			<a href="java01032.html" style="font-size:12px;">第三十二节&nbsp;&nbsp;&nbsp;&nbsp;Map 接口</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

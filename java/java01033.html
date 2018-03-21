@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十三节&nbsp;&nbsp;&nbsp;&nbsp;Map 的遍历</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、KeySet 遍历 Map</a></li>
+				<li><a href="#f2">二、EntrySet 遍历 Map</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	Map.Entry</a></li>
+						<li><a href="#f2-2">2、	遍历 Map</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、KeySet 遍历 Map</h4>
+			<p>
+				<code>Map</code> 的遍历和 <code>Collection</code> 不太一样，因为 <code>Map</code> 没有直接提供类似 <code>iterator()</code> 的方法，所以只能使用间接的方式遍历 <code>Map</code> 数据。
+			</p>
+			<p>
+				查看 <code>Map</code> 的 API 文档，可以看到 <code>Map</code> 有一个 <code>keySet()</code> 方法用来获取映射中包含的键的 <code>Set</code> 集合。
+			</p>
+			<p>
+				如果使用这个方法获取到键的 <code>keySet</code> 集合，再遍历这个 <code>keySet</code> 集合，然后根据键就可以获取到对应的值。
+			</p>
+
+			<pre>
+private static void testKeySet() {
+
+	<span class="annotation">// 创建HashMap</span>
+	Map map = new HashMap();
+
+	Mobile m1 = new Mobile(1, "18012341234");
+	Mobile m2 = new Mobile(2, "18012341235");
+	Mobile m3 = new Mobile(3, "18012341236");
+	Mobile m4 = new Mobile(4, "18012341237");
+
+	<span class="annotation">// 添加元素</span>
+	map.put(new Integer(m1.getProductId()), m1);
+	map.put(new Integer(m2.getProductId()), m2);
+	map.put(new Integer(m3.getProductId()), m3);
+	map.put(new Integer(m4.getProductId()), m4);
+
+	<span class="annotation">// 获取Map中键的Set集合</span>
+	Set keySet = map.keySet();
+
+	<span class="annotation">// 使用JDK1.5的增强for循环</span>
+	for (Object key : keySet) {
+		<span class="annotation">// 获取Map中key对应的值</span>
+		Object value = map.get(key);
+		System.out.println(key + " : " + value);
+	}
+
+	System.out.println();
+
+	<span class="annotation">// 使用while循环</span>
+	Iterator iterator = keySet.iterator();
+	while(iterator.hasNext()) {
+		Object key = iterator.next();
+		Object value = map.get(key);
+		System.out.println(key + " : " + value);
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+1 : 产品编码：1, 手机号码：18012341234
+2 : 产品编码：2, 手机号码：18012341235
+3 : 产品编码：3, 手机号码：18012341236
+4 : 产品编码：4, 手机号码：18012341237
+
+1 : 产品编码：1, 手机号码：18012341234
+2 : 产品编码：2, 手机号码：18012341235
+3 : 产品编码：3, 手机号码：18012341236
+4 : 产品编码：4, 手机号码：18012341237
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、EntrySet 遍历 Map</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	Map.Entry</h5>
+			<p>
+				<code>Map</code> 有 <code>entrySet()</code> 方法获取映射中包含的映射关系及 <code>Entry</code> 的 <code>Set</code> 集合。<code>Entry</code> 是 <code>Map</code> 接口的内部接口，用于封装一对键值映射。如果获取到了 <code>Map</code> 中全部键值映射的 <code>Set</code> 集合，再遍历这个 <code>Set</code> 集合，是不是可以达到遍历 <code>Map</code> 的目的呢？
+			</p>
+			<p>
+				首先先看下 <code>Entry</code> 的 API 文档。
+			</p>
+
+			<pre>
+java.util;
+
+public static interface Map.Entry&lt;K,V&gt; {
+	<span class="annotation">// 返回与此项对应的键。</span>
+	K getKey();
+
+	<span class="annotation">// 返回与此项对应的值。</span>
+	V getValue();
+}
+</pre>
+			<p>
+				再看下 <code>Map</code> 接口中的相关代码片段：
+			</p>
+			<pre>
+public interface Map&lt;K,V&gt; {
+
+	// 代码
+
+	Set&lt;K&gt; keySet();
+
+	Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet();
+
+	<span class="annotation">// 内部接口</span>
+	interface Entry&lt;K,V&gt; {
+		K getKey();
+		V getValue();
+		V setValue(V value);
+	}
+
+	// 代码
+}
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	遍历 Map</h5>
+
+			<pre>
+private static void testEntrySet() {
+	
+	<span class="annotation">// 创建HashMap</span>
+	Map map = new HashMap();
+
+	Mobile m1 = new Mobile(1, "18012341234");
+	Mobile m2 = new Mobile(2, "18012341235");
+	Mobile m3 = new Mobile(3, "18012341236");
+	Mobile m4 = new Mobile(4, "18012341237");
+
+	map.put(new Integer(m1.getProductId()), m1);
+	map.put(new Integer(m2.getProductId()), m2);
+	map.put(new Integer(m3.getProductId()), m3);
+	map.put(new Integer(m4.getProductId()), m4);
+
+	<span class="annotation">// 获取Map中映射关系集合</span>
+	Set entrySet = map.entrySet();
+
+	<span class="annotation">// 使用JDK1.5的增强for循环</span>
+	for (Object ele: entrySet) {
+		Map.Entry entry = (Map.Entry)ele;
+		Object key = entry.getKey();
+		Object value = entry.getValue();
+		System.out.println(key + " : " + value);
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+1 : 产品编码：1, 手机号码：18012341234
+2 : 产品编码：2, 手机号码：18012341235
+3 : 产品编码：3, 手机号码：18012341236
+4 : 产品编码：4, 手机号码：18012341237
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 MapIterator.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01032.html" style="font-size:12px;">第三十二节&nbsp;&nbsp;&nbsp;&nbsp;Map 接口</a>
+			<br />
+			<a href="java01034.html" style="font-size:12px;">第三十四节&nbsp;&nbsp;&nbsp;&nbsp;Hashtable 、Properties 和集合数组工具类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十七节&nbsp;&nbsp;&nbsp;&nbsp;GUI 概述、Frame入门</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、GUI 概述</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	学习目标</a></li>
+						<li><a href="#f1-2">2、	GUI 概述</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、AWT 组件、容器和窗体</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	Component 类</a></li>
+						<li><a href="#f2-2">2、	Container 类</a></li>
+						<li><a href="#f2-3">3、	Window 类</a></li>
+						<li><a href="#f2-4">4、	Frame 类</a></li>
+						<li><a href="#f2-5">5、	第一个 FrameStart 程序</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、GUI 概述</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	学习目标</h5>
+
+			<p>
+				从本节开始，我们将开始学习 Java 的 <code>GUI</code> 编程，<code>GUI</code> 全称 <code>Graphical User Interface</code>，即“图形用户接口”，也就是我们常说的图形界面软件。与 <code>CLI （Command Line User Interface）</code> 操作方式相比，图形界面操作简单、用户体验更好。
+			</p>
+
+			<p>
+				目标就是完成“简单资源管理器”和“坦克大战”的程序。
+			</p>
+
+			<p>
+				<span class="high-light">“简单资源管理器”</span>可以实现查看系统分区、文件、获取文件信息，还可以导出当前所在文件夹的文件树。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">“坦克大战”</span>可以实现坦克的运动、对战，显示用户成绩。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<h5 id="f1-2" class="title-2th">2、	GUI 概述</h5>
+
+			<p>
+				Java 为 <code>GUI</code> 提供的对象都在 <code>java.awt</code> 和 <code>javax.swing</code>
+			</p>
+
+			<p>
+				<code>awt：Abstract Window Toolket</code>(抽象窗口工具包)，需要调用本地系统方法实现功能，属于重量级控件。
+			</p>
+
+			<p>
+				<code>swing</code> 在 awt 基础上，建立的一套图形界面系统，其中提供了更多的组件，而且完全有 java 实现。增强了移植性，属于轻量级控件。
+			</p>
+
+			<p>
+				组件架构如下：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、AWT 组件、容器和窗体</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	Component 类</h5>
+
+			<pre>
+java.awt;
+
+public abstract class Component implements ImageObserver, MenuContainer {}
+</pre>
+
+			<p>
+				具有图形表示能力的类，可在屏幕上显示与用户进行交互。例如图形用户界面中的窗口、弹出框、按钮、复选框和滚动条等。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">有以下主要字段</span>
+			</p>
+			<pre>
+<span class="methodClassName">public static final float TOP_ALIGNMENT</span>
+	指定组件顶部对齐
+
+<span class="methodClassName">public static final float BOTTOM_ALIGNMENT</span>
+	指定组件底部对齐
+
+<span class="methodClassName">public static final float LEFT_ALIGNMENT</span>
+	指定组件左对齐
+
+<span class="methodClassName">public static final float RIGHT_ALIGNMENT</span>
+	指定组件右对齐
+
+<span class="methodClassName">public static final float CENTER_ALIGNMENT</span>
+	指定组件居中对齐
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">有以下主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public int getWidth()</span>
+	返回组件的当前宽度
+
+<span class="methodClassName">public int getHeight()</span>
+	返回组件的当前高度
+
+<span class="methodClassName">public int getX()</span>
+	返回组件原点（左上角）相对于屏幕左上角的x坐标
+
+<span class="methodClassName">public int getY()</span>
+	返回组件原点（左上角）相对于屏幕左上角的y坐标
+
+<span class="methodClassName">public void setSize(int width, int height)</span>
+	调整组件的大小
+
+<span class="methodClassName">public Dimension getSize()</span>
+	以Dimension对象的形式返回组件的大小
+
+<span class="methodClassName">public void setLocation(int x, int y)</span>
+	将组件移到新位置
+
+<span class="methodClassName">public Point getLocation()</span>
+	获取组件位置，形式是指定组件左上角的点
+
+<span class="methodClassName">public void setEnabled(boolean b)</span>
+	启用或禁用组件
+
+<span class="methodClassName">public void setVisible(boolean b)</span>
+	显示或隐藏组件
+
+<span class="methodClassName">public void add(PopupMenu popup)</span>
+	向组件添加指定弹出菜单
+
+<span class="methodClassName">public void remove(MenuComponent popup)</span>
+	从组件移除指定弹出菜单
+
+<span class="methodClassName">public void addComponentListener(ComponentListener l)</span>
+	添加组件侦听器，以接收发自组件的事件
+
+<span class="methodClassName">public void removeComponentListener(ComponentListener l)</span>
+	移除组件侦听器，不再接收发自组件的组件事件
+
+<span class="methodClassName">public void addFocusListener(FocusListener l)</span>
+	添加焦点侦听器，当此组件获得输入焦点时能够接收发自此组件的焦点事件
+
+<span class="methodClassName">public void removeFocusListener(FocusListener l)</span>
+	移除指定焦点侦听器，不再接收发自此组件的焦点事件
+
+<span class="methodClassName">public void addKeyListener(KeyListener l)</span>
+	添加按键侦听器，接收发自此组件的按键事件
+
+<span class="methodClassName">public void removeKeyListener(KeyListener l)</span>
+	移除按键侦听器，不再接收发自此组件的按键事件
+
+<span class="methodClassName">public void addMouseListener(MouseListener l)</span>
+	添加鼠标侦听器，以接收发自此组件的鼠标事件
+
+<span class="methodClassName">public void removeMouseListener(MouseListener l)</span>
+	移除鼠标侦听器，不再接收发自此组件的鼠标事件
+
+<span class="methodClassName">public boolean contains(int x, int y)</span>
+	检查组件是否“包含”指定的点，其中x和y是相对于此组件的坐标系定义的
+
+<span class="methodClassName">public void setBackground(Color c)</span>
+	设置组件背景色，可以使用setBackground(Color.green)设置背景色
+
+<span class="methodClassName">public Color getBackground()</span>
+	获取组件背景色
+
+<span class="methodClassName">public void setFont(Font f)</span>
+	设置组件字体
+
+<span class="methodClassName">public Font getFont()</span>
+	获取组件字体
+
+<span class="methodClassName">public void setForeground(Color c)</span>
+	设置组件前景色
+
+<span class="methodClassName">public Color getForeground()</span>
+	获取组件前景色
+
+<span class="methodClassName">public void setCursor(Cursor cursor)</span>
+	设置光标图像，可以使用setCursor(new Cursor(Cursor.HAND_CURSOR))方式设置为手形
+
+<span class="methodClassName">public Cursor getCursor()</span>
+	获取组件中光标集合
+
+<span class="methodClassName">public Graphics getGraphics()</span>
+	为组件创建一个图形上下文
+
+<span class="methodClassName">public void paint(Graphics g)</span>
+	绘制此组件
+
+<span class="methodClassName">public void paintAll(Graphics g)</span>
+	绘制此组件及其所有子组件
+
+<span class="methodClassName">public void repaint()</span>
+	重绘此组件
+
+<span class="red-bold-font">* 继承此类的组件也都拥有这些方法，所以在介绍子类时就不再介绍这些方法了</span>
+</pre>
+
+			<br />
+
+			<h5 id="f2-2" class="title-2th">2、	Container 类</h5>
+
+			<pre>
+java.awt;
+
+public class Container extends Component {}
+</pre>
+
+			<p>
+				添加到容器中的组件放在一个列表中。列表的顺序将定义组件在容器内的正向堆栈顺序。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">有以下主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Component add(Component comp)</span>
+	将指定组件追加到此容器的尾部
+	如果已经将某个组件添加到显示的容器中，则必须在此容器上调用validate，以显示新的组件
+	如果添加多个组件，那么可以在添加所有组件之后，通过只调用一次validate来提高效率
+
+<span class="methodClassName">public Component getComponent(int n)</span>
+	获取此容器中第n个组件
+
+<span class="methodClassName">public int getComponentCount()</span>
+	获取此容器中组件数
+
+<span class="methodClassName">public Component[] getComponents()</span>
+	获取此容器中所有组件
+
+<span class="methodClassName">public void remove(Component comp)</span>
+	从此容器中移除指定组件
+
+<span class="methodClassName">public void remove(int index)</span>
+	从此容器中移除index指定的组件
+
+<span class="methodClassName">public void removeAll()</span>
+	从此容器中移除所有组件
+
+<span class="methodClassName">public void validate()</span>
+	验证此容器及其所有子组件，以便在添加新组件时可以显示出来
+
+<span class="methodClassName">public void setLayout(LayoutManager mgr)</span>
+	设置此容器的布局管理器
+</pre>
+
+			<br />
+
+			<h5 id="f2-3" class="title-2th">3、	Window 类</h5>
+
+			<pre>
+java.awt;
+
+public class Window extends Container implements Accessible {}
+</pre>
+
+			<p>
+				Window 是一个没有边界、菜单栏的顶层窗口。默认布局是 BorderLayout
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Window(Frame owner)</span>
+	创建一个新的、不可见的窗口，使用指定Frame作为其所有者
+
+<span class="methodClassName">public Window(Window owner)</span>
+	创建一个新的、不可见的窗口，使用指定Window作为其所有者
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public void addWindowFocusListener(WindowFocusListener l)</span>
+	添加窗口焦点侦听器，从此窗口接收窗口事件
+
+<span class="methodClassName">public void removeWindowFocusListener(WindowFocusListener l)</span>
+	移除窗口焦点侦听器，不再从此窗口接收窗口事件
+
+<span class="methodClassName">public void addWindowListener(WindowListener l)</span>
+	添加窗口侦听器，从此窗口接收窗口事件
+
+<span class="methodClassName">public void removeWindowListener(WindowListener l)</span>
+	移除窗口侦听器，不再从此窗口接收窗口事件
+
+<span class="methodClassName">public void dispose()</span>
+	释放由此Window及其拥有的所有子组件使用屏幕资源
+
+<span class="methodClassName">public void pack()</span>
+	调整此窗口的大小，以适合其子组件的首选大小和布局
+
+<span class="methodClassName">public void setIconImage(Image image)</span>
+	设置窗口图标显示的图像
+</pre>
+
+			<br />
+
+			<h5 id="f2-4" class="title-2th">4、	Frame 类</h5>
+
+			<pre>
+java.awt;
+
+public class Frame extends Window implements MenuContainer {}
+</pre>
+
+			<p>
+				带有标题和边框的顶层窗口
+			</p>
+			<p>
+				默认布局为BorderLayout
+			</p>
+			<p>
+				窗体的大小包括被边框指定的所有区域。边框区域的尺寸可以使用getInsets方法获得
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Frame() throws HeadlessException</span>
+	创建一个不可见的Frame窗体
+
+<span class="methodClassName">public Frame(String title) throws HeadlessException</span>
+	创建一个新的、不可见的、具有指定标题的Frame窗体
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public void setMenuBar(MenuBar mb)</span>
+	设置菜单栏
+
+<span class="methodClassName">public MenuBar getMenuBar()</span>
+	获取菜单栏
+
+<span class="methodClassName">public void remove(MenuComponent m)</span>
+	从窗体移除指定菜单栏
+
+<span class="methodClassName">public void setTitle(String title)</span>
+	设置标题
+
+<span class="methodClassName">public String getTitle()</span>
+	获得窗体标题
+</pre>
+
+			<br />
+
+			<h5 id="f2-5" class="title-2th">5、	第一个 FrameStart 程序</h5>
+
+			<pre>
+/**
+ * <span class="annotation">第一个Frame演示程序</span>
+ * <span class="annotation">主要演示Frame类的setSize、setLocation、setTitle、setCursor、setBackground、setVisible</span>
+ * <span class="annotation">以及添加WindowListener以实现关闭程序</span>
+ * 
+ * @author soft01
+ *
+ */
+@SuppressWarnings("serial")
+public class FrameStart extends Frame {
+
+	public FrameStart() throws HeadlessException {
+		this(null);
+	}
+
+	public FrameStart(String title) throws HeadlessException {
+		<span class="annotation">// 设置窗体大小</span>
+		<span class="annotation">// 第一个参数是宽</span>
+		<span class="annotation">// 第二个参数是高</span>
+		this.setSize(500, 400);
+
+		<span class="annotation">// 设置窗体位置居中</span>
+		this.setLocation(
+				(Toolkit.getDefaultToolkit().getScreenSize().width - 500) / 2,
+				(Toolkit.getDefaultToolkit().getScreenSize().height - 400) / 2);
+
+		<span class="annotation">// 为窗体设置标题</span>
+		this.setTitle(title);
+
+		<span class="annotation">// 设置鼠标移入窗体时显示为手形</span>
+		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		<span class="annotation">// 设置窗体背景为绿色</span>
+		this.setBackground(Color.green);
+
+		<span class="annotation">// 禁用最大化按钮</span>
+		this.setResizable(false);
+
+		<span class="annotation">// 设置窗口图标</span>
+		this.setIconImage(new ImageIcon("images/wx.jpg").getImage());
+
+		<span class="annotation">// 窗体关闭按钮点击监听器</span>
+		<span class="annotation">// 实现关闭按钮点击时退出程序</span>
+		<span class="annotation">// 因为默认情况下关闭按钮点击时什么都不做</span>
+		this.addWindowListener(new FrameCloseListener());
+
+		<span class="annotation">// 设置窗体可见</span>
+		this.setVisible(true);
+	}
+
+	/**
+	 * <span class="annotation">内部类继承WindowAdapter类，重写windowClosing方法实现窗体关闭退出程序</span>
+	 * 
+	 * @author soft01
+	 *
+	 */
+	private class FrameCloseListener extends WindowAdapter {
+		@Override
+		public void windowClosing(WindowEvent e) {
+			<span class="annotation">// 程序退出</span>
+			<span class="annotation">// 返回值给JVM，JVM再返回给操作系统</span>
+			System.exit(0);
+		}
+	}
+
+	public static void main(String[] args) {
+		// new FrameStart();
+		new FrameStart("第一个演示窗体");
+	}
+}
+</pre>
+
+			<p>
+				运行程序可以显示窗口
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01047/01047006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01046.html" style="font-size:12px;">第四十六节&nbsp;&nbsp;&nbsp;&nbsp;Eclipse开发环境</a>
+			<br />
+			<a href="java01048.html" style="font-size:12px;">第四十八节&nbsp;&nbsp;&nbsp;&nbsp;Dialog 和 FileDialog</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

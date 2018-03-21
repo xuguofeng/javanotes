@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数组</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十节&nbsp;&nbsp;&nbsp;&nbsp;数组</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、数组的定义</a></li>
+				<li><a href="#f2">二、数组的索引、默认值及遍历</a></li>
+				<li><a href="#f3">三、最值</a></li>
+				<li><a href="#f4">四、格式化输出数组</a></li>
+				<li><a href="#f5">五、选择排序</a></li>
+				<li><a href="#f6">六、冒泡排序</a></li>
+				<li><a href="#f7">七、冒泡排序优化</a></li>
+				<li><a href="#f8">八、二分查找法</a></li>
+				<li><a href="#f9">九、二维数组</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、数组的定义</h4>
+			<p>
+				数组（Array）是一个容器，可以存储多个同一种类型数据变量，可以使用元素编号操作数组中的元素。
+			</p>
+			<p>
+				定义方式主要有以下几种
+			</p>
+			<pre>
+类型[] 数组变量名 = new 类型[数组长度];
+
+类型[] 数组变量名 = new类型[]{元素1, 元素2......};
+
+类型[] 数组变量名 = {元素1, 元素2......};
+</pre>
+
+			<br />
+			<p>
+				第一种方式
+			</p>
+			<p>
+				定义 int 类型的数组 array1、array2，长度都是 5
+			</p>
+			<pre>
+int[] array1 = new int[5];
+
+int array2[] = new int[5];
+</pre>
+			<p>
+				定义 <code>int[] array1</code> 时会在内存中开辟空间存储该变量，在使用 new 关键字实例化 int 数组时，会在堆中开辟空间存储 int[5]，并为每个数组元素分配默认值和索引，array1 变量引用该数组(变量存储的只是堆内存对象的地址)。在 <code>array1= null</code> 时，array1 就不再引用该数组对象。
+			</p>
+
+			<br />
+			<p>
+				第二种方式
+			</p>
+			<pre>
+int[] array3 = new int[]{1, 2, 3, 4, 5};
+
+int array4[] = new int[]{1, 2, 3, 4, 5};
+</pre>
+
+			<br />
+			<p>
+				第三种方式
+			</p>
+			<pre>
+int[] array5 = {1, 2, 3, 4, 5};
+
+int array6[] = {1, 2, 3, 4, 5};
+</pre>
+
+			<br />
+			<p>
+				第2、3两种方式在创建数组的时候，就会为每个元素赋值。
+			</p>
+			<br />
+
+			<span class="src-introduce">演示代码在项目 Array中的 ArrayStart.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、数组的索引、默认值及遍历</h4>
+			<p>
+				数组索引，通常叫做下标，是用于检索数组元素的数字编号，从 0 开始。
+			</p>
+
+			<pre>
+int[] array1 = new int[3];
+
+System.out.println( array1[0] ); <span class="annotation">// 获取数组 array1 的第一个元素，并打印</span>
+System.out.println( array1[1] );
+System.out.println( array1[2] );
+
+array1[0] = 101; <span class="annotation">// 为第一个元素赋值为101</span>
+
+System.out.println( array1[0] );
+
+<span class="phase-title">输出：</span>
+
+0
+0
+0
+101
+</pre>
+
+			<p>
+				简单解读：
+			</p>
+			<p>
+				（1）数组 array1 长度为 3，索引从 0 开始，分别是 0、1、2，使用 <code>array1[index]</code> 方式查找指定位置的元素，或者为该索引位置的元素赋值。
+			</p>
+			<p>
+				（2）如果我们使用的索引超过数组长度或为负数，会出现异常：<code>java.lang.ArrayIndexOutOfBoundsException: index</code>
+			</p>
+
+			<br />
+
+			<p>
+				从上面的例子可以看到，int 类型的数组，在定义时如果没有为元素指定值，元素的值都为 0 。那么其他基本数据类型和引用数据类型的默认值是什么呢？
+			</p>
+			<p>
+				byte、short、long 都是 0
+			</p>
+			<p>
+				float、double 都是 0.0
+			</p>
+			<p>
+				boolean 是 false
+			</p>
+			<p>
+				char 是空白
+			</p>
+			<p>
+				引用类型数组默认值是 null
+			</p>
+
+			<br />
+
+			<p>
+				使用数组的 length 和 for 循环可以实现数组元素的遍历，数组和集合(以后会讲解)的遍历在实际开发时使用很频繁。
+			</p>
+			<p>
+				比如一个图书馆网站，有一个使用 excel 文件批量导入图书信息的功能，我们在后台读取到用户上传的文件之后，就需要使用集合的遍历操作生成数据库插入语句，然后批量执行。
+			</p>
+			<p>
+				只是遍历的对象不同、循环体的程序不同，编程思想是完全一致的。
+			</p>
+			<pre>
+int[] array3 = { 3, 56, 89, -1 };
+
+/*
+	<span class="annotation">array3.length：使用length属性可以获取到数组的长度，即元素个数</span>
+*/
+for (int index = 0 ; index &lt; array3.length ; index++) {
+	int i = array3[index];
+	System.out.println("array3[" + index + "]=" + i);
+}
+
+<span class="phase-title">输出：</span>
+
+array3[0]=3
+array3[1]=56
+array3[2]=89
+array3[3]=-1
+</pre>
+			<br />
+
+			<span class="src-introduce">演示代码在项目 Array中的 ArrayIndexAndLength.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、最值</h4>
+			<p>
+				<span class="high-light">最大值</span>
+			</p>
+
+			<p>
+				定义一个方法，参数是 int 类型数组，返回值 int 即数组最大值。
+			</p>
+			<p>
+				首先判断数组为 null 或长度为 0，因为我们还没有讲解异常，所以此处暂时返回 int 类型最小值。
+			</p>
+			<p>
+				定义一个 max 变量保存数组第一个元素。
+			</p>
+			<p>
+				然后从第二个元素遍历数组，如果遍历到的元素大于 max，max 赋值为该元素，循环结束后，max 即为数组中的最大值。
+			</p>
+			<pre>
+public static int maxValueOfIntArray(int[] array) {
+	if (array == null || array.length == 0)
+		return Integer.MIN_VALUE;
+	int max = array[0];
+	for (int i = 1; i &lt; array.length; i++) {
+		if (array[i] &gt; max)
+			max = array[i];
+	}
+	return max;
+}
+</pre>
+
+			<p>
+				<span class="high-light">最小值</span>
+			</p>
+
+			<p>
+				思考方式和查找最大值一致。
+			</p>
+			<pre>
+public static int minValueOfIntArray(int[] array) {
+	if (array == null || array.length == 0)
+		return Integer.MAX_VALUE;
+	int min = array[0];
+	for (int i = 1; i &lt; array.length; i++) {
+		if (array[i] &lt; min)
+			min = array[i];
+	}
+	return min;
+}
+</pre>
+			<br />
+
+			<span class="src-introduce">演示代码在项目 Array中的 MaxMinValueOfIntArray.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、格式化输出数组</h4>
+			<p>
+				在介绍 <code>java.util.Arrays</code> 类之前，我们先使用自己定义的方法来格式化输出数组。
+			</p>
+
+			<p>
+				<code>java.lang.String</code> 是 java 中的字符串类，封装了操作字符串的方法，我们现在只是先使用它格式化输出数组，以后会详细讲解 API。
+			</p>
+			<p>
+				<code>+</code> 运算符我们之前讲解过（见“<a target="_blank" href="java01006.html#f2">算术运算符</a>”），可以用于字符串的连接。
+			</p>
+
+			<pre>
+public static String printArray(int[] array) {
+	if (array == null)
+		return null;
+	if (array.length == 0)
+		return "[]";
+
+	String str = "[ ";
+
+	for (int i = 0; i &lt; array.length; i++) {
+		if (i &lt; array.length - 1)
+			str = str + array[i] + ", ";
+		else
+			str = str + array[i] + " ]";
+	}
+	return str;
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、选择排序</h4>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01010/01010001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				我们需要使用选择排序算法给 <code>int[] a = { 5, 42, 1, -2, 100 }</code> 数组排序，算法大致就是这样的：
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01010/01010002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+public static void selectionSort(int[] array){
+	int tmp = 0;
+	for (int i = 0; i &lt; array.length - 1; i++) {
+		for (int j = i + 1; j &lt; array.length; j++) {
+			if (array[i] &gt; array[j]) {
+				tmp = array[i];
+				array[i] = array[j];
+				array[j] = tmp;
+			}
+		}
+	}
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、冒泡排序</h4>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01010/01010003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				我们需要使用冒泡排序算法给 int[] a = {5, 42, 1, -2, 100} 数组排序，算法大致就是这样的：
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01010/01010004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<pre>
+public static void bubbleSort(int[] array) {
+	int tmp = 0;
+	for (int i = 0; i &lt; array.length - 1; i++) {
+		for (int j = 0; j &lt; array.length - i - 1; j++) {	
+			if (array[j] &gt; array[j + 1]) {
+				tmp = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = tmp;
+			}
+		}
+	}
+}
+
+public static void main(String[] args) {
+	int[] array = {5, 42, 1, -2, 100};
+	bubbleSort(array);
+	System.out.println(printArray(array));
+}
+
+<span class="phase-title">输出：</span>
+
+[ -2, 1, 5, 42, 100 ]
+</pre>
+
+			<hr />
+
+			<h4 id="f7" class="title-1th">七、冒泡排序优化</h4>
+			<p>
+				首先在原版的冒泡排序中添加一些打印调试信息的代码，高亮部分即为调试信息
+			</p>
+
+			<pre>
+public static void bubbleSort(int[] array){
+	<span class="high-light">boolean swap = false;</span>
+	int tmp = 0;
+	for (int i = 0; i &lt; array.length - 1; i++) {
+		for (int j = 0; j &lt; array.length - i - 1; j++) {
+			<span class="high-light">swap = false;</span>
+			if (array[j] &gt; array[j + 1]) {
+				tmp = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = tmp;
+				<span class="high-light">swap = true;</span>
+			}
+			<span class="high-light">System.out.println("第" + (i + 1) + "轮 : " + (swap ? "换位":"不换") +printArray(array));</span>
+		}
+	}
+}
+</pre>
+
+			<p>
+				定义一个数组，<code>int[] array = {5, 42, 1, -2, 100, -12, -10, -9, -8, -6};</code>，使用方法进行排序
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	int[] array = {5, 42, 1, -2, 100, -12, -10, -9, -8, -6};
+	bubbleSort(array);
+}
+
+<span class="phase-title">输出：</span>
+
+......之前的输出省略
+第6轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第6轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第6轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第6轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第7轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第7轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第7轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第8轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第8轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+第9轮 : 不换[ -12, -10, -9, -8, -6, -2, 1, 5, 42, 100 ]
+</pre>
+
+			<p>
+				查看输出信息，我们可以看到从第 6 轮开始数组一直没有置换过顺序，说明数组已经是排序完成了，从第 7 轮开始都是不需要的，所以我们可以对这个算法进行优化。
+			</p>
+			<p>
+				优化的思路是这样的：
+			</p>
+
+			<br />
+
+			<p>
+				定义一个 boolean 变量 sort 标识内层循环是否置换过位置，如果置换过位置，该变量在内层循环中会被修改为假。
+			</p>
+			<p>
+				在外层循环开始后判断 sort 是否为真，如果为真表示上一次内层循环没有置换过位置，代表排序完成，直接跳出外层循环。
+			</p>
+			<p>
+				如果为假，表示上一次内层循环置换过位置，排序还没有完成，所以再一次将 sort 变量赋值为真，然后进入内层循环。
+			</p>
+
+			<br />
+
+			<p>
+				以下代码中 <span class="high-light">蓝色字体的代码</span> 即为加入的优化代码
+			</p>
+			<pre>
+public static void bubbleSortAlpha(int[] array){
+	<span class="annotation">boolean sort = false;</span>
+	<span class="high-light">boolean swap = false;</span>
+	int tmp = 0;
+	for (int i = 0; i &lt; array.length - 1; i++) {
+		<span class="annotation">if (sort) // 内层循环没有进行过置换操作，说明排序完成</span>
+			<span class="annotation">break;</span>
+		sort = true;
+		for (int j = 0; j &lt; array.length - i - 1; j++) {	
+			<span class="high-light">swap = false;</span>
+			if (array[j] &gt; array[j + 1]) {
+				tmp = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = tmp;
+				<span class="annotation">sort = false;</span>
+				<span class="high-light">swap = true;</span>
+			}
+			<span class="high-light">System.out.println("第" + (i + 1) + "轮 : " + (swap ? "换位":"不换") +printArray(array));</span>
+		}
+	}
+}
+</pre>
+
+			<br />
+
+			<span class="src-introduce">四、五、六、七部分演示代码在项目 Array中的 ArraySort.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f8" class="title-1th">八、二分查找法</h4>
+			<p>
+				首先编写一个普通的查找方法，即传入待查找元素，返回该元素的下标位置，如果未找到返回 -1
+			</p>
+			<pre>
+public static int indexOf(int[] arr, int element) {
+		
+		<span class="annotation">// 如果数组为 null 或数组长度为 0，返回 -1</span>
+		if (arr == null || arr.length == 0)
+			return -1;
+
+		for (int i = 0; i &lt; arr.length; i++) {
+			if (arr[i] == element)<span class="annotation"> // 如果元素找到，直接返回 index</span>
+				return i;
+		}
+		return -1;<span class="annotation"> // 如果没有，返回 -1</span>
+}
+</pre>
+
+			<br />
+
+			<p>
+				下面我们看一下有序数组的二分查找法，如果找到元素则返回下标值，如果未找到则返回插入点位置。JDK 源代码的二分查找法是这样的：
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01010/01010005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+public static int binarySearch(int[] arr, int element){
+		int min = 0;
+		int max = arr.length - 1;
+		int mid = 0;
+
+		while (max &gt;= min) {
+			mid = (min + max) &gt;&gt; 1;
+
+			if (arr[mid] &gt; element)
+				max = mid - 1;
+			else if (arr[mid] &lt; element)
+				min = mid + 1;
+			else 
+				return mid;
+		}
+		return -(min+1);<span class="annotation"> // 如果未找到，返回 -( 插入下标 + 1 )</span>
+}
+
+public static void main(String[] args) {
+
+	int[] a = new int[]{ 2, 56, 100, 201, 340 };
+
+	int index = binarySearch(a, 100);
+	System.out.println(index);
+
+	index = binarySearch(a, 78);
+	System.out.println(index);
+}
+
+<span class="phase-title">输出：</span>
+
+2
+-3
+</pre>
+			<p>
+				如果返回非负数，表示元素存在，且 <code>返回值 = 元素下标</code>
+			</p>
+			<p>
+				如果返回负数，表示元素不存在，且 <code>插入位置点 = -( 返回值 + 1 )</code>
+			</p>
+			<p>
+				100 元素是数组的第三个元素，下标为 2。78 元素不存在，插入位置点为 2
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 Array中的 ArraySearch.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f9" class="title-1th">九、二维数组</h4>
+			<p>
+				（1）数组中的每一个元素又是一个数组；
+			</p>
+			<p>
+				（2）二维数组的每一个元素又是一个数组，所以二维数组的遍历是一个嵌套循环；
+			</p>
+			<p>
+				（3）使用以下方式创建：
+			</p>
+			<pre>
+数据类型[][] array1 = new 数据类型[外层数组长度][内层数组长度];
+
+数据类型[][] array2 = new 数据类型[外层数组长度][];
+
+数据类型[][] array3 = { {} , {} , {} };
+</pre>
+			<p>
+				（4）为外层数组元素赋值方式：
+			</p>
+			<pre>
+array1[index] = new int[5]; <span class="annotation">// 右侧需要一个正确的数组定义方式</span>
+</pre>
+			<p>
+				（5）为内层数组元素赋值方式：
+			</p>
+			<pre>
+array1[index][index] = 6;
+</pre>
+
+			<br />
+
+			<p>第 1 种定义方式</p>
+			<pre>
+public static void main(String[] args) {
+	/*
+		<span class="annotation">定义了一个int类型二维数组</span>
+		<span class="annotation">这个数组有3个元素</span>
+		<span class="annotation">每一个元素都是长度为2的int数组</span>
+	*/
+	int[][] array = new int[3][2];
+
+	System.out.println("----第1次输出----");
+
+	/*
+		<span class="annotation">使用嵌套循环遍历二维数组</span>
+	*/
+	for (int i = 0; i < array.length; i++) {
+		for (int j = 0; j < array[i].length; j++)
+			System.out.println("array[" + i + "][" + j + "] = " + array[i][j]);
+	}
+
+	<span class="annotation">// 为array中第二个数组的第二个元素赋值为 2</span>
+	array[1][1] = 2;
+
+	System.out.println("----第2次输出----");
+	for (int i = 0; i < array.length; i++) {
+		for (int j = 0; j < array[i].length; j++)
+			System.out.println("array[" + i + "][" + j + "] = " + array[i][j]);
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+----第1次输出----
+array[0][0] = 0
+array[0][1] = 0
+array[1][0] = 0
+array[1][1] = 0
+array[2][0] = 0
+array[2][1] = 0
+----第2次输出----
+array[0][0] = 0
+array[0][1] = 0
+array[1][0] = 0
+array[1][1] = 2
+array[2][0] = 0
+array[2][1] = 0
+</pre>
+
+			<p>第 2 种定义方式</p>
+			<pre>
+public static void main(String[] args) {
+	/*
+		<span class="annotation">定义了一个int类型二维数组</span>
+		<span class="annotation">这个数组有3个元素</span>
+		<span class="annotation">每一个元素都是初始化值都是null</span>
+	*/
+	int[][] array = new int[3][];
+
+	System.out.println("----第1次输出----");
+	for (int i = 0; i < array.length; i++)
+		System.out.println("array[" + i + "] = " + array[i]);
+
+	<span class="annotation">// 为array中的元素赋值</span>
+	array[0] = new int[3];
+	array[1] = new int[]{5, 6, 7, 8};
+	array[2] = new int[]{1, 2, 3, 4, 5, 6};
+
+	System.out.println("----第2次输出----");
+	for (int i = 0; i < array.length; i++) {
+		for (int j = 0; j < array[i].length; j++)
+			System.out.println("array[" + i + "][" + j + "] = " + array[i][j]);
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+----第1次输出----
+array[0] = null
+array[1] = null
+array[2] = null
+----第2次输出----
+array[0][0] = 0
+array[0][1] = 0
+array[0][2] = 0
+array[1][0] = 5
+array[1][1] = 6
+array[1][2] = 7
+array[1][3] = 8
+array[2][0] = 1
+array[2][1] = 2
+array[2][2] = 3
+array[2][3] = 4
+array[2][4] = 5
+array[2][5] = 6
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 Array中的 TwoDimensionArray.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01009.html" style="font-size:12px;">第九节&nbsp;&nbsp;&nbsp;&nbsp;方法</a>
+			<br />
+			<a href="java01011.html" style="font-size:12px;">第十一节&nbsp;&nbsp;&nbsp;&nbsp;面向对象思想、类和对象</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

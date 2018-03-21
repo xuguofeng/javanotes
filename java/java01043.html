@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java IO 技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十三节&nbsp;&nbsp;&nbsp;&nbsp;字符流（二）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、文件字符流</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	FileReader 类</a></li>
+						<li><a href="#f1-2">2、	FileWriter 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、缓冲字符流</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	BufferedReader 类</a></li>
+						<li><a href="#f2-2">2、	BufferedWriter 类</a></li>
+						<li><a href="#f2-3">3、	读取和复制文件</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、打印字符流</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	PrintWriter 类</a></li>
+						<li><a href="#f3-2">2、	PrintWriter 类使用</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、输出目录树</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、文件字符流</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	FileReader 类</h5>
+
+			<pre>
+java.io;
+
+public class FileReader extends InputStreamReader {}
+</pre>
+			<p>
+				用来读取字符文件的便捷类。此类的构造方法假定默认字符编码和默认字节缓冲区大小都是适当的。
+			</p>
+
+			<p>
+				构造方法如下：
+			</p>
+
+			<pre>
+<span class="methodClassName">public FileReader(File file) throws FileNotFoundException</span>
+	使用File对象创建一个新FileReader
+
+<span class="methodClassName">public FileReader(String fileName) throws FileNotFoundException</span>
+	使用文件名创建一个新FileReader
+</pre>
+
+			<h5 id="f1-2" class="title-2th">2、	FileWriter 类</h5>
+
+			<pre>
+java.io;
+
+public class FileWriter extends OutputStreamWriter {}
+</pre>
+
+			<p>
+				用来写入字符文件的便捷类。此类的构造方法假定默认字符编码和默认字节缓冲区大小都是可接受的。
+			</p>
+
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public FileWriter(File file) throws IOException</span>
+	使用File对象构造一个FileWriter对象
+
+<span class="methodClassName">public FileWriter(File file, boolean append) throws IOException</span>
+	使用File对象构造一个FileWriter对象。如果第二个参数为true，则将字节追加到文件
+
+<span class="methodClassName">public FileWriter(String fileName) throws IOException</span>
+	使用文件名构造一个FileWriter对象
+
+<span class="methodClassName">public FileWriter(String fileName, boolean append) throws IOException</span>
+	使用文件名构造一个FileWriter对象。如果第二个参数为true，则将字节追加到文件
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、缓冲字符流</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	BufferedReader 类</h5>
+
+			<pre>
+java.io;
+
+public class BufferedReader extends Reader {}
+</pre>
+
+			<p>
+				从字符输入流中读取文本，缓冲各个字符，从而实现字符、数组和行的高效读取。
+			</p>
+			<p>
+				可以指定缓冲区的大小，或者使用默认的大小。大多数情况下，默认值就足够大了。
+			</p>
+			<p>
+				建议用 <code>BufferedReader</code> 包装所有开销很高的 <code>Reader</code>（如 <code>FileReader</code> 和 <code>InputStreamReader</code>）。
+			</p>
+			<p>
+				例如：<code>BufferedReader in = new BufferedReader(new FileReader("foo.in"));</code>
+			</p>
+			<p>
+				如果没有缓冲，则每次调用 <code>read()</code> 或 <code>readLine()</code> 都会导致从文件中读取字节，并将其转换为字符后返回，而这是极其低效的。
+			</p>
+			
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public BufferedReader(Reader in)</span>
+	创建一个使用默认大小输入缓冲区的缓冲字符输入流
+
+<span class="methodClassName">public BufferedReader(Reader in, int sz)</span>
+	创建一个使用指定大小输入缓冲区的缓冲字符输入流
+</pre>
+
+			<p>
+				该类有一个读取整行字符的方法：
+			</p>
+			<pre>
+<span class="methodClassName">public String readLine() throws IOException</span>
+	读取一个文本行。
+	通过下列字符之一即可认为某行已终止：换行('\n')、回车('\r')或回车后直接跟着换行
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	BufferedWriter 类</h5>
+
+			<pre>
+java.io;
+
+public class BufferedWriter extends Writer {}
+</pre>
+
+			<p>
+				将文本写入字符输出流，缓冲各个字符，从而提供单个字符、数组和字符串的高效写入。
+			</p>
+			<p>
+				可以指定缓冲区的大小，或者使用默认的大小。在大多数情况下，默认值就足够大了。
+			</p>
+			<p>
+				该类提供了 <code>newLine()</code> 方法，使用平台的行分隔符概念，此概念由系统属性 <code>line.separator</code> 定义。
+			</p>
+			<p>
+				建议用 <code>BufferedWriter</code> 包装所有开销很高的 <code>Writer</code>（如 <code>FileWriters</code> 和 <code>OutputStreamWriters</code>）。
+			</p>
+			<p>
+				例如：<code>PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("foo.out")));</code>
+			</p>
+			<p>
+				将缓冲 <code>PrintWriter</code> 对文件的输出。如果没有缓冲，则每次调用 <code>print()</code> 方法会导致将字符转换为字节，然后立即写入到文件，而这是极其低效的。
+			</p>
+
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public BufferedWriter(Writer out)</span>
+	创建一个使用默认大小缓冲区的缓冲字符输出流
+
+<span class="methodClassName">public BufferedWriter(Writer out, int sz)</span>
+	创建一个使用给定大小缓冲区的新缓冲字符输出流
+</pre>
+
+			<p>
+				方法：
+			</p>
+			<pre>
+<span class="methodClassName">public void newLine() throws IOException</span>
+	写入一个行分隔符。
+	行分隔符字符串由系统属性line.separator定义，并且不一定是单个新行('\n')符
+
+<span class="methodClassName">public void write(String s, int off, int len) throws IOException</span>
+	写入字符串的某一部分
+	如果len参数的值为负数，则不写入任何字符
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	读取和复制文件</h5>
+
+			<p>
+				<span class="high-light">读取文件</span>
+			</p>
+			<p>
+				主要是使用 <code>BufferedReader</code> 的 <code>readLine</code> 方法实现
+			</p>
+
+			<pre>
+<span class="annotation">// 定义输入流</span>
+BufferedReader reader = null;
+try {
+	
+	<span class="annotation">// 创建BufferedReader对象</span>
+	<span class="annotation">// 使用UTF-8字符集</span>
+	reader = new BufferedReader(
+					new InputStreamReader(
+						new FileInputStream(src), "UTF-8"));
+
+	String line = "";
+
+	<span class="annotation">// 循环读取每一行</span>
+	while ((line = reader.readLine()) != null) {
+		<span class="annotation">// 将读取到的一行文本输出到控制台</span>
+		System.out.println( line );
+	}
+} catch (IOException e) {
+	e.printStackTrace();
+	throw e;
+} finally {
+	try {
+		if (reader != null)
+			reader.close();
+	} catch (IOException e) {}
+}
+</pre>
+			<br />
+			<p>
+				<span class="high-light">复制文件</span>
+			</p>
+			<pre>
+<span class="annotation">// 定义输入流和输出流</span>
+BufferedReader reader = null;
+BufferedWriter writer = null;
+try {
+	
+	<span class="annotation">// 创建BufferedReader和BufferedWriter对象</span>
+	<span class="annotation">// 使用UTF-8字符集</span>
+	reader = new BufferedReader(
+					new InputStreamReader(
+						new FileInputStream(src), "UTF-8"));
+	writer = new BufferedWriter(
+					new OutputStreamWriter(
+						new FileOutputStream(dst), "UTF-8"));
+
+	String line = "";
+
+	<span class="annotation">// 循环读取每一行</span>
+	while ((line = reader.readLine()) != null) {
+		<span class="annotation">// 将读取到的一行文本输出到目标文件</span>
+		writer.write(line);
+		writer.newLine();
+		writer.flush();
+	}
+} catch (IOException e) {
+	e.printStackTrace();
+	throw e;
+} finally {
+	try {
+		if (reader != null)
+			reader.close();
+		if (writer != null)
+			writer.close();
+	} catch (IOException e) {}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 BufferedReaderAndWriter.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、打印字符流</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	PrintWriter 类</h5>
+
+			<pre>
+java.io;
+
+public class PrintWriter extends Writer {}
+</pre>
+
+			<p>
+				向文本输出流打印对象的格式化表示形式。不包含用于写入原始字节的方法，对于这些字节，程序应该使用未编码的字节流进行写入。
+			</p>
+
+			<p>
+				构造方法如下：
+			</p>
+
+			<pre>
+<span class="methodClassName">public PrintWriter(File file) throws FileNotFoundException</span>
+	使用指定File对象创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(File file, String csn) throws FileNotFoundException, UnsupportedEncodingException</span>
+	使用指定File对象、字符集创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(OutputStream out)</span>
+	根据OutputStream创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(OutputStream out, boolean autoFlush)</span>
+	根据OutputStream创建新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(String fileName) throws FileNotFoundException</span>
+	使用指定文件名称创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(String fileName, String csn) throws FileNotFoundException, UnsupportedEncodingException</span>
+	使用指定文件名称和字符集创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(Writer out)</span>
+	创建非自动行刷新的PrintWriter
+
+<span class="methodClassName">public PrintWriter(Writer out, boolean autoFlush)</span>
+	创建PrintWriter
+</pre>
+
+			<p>
+				方法如下：
+			</p>
+
+			<pre>
+<span class="methodClassName">public PrintWriter append(char c)</span>
+	将指定字符追加到writer
+
+<span class="methodClassName">public PrintWriter append(CharSequence csq)</span>
+	将指定字符序列追加到writer
+
+<span class="methodClassName">public void print(Object obj)</span>
+	打印对象
+
+<span class="methodClassName">public void print(String s)</span>
+	打印字符串。如果参数为null，则打印字符串"null"
+
+<span class="methodClassName">public void println(Object x)</span>
+	打印Object，然后终止该行
+
+<span class="methodClassName">public void println(String x)</span>
+	打印String，然后终止该行
+
+<span class="methodClassName">public void write(char[] buf)</span>
+	写入字符数组
+
+<span class="methodClassName">public void write(char[] buf, int off, int len)</span>
+	写入字符数组的某一部分
+
+<span class="methodClassName">public void write(String s)</span>
+	写入字符串
+
+<span class="methodClassName">public void write(String s, int off, int len)</span>
+	写入字符串的某一部分
+</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	PrintWriter 类使用</h5>
+
+			<pre>
+PrintWriter out = null;
+try {
+
+	<span class="annotation">// 创建PrintWriter对象</span>
+	<span class="annotation">// public PrintWriter(Writer out, boolean autoFlush) 构造方法</span>
+	<span class="annotation">// 既可以指定字符集，又可以指定自动刷新</span>
+	out = new PrintWriter(
+			new OutputStreamWriter(
+				new FileOutputStream("D:\\测试.txt"), "UTF-8"), 
+			true);
+
+	String line = "测试PrintWriter类";
+	out.println(line);
+
+} catch (IOException e) {
+	e.printStackTrace();
+} finally {
+	if (out != null)
+		out.close();
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 PrintWriterAPI.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、输出目录树</h4>
+
+			<p>
+				查找指定目录下的指定类型文件，以目录树的方式输出到指定文件。
+			</p>
+			<pre>
+public static void main(String[] args) throws IOException {
+
+	String dstFile = "D:\\fileList.txt";
+
+	List&lt;String&gt; targetList = new ArrayList&lt;String&gt;();
+	File file = new File("D:\\tmp");
+	fileList(file, ".java", targetList, 0);
+
+	for(String f : targetList) {
+		System.out.println(f);
+	}
+
+	printFileListTree(targetList, 
+		new BufferedWriter(
+			new OutputStreamWriter(
+				new FileOutputStream(dstFile), "UTF-8")));
+}
+
+<span class="annotation">// 查找文件集合</span>
+private static void fileList(File dir, String suffix, List&lt;String&gt; targetList, int level) {
+	if (dir == null)
+		throw new RuntimeException("参数文件不合理: " + null);
+
+	final String s = suffix;
+
+	targetList.add(format(level++) + dir.getName());
+	if (dir.isDirectory()) {
+		File[] fs = dir.listFiles(new FileFilter() {
+			public boolean accept(File d) {
+				return d.isDirectory() || d.getName().endsWith(s);
+			}
+		});
+		for (int i = 0; i < fs.length; i++)
+			fileList(fs[i], s, targetList, level);
+	}
+}
+
+<span class="annotation">// 格式化文件层次字符串</span>
+private static String format(int level) {
+	StringBuilder builder = new StringBuilder();
+	builder.append("|--");
+	for (int i = 0; i < level; i++)
+		builder.insert(0, "|  ");
+	return builder.toString();
+}
+
+<span class="annotation">// 输出目录树</span>
+private static void printFileListTree(List&lt;String&gt; fileListTree, Writer writer) throws IOException {
+	try {
+		for(String f : fileListTree) {
+			writer.write(f + System.getProperty("line.separator"));
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw e;
+	} finally {
+		try {
+			if (writer != null)
+				writer.close();
+		} catch (IOException e) {}
+	}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 FileListTree.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01042.html" style="font-size:12px;">第四十二节&nbsp;&nbsp;&nbsp;&nbsp;字符流（一）</a>
+			<br />
+			<a href="java01044.html" style="font-size:12px;">第四十四节&nbsp;&nbsp;&nbsp;&nbsp;Properties 和 控制台输入输出操作</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

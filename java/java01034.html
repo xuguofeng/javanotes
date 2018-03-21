@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十四节&nbsp;&nbsp;&nbsp;&nbsp;Hashtable 、Properties 和集合数组工具类</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Hashtable 类</a></li>
+				<li><a href="#f2">二、Properties 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	概述</a></li>
+						<li><a href="#f2-2">2、	构造方法</a></li>
+						<li><a href="#f2-3">3、	主要方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、集合数组工具类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	Collections 类</a></li>
+						<li><a href="#f3-2">2、	Arrays 类</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Hashtable 类</h4>
+			<pre>
+java.util;
+
+public class Hashtable&lt;K,V&gt; extends Dictionary&lt;K,V&gt; implements Map&lt;K,V&gt;, Cloneable, Serializable {}
+</pre>
+			<p>
+				此类使用哈希表将键映射到相应的值，任何非 null 对象都可以用作键或值。
+			</p>
+			<p>
+				为了成功地在哈希表中存储和获取对象，用作键的对象必须实现 <code>hashCode</code> 方法和 <code>equals</code> 方法。
+			</p>
+			<p>
+				从 Java 2 平台 v1.2 起，此类被改进以实现 <code>Map</code> 接口，成为集合框架的一个成员，<code>Hashtable</code> 是同步的。
+			</p>
+			<p>
+				<code>HashMap</code> 和 <code>Hashtable</code> 有以下共同点和区别：
+			</p>
+			<p>
+				（1）二者内部都是哈希表实现；
+			</p>
+			<p>
+				（2）前者是 1.2 出现的，是 <code>Map</code> 接口的实现类；后者是过时的 <code>Dictionary</code> 的子类；JDK 已经明确建议“新的实现应该实现 <code>Map</code> 接口，而不是扩展 <code>Dictionary</code> 类。”；
+			</p>
+			<p>
+				（3）前者不是同步的，多个线程操作需要实现外部同步；后者是同步的；
+			</p>
+			<p>
+				（4）前者允许 null 键、null 值，后者不允许 null 作为键值；
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Properties 类</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	概述</h5>
+
+			<pre>
+java.util;
+
+public class Properties extends Hashtable&lt;Object, Object&gt; {}
+</pre>
+			<p>
+				表示一个持久的属性集，可以保存在流中或从流中加载，属性集中每个键及其对应值都是一个字符串。
+			</p>
+			<p>
+				一个属性集可以包含另一个属性集作为“默认值”。
+			</p>
+			<p>
+				<code>load(Reader)/store(Writer, String)</code> 方法在字符流中加载和存储属性。
+			</p>
+			<p>
+				<code>loadFromXML(InputStream)</code> 和 <code>storeToXML(OutputStream, String, String)</code> 方法按简单的 XML 格式加载和存储属性。默认使用 UTF-8 字符编码，当然也可以指定编码。XML 属性文档应具有以下 DOCTYPE 声明：
+			</p>
+			<p>
+				<code>&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;</code>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	构造方法</h5>
+
+			<pre>
+<span class="methodClassName">public Properties()</span>
+	创建一个无默认值的空属性集。
+
+<span class="methodClassName">public Properties( Properties defaults )</span>
+	创建一个带有指定默认值的空属性集。
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	主要方法</h5>
+
+			<pre>
+<span class="methodClassName">public String getProperty(String key)</span>
+	用指定的键在此属性集中搜索属性值。
+
+<span class="methodClassName">public String getProperty(String key, String defaultValue)</span>
+	用指定的键在属性集中搜索属性。如果在属性集中未找到该键，则接着递归检查默认属性集及其默认值。如果未找到属性，则此方法返回默认值变量。
+
+<span class="methodClassName">public void list(PrintStream out)</span>
+	将属性集输出到指定的输出流。
+
+<span class="methodClassName">public void list(PrintWriter out)</span>
+	将属性集输出到指定的输出流。
+
+<span class="methodClassName">public void load(InputStream inStream) throws IOException</span>
+	从输入流中读取属性集（键和元素对）
+
+<span class="methodClassName">public void load(Reader reader) throws IOException</span>
+	按面向行的格式从字符输入流中读取属性集（键和元素对）。
+
+<span class="methodClassName">public Object setProperty(String key, String value)</span>
+	为某个键设置指定的值。
+
+<span class="methodClassName">public void store(OutputStream out, String comments) throws IOException</span>
+	将属性集（键和元素对）写入输出流。
+
+<span class="methodClassName">public void store(Writer writer, String comments) throws IOException</span>
+	将属性集（键和元素对）写入字符输出流。
+
+<span class="methodClassName">public Set&lt;String&gt; stringPropertyNames()</span>
+	返回属性集中的键集。
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、集合数组工具类</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	Collections 类</h5>
+
+			<pre>
+java.util;
+
+public class Collections extends Object {}
+</pre>
+			<p>
+				此类完全由在 <code>Collection</code> 上进行操作或返回 <code>Collection</code> 的静态方法组成，具体方法如下：
+			</p>
+
+			<pre>
+<span class="methodClassName">public static &lt;T&gt; boolean addAll(Collection&lt;? super T&gt; c, T... elements)</span>
+	将所有指定元素添加到指定集合。
+
+<span class="methodClassName">public static &lt;T&gt; int binarySearch(List&lt;? extends Comparable&lt;? super T&gt;&gt; list, T key)</span>
+	使用二分法搜索指定集合，以获得指定对象。在调用之前，必须根据元素的自然顺序对集合进行升序排序（通过sort(List)方法）。
+
+<span class="methodClassName">public static &lt;T&gt; int binarySearch(List&lt;? extends T&gt; list, T key, Comparator&lt;? super T&gt; c)</span>
+	使用二分法搜索指定集合，以获得指定对象。在调用之前，必须根据指定的比较器对集合进行升序排序（通过sort(List, Comparator)方法）。
+
+<span class="methodClassName">public static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)</span>
+	将所有元素从一个集合复制到另一个集合。
+
+<span class="methodClassName">public static &lt;T&gt; void fill(List&lt;? super T&gt; list, T obj)</span>
+	使用指定元素替换指定集合中的所有元素。
+
+<span class="methodClassName">public static &lt;T extends Object & Comparable&lt;? super T&gt;&gt; T max(Collection&lt;? extends T&gt; coll)</span>
+	根据元素的自然顺序，返回给定集合的最大元素。
+
+<span class="methodClassName">public static &lt;T&gt; T max(Collection&lt;? extends T&gt; coll, Comparator&lt;? super T&gt; comp)</span>
+	根据指定比较器产生的顺序，返回给定集合的最大元素。
+
+<span class="methodClassName">public static &lt;T extends Object & Comparable&lt;? super T&gt;&gt; T min(Collection&lt;? extends T&gt; coll)</span>
+	根据元素的自然顺序，返回给定集合的最小元素。
+
+<span class="methodClassName">public static &lt;T&gt; T min(Collection&lt;? extends T&gt; coll, Comparator&lt;? super T&gt; comp)</span>
+	根据指定比较器产生的顺序，返回给定集合的最小元素。
+
+<span class="methodClassName">public static &lt;T&gt; boolean replaceAll(List&lt;T&gt; list, T oldVal, T newVal)</span>
+	使用newVal替换集合中出现的所有oldVal。
+
+<span class="methodClassName">public static &lt;T&gt; Comparator&lt;T&gt; reverseOrder()</span>
+	返回一个比较器，逆转实现了Comparable接口的对象集合的自然顺序。
+	例如，假设 a 是一个字符串数组。那么：
+	Arrays.sort(a, Collections.reverseOrder());
+	将按照逆字典（字母）顺序对数组进行排序。
+
+<span class="methodClassName">public static &lt;T&gt; Comparator&lt;T&gt; reverseOrder(Comparator&lt;T&gt; cmp)</span>
+	返回一个比较器，逆转指定比较器的顺序。
+
+<span class="methodClassName">public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list)</span>
+	根据元素的自然顺序对指定集合按升序进行排序。集合中的所有元素都必须实现Comparable接口。
+
+<span class="methodClassName">public static &lt;T&gt; void sort(List&lt;T&gt; list, Comparator&lt;? super T&gt; c)</span>
+	根据指定比较器产生的顺序对指定集合进行排序。此集合内的所有元素都必须可使用指定比较器相互比较。
+
+<span class="methodClassName">public static &lt;T&gt; List&lt;T&gt; synchronizedList(List&lt;T&gt; list)</span>
+	返回指定集合支持的同步（线程安全的）集合。
+
+<span class="methodClassName">public static &lt;K,V&gt; Map&lt;K,V&gt; synchronizedMap(Map&lt;K,V&gt; m)</span>
+	返回由指定映射支持的同步（线程安全的）映射。
+
+<span class="methodClassName">public static &lt;T&gt; Set&lt;T&gt; synchronizedSet(Set&lt;T&gt; s)</span>
+	返回指定Set支持的同步（线程安全的）Set。
+</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	Arrays 类</h5>
+
+			<pre>
+java.util;
+
+public class Arrays extends Object {}
+</pre>
+
+			<p>
+				此类包含用来操作数组的各种方法，具体如下：
+			</p>
+
+			<pre>
+<span class="methodClassName">public static &lt;T&gt; List&lt;T&gt; asList(T... a)</span>
+	返回一个受指定数组支持的固定大小的集合。
+
+<span class="methodClassName">public static int binarySearch(int[] a, int key)</span>
+	使用二分法搜索指定的int型数组，以获得指定的值。
+
+<span class="methodClassName">public static int binarySearch(int[] a, int fromIndex, int toIndex, int key)</span>
+	使用二分法搜索指定的int型数组，在指定范围内获得指定的值，必须在调用前对范围进行排序（通过sort(int[], int, int)方法）。
+
+<span class="methodClassName">public static int binarySearch(Object[] a, int fromIndex, int toIndex, Object key)</span>
+	使用二分法搜索指定数组，在指定范围内获得指定对象，在调用前，必须根据元素的自然顺序对范围进行升序排序（通过sort(Object[], int, int)方法）。
+
+<span class="methodClassName">public static int binarySearch(Object[] a, Object key)</span>
+	使用二分法搜索指定数组，以获得指定对象，在调用前，必须根据元素的自然顺序对数组进行升序排序（通过sort(Object[])方法）。
+
+<span class="methodClassName">public static int[] copyOf(int[] original, int newLength)</span>
+	复制指定的数组。
+
+<span class="methodClassName">public static &lt;T&gt; T[] copyOf(T[] original, int newLength)</span>
+
+<span class="methodClassName">public static int[] copyOfRange(int[] original, int from, int to)</span>
+<span class="methodClassName">public static &lt;T&gt; T[] copyOfRange(T[] original, int from, int to)</span>
+
+<span class="methodClassName">public static boolean deepEquals(Object[] a1, Object[] a2)</span>
+	如果两个数组彼此是深层相等的，则返回true。
+
+<span class="methodClassName">public static boolean equals(Object[] a, Object[] a2)</span>
+	如果两个Object数组彼此相等，则返回true。
+
+<span class="methodClassName">public static void fill(Object[] a, Object val)</span>
+<span class="methodClassName">public static void fill(Object[] a, int fromIndex, int toIndex, Object val)</span>
+	将val对象填充到Object数组指定范围。
+
+<span class="methodClassName">public static void sort(int[] a)</span>
+<span class="methodClassName">public static void sort(int[] a, int fromIndex, int toIndex)</span>
+	对int型数组的指定范围按数字升序进行排序。
+
+<span class="methodClassName">public static void sort(Object[] a)</span>
+<span class="methodClassName">public static void sort(Object[] a, int fromIndex, int toIndex)</span>
+	根据元素的自然顺序对指定对象数组的指定范围按升序进行排序。
+
+<span class="methodClassName">public static String toString(Object[] a)</span>
+	返回指定数组内容的字符串表示形式。
+</pre>
+			<br />
+
+			<a href="java01033.html" style="font-size:12px;">第三十三节&nbsp;&nbsp;&nbsp;&nbsp;Map 的遍历</a>
+			<br />
+			<a href="java01035.html" style="font-size:12px;">第三十五节&nbsp;&nbsp;&nbsp;&nbsp;泛型</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

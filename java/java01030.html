@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十节&nbsp;&nbsp;&nbsp;&nbsp;Set 接口</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Set 接口</a></li>
+				<li><a href="#f2">二、HashSet 类</a></li>
+				<li><a href="#f3">三、LinkedHashSet 和 TreeSet 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	LinkedHashSet 类</a></li>
+						<li><a href="#f3-2">2、	TreeSet 类</a></li>
+						<li><a href="#f3-3">3、	Comparable 接口</a></li>
+						<li><a href="#f3-4">4、	Comparator 接口</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Set 接口</h4>
+
+			<pre>
+java.util;
+
+public interface Set&lt;E&gt; extends Collection&lt;E&gt; {}
+</pre>
+			<p>
+				不包含重复元素的集合接口。<code>Set</code> 集合不包含满足 <code>e1.equals(e2)</code> 的元素对 <code>e1</code> 和 <code>e2</code> ，并且最多包含一个 null 元素。
+			</p>
+			<p>
+				如果将可变对象用作 <code>Set</code> 集合元素，而数据操作影响 <code>equals</code> 比较的值，那么 <code>Set</code> 的行为是不确定的。
+			</p>
+			<p>
+				某些 <code>Set</code> 实现对其所包含的元素有所限制。例如，某些实现禁止 null 元素，而某些则对其元素的类型所有限制。试图添加不合理的元素会抛出<code>NullPointerException</code> 或 <code>ClassCastException</code>。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、HashSet 类</h4>
+
+			<pre>
+java.util;
+
+public class HashSet&lt;E&gt; extends AbstractSet&lt;E&gt; implements Set&lt;E&gt;, Cloneable, Serializable {}
+</pre>
+			<p>
+				此类实现 <code>Set</code> 接口，由哈希表（实际上是一个 <code>HashMap</code> 实例）支持。不保证迭代顺序。此类允许使用 null 元素。
+			</p>
+			<p>
+				此实现不是同步的。
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public HashSet()</span>
+	构造一个新的空Set集合，默认初始容量是16，加载因子是0.75。
+
+<span class="methodClassName">public HashSet( Collection&lt;? extends E&gt; c )</span>
+	构造一个包含指定集合元素的新Set集合。
+
+<span class="methodClassName">public HashSet( int initialCapacity, float loadFactor )</span>
+	构造一个新的空Set集合，其具有指定的初始容量和加载因子。
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、LinkedHashSet 和 TreeSet 类</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	LinkedHashSet 类</h5>
+
+			<pre>
+java.util;
+
+public class LinkedHashSet&lt;E&gt; extends HashSet&lt;E&gt; implements Set&lt;E&gt;, Cloneable, Serializable {}
+</pre>
+
+			<p>
+				可预知迭代顺序的哈希表和链表集合实现，不同步。
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	TreeSet 类</h5>
+
+			<pre>
+java.util;
+
+public class TreeSet&lt;E&gt; extends AbstractSet&lt;E&gt; implements NavigableSet&lt;E&gt;, Cloneable, Serializable {
+
+	public TreeSet( Comparator&lt;? super E&gt; comparator ) { ...... }
+
+	public TreeSet() { ...... }
+}
+</pre>
+
+			<p>
+				使用元素的自然顺序对元素进行排序，或者根据创建时提供的 <code>Comparator</code> 进行排序。
+			</p>
+			<p>
+				<code>TreeSet</code> 使用对象的 <code>compareTo</code> 方法或 <code>Comparator</code> 的 <code>compare</code> 方法对元素进行比较。
+			</p>
+			<p>
+				不是同步的。
+			</p>
+			<p>
+				如果需要 <code>TreeSet</code> 保存某个类对象，这个类应该是可比较的，主要两种方式：该类实现 <code>Comparable</code> 接口；在创建 <code>TreeSet</code> 时传入 <code>Comparator</code> 接口对象作为参数。
+			</p>
+
+			<h5 id="f3-3" class="title-2th">3、	Comparable 接口</h5>
+
+			<pre>
+java.lang;
+
+public interface Comparable&lt;T&gt; {
+	int compareTo(T o);
+}
+</pre>
+
+			<p>
+				实现 <code>Comparable</code> 接口的每个类应该实现 <code>int compareTo(T o)</code> 方法用来对该类对象进行排序。
+			</p>
+			<p>
+				在某个对象上调用 <code>compareTo(T o)</code> 会比较此对象与参数对象的大小。如果该对象小于、等于或大于参数对象，则分别返回负整数、零或正整数。
+			</p>
+			<p>
+				在向 <code>TreeSet</code> 集合插入新元素时，<code>TreeSet</code> 会调用这个元素的 <code>compareTo</code> 方法与集合中的元素进行大小比较，返回值为正数（即“较大”）放在后面；负数放在前面；0不插入。
+			</p>
+			<p>
+				找到之前编写的 <code>Mobile</code> 类，让这个类实现 <code>Comparable</code> 接口，覆盖 <code>int compareTo(T o)</code> 方法，使用手机的产品编码比较两个 <code>Mobile</code> 对象。代码如下：
+			</p>
+
+			<pre>
+public class Mobile implements Comparable&lt;Mobile&gt; {
+	
+	<span class="annotation">// 产品编码，用于确定 Mobile 对象的唯一性、以及比较两个 Mobile 对象</span>
+	private int productId;
+
+	private String phoneNumber;
+
+	public Mobile() {}
+
+	public Mobile(int productId, String phoneNumber){
+		this.phoneNumber = phoneNumber;
+		this.productId = productId;
+	}
+
+	// getter & setter
+
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Mobile))
+			return false;
+		Mobile anotherMobile = (Mobile) obj;
+		return this.productId == anotherMobile.getProductId();
+	}
+	public int hashCode() {
+		return this.productId;
+	}
+	public String toString() {
+		return "产品编码：" + this.productId + ", 手机号码：" + this.phoneNumber;
+	}
+
+	<span class="annotation">// 使用 productId 比较 Mobile 对象</span>
+	public int compareTo(Mobile m) {
+		return this.productId - m.getProductId();
+	}
+}
+
+public static void main(String[] args) {
+	TreeSet treeSet = new TreeSet();
+
+	Mobile m1 = new Mobile(10, "18902120812");
+	Mobile m2 = new Mobile(2, "18902120812");
+	Mobile m3 = new Mobile(6, "18902120812");
+	Mobile m4 = new Mobile(1, "18902120812");
+	Mobile m5 = new Mobile(100, "18902120812");
+
+	treeSet.add(m1);
+	treeSet.add(m2);
+	treeSet.add(m3);
+	treeSet.add(m4);
+	treeSet.add(m5);
+
+	System.out.println(treeSet);
+}
+
+<span class="phase-title">输出：</span>
+
+[产品编码：1, 手机号码：18902120812, 产品编码：2, 手机号码：18902120812, 产品编码：6, 手机号码：18902120812, 产品编码：10, 手机号码：18902120812, 产品编码：100, 手机号码：18902120812]
+</pre>
+
+			<h5 id="f3-4" class="title-2th">4、	Comparator 接口</h5>
+
+			<pre>
+java.util;
+
+public interface Comparator&lt;T&gt; {
+	int compare(T o1, T o2);
+}
+</pre>
+			<p>
+				比较两个参数。根据第一个参数小于、等于或大于第二个参数分别返回负整数、零或正整数。
+			</p>
+			<p>
+				在向 <code>TreeSet</code> 集合插入新元素时，<code>TreeSet</code> 会调用比较器的 <code>compare(新元素, 已存在元素)</code> 方法，返回值为正数，则把新元素放在后面；负数放在前面；0不插入。
+			</p>
+			<pre>
+TreeSet treeSet = new TreeSet(new Comparator&lt;Mobile&gt;() {
+	public int compare(Mobile m1, Mobile m2) {
+		return m2.getProductId() - m1.getProductId();
+	}
+});
+
+Mobile m1 = new Mobile(10, "18902120812");
+Mobile m2 = new Mobile(2, "18902120812");
+Mobile m3 = new Mobile(6, "18902120812");
+Mobile m4 = new Mobile(1, "18902120812");
+Mobile m5 = new Mobile(100, "18902120812");
+
+treeSet.add(m1);
+treeSet.add(m2);
+treeSet.add(m3);
+treeSet.add(m4);
+treeSet.add(m5);
+
+System.out.println(treeSet);
+
+<span class="phase-title">输出：</span>
+
+[产品编码：100, 手机号码：18902120812, 产品编码：10, 手机号码：18902120812, 产品编码：6, 手机号码：18902120812, 产品编码：2, 手机号码：18902120812, 产品编码：1, 手机号码：18902120812]
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 Mobile.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01029.html" style="font-size:12px;">第二十九节&nbsp;&nbsp;&nbsp;&nbsp;ArrayList 类、队列和栈</a>
+			<br />
+			<a href="java01031.html" style="font-size:12px;">第三十一节&nbsp;&nbsp;&nbsp;&nbsp;集合遍历和 Iterator 接口</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

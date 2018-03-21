@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二节&nbsp;&nbsp;&nbsp;&nbsp;PLSQL Developer 客户端软件</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、下载 PLSQL Developer</a></li>
+				<li><a href="#f2">二、安装</a></li>
+				<li><a href="#f3">三、instantclient 下载安装</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	下载</a></li>
+						<li><a href="#f3-2">2、	解压安装</a></li>
+						<li><a href="#f3-3">3、	配置PLSQL Developer</a></li>
+						<li><a href="#f3-4">4、 配置tns</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、连接数据库</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	连接本地数据库</a></li>
+						<li><a href="#f4-2">2、	连接远程数据库</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、普通用户登陆数据库</a>
+					<ul class="list-unstyled">
+						<li><a href="#f5-1">1、	创建用户</a></li>
+						<li><a href="#f5-2">2、	使用普通用户登录</a></li>
+					</ul>
+				</li>
+				<li><a href="#f6">六、其他图形工具</a>
+					<ul class="list-unstyled">
+						<li><a href="#f6-1">1、	sql developer</a></li>
+						<li><a href="#f6-2">2、	Navicat Premium</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、下载 PLSQL Developer</h4>
+			<p>
+				百度搜索 <code>“plsql developer”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到 <code>“PL/SQL Developer 10.0 page”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、安装</h4>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002007.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002008.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/01002009.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020010.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020011.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020012.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、instantclient 下载安装</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	下载</h5>
+			<p>
+				百度搜索 <code>“instantclient”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020013.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到 <code>“Downloads”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020014.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				选择 <code>“Instant Client for Microsoft Windows (x64)”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020015.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到 <code>“instantclient-basic-windows.x64-11.2.0.4.0.zip”</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020016.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				登陆后下载即可
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	解压安装</h5>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020017.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				把解压后的 <code>“instantclient_11_2”</code> 拷贝到 <code>“C:\Program Files”</code> 下面
+			</p>
+
+			<h5 id="f3-3" class="title-2th">3、	配置PLSQL Developer</h5>
+
+			<p>
+				打开软件，找到 <code>Configure—>Preference</code>，找到 <code>Connection</code> 菜单，配置如下
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020018.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				<span class="high-light">Oracle Home</span>
+			</p>
+			<pre>
+C:\Program Files\instantclient_11_2</pre>
+
+			<p>
+				<span class="high-light">OCI library</span>
+			</p>
+			<pre>
+C:\Program Files\instantclient_11_2\oci.dll</pre>
+
+			<p>
+				关闭 <code>PLSQL Developer</code>
+			</p>
+
+			<h5 id="f3-4" class="title-2th">4、 配置tns</h5>
+
+			<p>
+				找到 <code>OracleXE</code> 安装目录下的 <code>tnsnames.ora</code> 配置文件，在以下目录：
+			</p>
+			<pre>
+C:\soft01\oracle\app\oracle\product\11.2.0\server\network\ADMIN</pre>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020019.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				把 <code>tnsnames.ora</code> 拷贝到 <code>“C:\Program Files\instantclient_11_2\NETWORK\ADMIN”</code>，如果没有这个目录需要创建
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020020.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、连接数据库</h4>
+
+			<h5 id="f4-1" class="title-2th">1、	连接本地数据库</h5>
+
+			<p>
+				打开 <code>PLSQL Developer</code>
+			</p>
+			<p>
+				Database选择 <code>XE</code>，Username是 <code>sys</code>，Password是 <code>Sysmanager1</code>，Connect as选择 <code>SYSDBA</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020021.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020022.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f4-2" class="title-2th">2、	连接远程数据库</h5>
+
+			<p>
+				如果您需要连接远程数据库，首先必须有远程数据库的tns信息，把这些信息追加到 <code>C:\Program Files\instantclient_11_2\NETWORK\ADMIN\tnsnames.ora</code> 文件，这样再次打开 PLSQL Developer 即可连接这个远程的 Oracle 服务器了
+			</p>
+			<p>
+				比如我的这台机器的 ip 是 <code>192.168.0.104</code>，我想连接 <code>192.168.0.10</code> 上面的 Oracle 服务
+			</p>
+			<p>
+				首先，找到 <code>192.168.0.10</code> 的 Oracle 服务的 tns 配置信息
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020023.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				把里面的内容拷贝到 <code>192.168.0.104</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020024.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				然后再把这个文件拷贝到 <code>“C:\soft01\oracle\app\oracle\product\11.2.0\server\network\ADMIN”</code> 下面
+			</p>
+			<p>
+				打开 PLSQL Developer 即可看到：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020025.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、普通用户登陆数据库</h4>
+
+			<h5 id="f5-1" class="title-2th">1、	创建用户</h5>
+
+			<p>
+				打开“命令窗口”
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020026.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				使用下面语句创建普通用户 <code>test01</code>，密码是 <code>123456</code>
+			</p>
+			<pre>
+GRANT CONNECT,RESOURCE,UNLIMITED TABLESPACE,CREATE VIEW TO TEST01 IDENTIFIED BY 123456;</pre>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020027.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f5-2" class="title-2th">2、	使用普通用户登录</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020028.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020029.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、其他图形工具</h4>
+
+			<h5 id="f6-1" class="title-2th">1、	sql developer</h5>
+
+			<p>
+				这个是 Oracle 公司提供的图形化数据库连接软件，您可以到官网下载
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020030.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f6-2" class="title-2th">2、	Navicat Premium</h5>
+
+			<p>
+				这个版本的 <code>Navicat</code> 是支持 Oracle 数据库连接的
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020031.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020032.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01002/010020033.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br /><br />
+			<p>
+				<a href="db01001.html" style="font-size:12px;">第一节&nbsp;&nbsp;&nbsp;&nbsp;Oracle数据库安装</a>
+			</p>
+			<p>
+				<a href="db01003.html" style="font-size:12px;">第三节&nbsp;&nbsp;&nbsp;&nbsp;Oracle 的数据类型、建表、建序列</a>
+			</p>
+			<br />
+
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

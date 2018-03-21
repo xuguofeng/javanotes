@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十三节&nbsp;&nbsp;&nbsp;&nbsp;继承（一）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、类继承</a></li>
+				<li><a href="#f2">二、类实例化过程</a></li>
+				<li><a href="#f3">三、类继承举例</a></li>
+				<li><a href="#f4">四、final关键字</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、类继承</h4>
+			<p>
+				（1）在多个不同的类中抽取出共性的数据和逻辑，对这些共性的内容进行封装一个新的类即父类（也成为超类或基类），让之前的类来继承这个类，那些共性的内容在子类中就不必重复定义。
+			</p>
+			<p>
+				<span class="important">*</span> （2）java 的继承机制是单继承，即一个类只能有一个直接父类。
+			</p>
+			<p>
+				<span class="important">*</span> （3）如果子类和父类有同名成员变量和方法，子类可以使用 <code>super</code> 关键字调用父类的成员变量和方法，上述使用方式前提是成员在子类可见。
+			</p>
+			<p>
+				<span class="important">*</span> （4）在调用子类构造方法时，会隐式的调用父类的构造方法 <code>super()</code>。如果父类没有无参构造方法，为了避免编译错误，需要在子类构造方法中显式的调用父类的含参构造方法。
+			</p>
+			<p>
+				（5）子类创建时调用父类构造方法：子类需要使用父类的成员变量和方法，所以就要调用父类构造方法来初始化，之后再进行子类成员变量和方法的初始化。因此，构造方法是无法覆盖的。
+			</p>
+			<p>
+				<span class="important">*</span> （6）当子类需要扩展父类的某个方法时，可以覆盖父类方法，但是子类方法访问权限必须大于或等于父类权限。
+			</p>
+			<p>
+				（7）继承提高了程序的复用性、扩展性，也是 java 语言多态特征的前提。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="important">* * 以上几点非常重要，请仔细阅读</span>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、类实例化过程</h4>
+			<p>
+				（1）JVM 读取指定 classpath 路径下的 class 文件，加载到内存，如果有直接父类，也会加载父类；
+			</p>
+			<p>
+				（2）堆内存分配空间；
+			</p>
+			<p>
+				（3）执行父类、子类静态代码块；
+			</p>
+			<p>
+				（4）对象属性进行默认初始化；
+			</p>
+			<p>
+				（5）调用构造方法；
+			</p>
+			<p>
+				（6）在构造方法中，先调用父类构造方法初始化父类数据；
+			</p>
+			<p>
+				（7）初始化父类数据后，显示初始化，执行子类的构造代码块；
+			</p>
+			<p>
+				（8）再进行子类构造方法的特定初始化；
+			</p>
+			<p>
+				（9）初始化完毕后，将地址赋值给引用
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、类继承举例</h4>
+			<p>
+				为了说明上面的内容，我们来编写一个简单的例子，实际意义并不大，只是为了演示类继承实例化的过程。
+			</p>
+			<pre>
+/*
+	<span class="annotation">父类</span>
+*/
+class Parent {
+
+	int num = 5;
+
+	static {
+		System.out.println("父类静态代码块");
+		System.out.println();
+	}
+
+	{
+		System.out.println("父类构造代码块1，" + num);
+		num = 1;
+		System.out.println("父类构造代码块2，" + num);
+		doSomething();
+		System.out.println();
+	}
+
+	Parent() {
+		System.out.println("父类构造方法1，" + num);
+		num = 2;
+		System.out.println("父类构造方法2，" + num);
+		doSomething();
+		System.out.println();
+	}
+
+	void doSomething() {
+		System.out.println("父类doSomething方法1，" + num);
+		num = 3;
+		System.out.println("父类doSomething方法2，" + num);
+		System.out.println();
+	}
+}
+
+/*
+	<span class="annotation">子类</span>
+*/
+class Child extends Parent {
+
+	int num = 10;
+	
+	/*
+		<span class="annotation">静态代码块，在类加载时执行</span>
+	*/
+	static {
+		System.out.println("子类静态代码块");
+		System.out.println();
+	}
+
+	/*
+		<span class="annotation">构造代码块</span>
+	*/
+	{
+		System.out.println("子类构造代码块1，" + num);
+		num = 11;
+		System.out.println("子类构造代码块2，" + num);
+		doSomething();
+		System.out.println();
+	}
+
+	Child() {
+		System.out.println("子类构造方法1，" + num);
+		num = 12;
+		System.out.println("子类构造方法2，" + num);
+		doSomething();
+		System.out.println();
+	}
+
+	void doSomething() {
+		System.out.println("子类doSomething方法1，" + num);
+		num = 13;
+		System.out.println("子类doSomething方法2，" + num);
+		System.out.println();
+	}
+
+}
+
+public class A {
+	public static void main(String[] args) {
+		Child child = new Child();
+		child.num = 20;
+		child.doSomething();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+父类静态代码块
+
+子类静态代码块
+
+父类构造代码块1，5
+父类构造代码块2，1
+子类doSomething方法1，0
+子类doSomething方法2，13
+
+
+父类构造方法1，1
+父类构造方法2，2
+子类doSomething方法1，13
+子类doSomething方法2，13
+
+
+子类构造代码块1，10
+子类构造代码块2，11
+子类doSomething方法1，11
+子类doSomething方法2，13
+
+
+子类构造方法1，13
+子类构造方法2，12
+子类doSomething方法1，12
+子类doSomething方法2，13
+
+
+子类doSomething方法1，20
+子类doSomething方法2，13
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 oop 中的 A.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、final关键字</h4>
+			<p>
+				由于继承在一定程度上打破了面向对象的封装原则，所以我们可以使用 <code>final</code> 关键字修饰类、方法、变量来维护封装的原则。
+			</p>
+			<p>
+				<code>final</code> 修饰的类不可以被继承。
+			</p>
+			<p>
+				<code>final</code> 修饰的方法不可以被覆盖。
+			</p>
+			<p>
+				<code>final</code> 修饰的变量只能被赋值一次。
+			</p>
+			<p>
+				内部类只能访问被 <code>final</code> 修饰的局部变量。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="phase-title">修饰类</span>
+			</p>
+			<p>
+				如果您定义的类不想被继承，那么可以使用 <code>final</code> 来修饰。在 JDK 中，String、Integer 这些类就是被 <code>final</code> 修饰的，说明 JDK 禁止使用者编写这些类的子类而破坏其中的方法实现。
+			</p>
+			<pre>
+public <span class="high-light">final class String</span> 
+	implements java.io.Serializable, Comparable<String>, CharSequence {
+
+	// ......
+	// ......
+}
+</pre>
+			<pre>
+public <span class="high-light">final class Integer</span> extends Number implements Comparable&lt;Integer&gt; {
+
+	public static final int   MIN_VALUE = 0x80000000;
+
+	public static final int   MAX_VALUE = 0x7fffffff;
+
+	// ......
+}
+</pre>
+
+			<br />
+
+			<p>
+				<span class="phase-title">修饰方法</span>
+			</p>
+			<p>
+				如果您定义的方法不想被覆盖，那么可以使用 <code>final</code> 来修饰。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="phase-title">修饰成员变量</span>
+			</p>
+			<p>
+				在实际开发过程中，<code>final</code> 经常和 <code>static</code> 配合使用，用于声明常量。
+			</p>
+			<p>
+				我们之前编写的 MobilePhone3 类，就使用这种方式定义过 4 个状态常量。
+			</p>
+			<p>
+				使用 <code>static</code> 修饰是因为所有的 MobilePhone3 对象都可以共用这些数据，使用者可以使用类名访问这些状态值，而使用 <code>final</code> 修饰则是为了避免使用者随意修改公有的静态变量，使用者只能使用而无法修改，数据的安全、程序的稳定也就得到了保障。
+			</p>
+			<p>
+				在 java 中，常量通常使用大写字母定义，单词之间使用下划线分隔。
+			</p>
+			<p>
+				我们回顾一下这段代码：
+			</p>
+			<pre>
+/*
+	<span class="annotation">代表手机状态的四个静态变量</span>
+*/
+public static final int INIT_STATE       = 0;
+public static final int USEFUL_STATE     = 1;
+public static final int POWER_OFF_STATE  = 2;
+public static final int HALT_STATE       = 3;
+
+<span class="annotation">// 手机状态属性</span>
+private int state;
+
+public int getState(){
+	return this.state;
+}
+public void setState(int state){
+	this.state = state;
+}
+
+<span class="annotation">// 返回当前状态说明</span>
+public String currentState(){
+	switch (this.state) {
+		case INIT_STATE:
+			return "出厂状态";
+		case USEFUL_STATE:
+			return "在用状态";
+		case POWER_OFF_STATE:
+			return "关机状态";
+		case HALT_STATE:
+			return "停机状态";
+		default:
+			return "未知状态";
+	}
+}
+
+public static void main(String[] args){
+	// 使用new关键字调用MobilePhone的默认构造方法创建实例
+	Mobile mobile = new Mobile();
+
+	<span class="annotation">// 注意此处set方法填写的参数是使用静态变量传递的</span>
+	<span class="annotation">mobile.setState(Mobile.initState);</span>
+	String state = mobile.currentState();
+	System.out.println(state);
+}
+
+<span class="phase-title">输出：</span>
+
+出厂状态
+</pre>
+
+			<p>
+				在之前引用的 JDK 中 String、Integer 里面，我们也可以看到 <code>final</code> 和 <code>static final</code> 的变量。
+			</p>
+			<p>
+				比如 String，字符串对象定义之后就是不可变化的，所以使用一个不可被改变的 char 类型数组来保存字符串中的字符。
+			</p>
+			<pre>
+private final char value[];
+</pre>
+
+			<p>
+				比如 Integer，int 类型的最值是不需要根据对象而改变的，所以被 <code>static final</code> 修饰。
+			</p>
+			<pre>
+public static final int   MIN_VALUE = 0x80000000;
+public static final int   MAX_VALUE = 0x7fffffff;
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 oop 中的 MobilePhone3.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01012.html" style="font-size:12px;">第十二节&nbsp;&nbsp;&nbsp;&nbsp;封装</a>
+			<br />
+			<a href="java01014.html" style="font-size:12px;">第十四节&nbsp;&nbsp;&nbsp;&nbsp;继承和抽象类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

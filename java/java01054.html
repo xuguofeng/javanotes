@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十四节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发界面结构）</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、界面结构</a></li>
+				<li><a href="#f2">二、添加组件</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	定义组件</a></li>
+						<li><a href="#f2-2">2、	添加菜单栏方法</a></li>
+						<li><a href="#f2-3">3、	添加工具栏方法</a></li>
+						<li><a href="#f2-4">4、	添加主面板方法</a></li>
+						<li><a href="#f2-5">5、	添加状态栏方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、创建窗口、启动程序</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	构造方法</a></li>
+						<li><a href="#f3-2">2、	程序启动</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、界面结构</h4>
+
+			<p>
+				主要分为4个部分：窗口顶部的菜单栏、显示当前位置和回退刷新按钮的工具栏、中部主面板、底部状态栏面板，即：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01054/01054001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				菜单栏显示效果：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01054/01054002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、添加组件</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	定义组件</h5>
+
+			<p>
+				编写一个 <code>ExplorerFrame</code> 继承 <code>JFrame</code> 类，并添加核心组件的相关字段
+			</p>
+			<pre>
+package org.net5ijy.explorer;
+
+import java.awt.*;
+import java.io.File;
+import java.util.Enumeration;
+
+import javax.swing.*;
+
+<span class="annotation">/**</span>
+<span class="annotation"> * 资源管理器窗口类</span>
+<span class="annotation"> * 默认宽800，高550</span>
+<span class="annotation"> * 窗口禁用缩放、居中</span>
+<span class="annotation"> * 可以使用ExplorerFrame(String title)构造方法创建指定Title的窗口</span>
+<span class="annotation"> * 可以使用ExplorerFrame()构造方法创建默认Title的窗口</span>
+<span class="annotation"> * 该窗口主要包含：菜单栏、当前位置显示、刷新按钮、上级按钮、文件显示主面板、文件详情信息条等组件</span>
+<span class="annotation"> * 第一次打开窗口时会显示系统根目录</span>
+<span class="annotation"> * 点击面板上的目录时，会跳转至该目录，显示目录下的全部文件</span>
+<span class="annotation"> * 点击上级按钮时，会跳转至当前目录的父级目录</span>
+<span class="annotation"> * 点击刷新按钮时，会将当前主面板的显示信息进行刷新</span>
+<span class="annotation"> * 点击文件树菜单后，会打开显示文件树的窗口</span>
+<span class="annotation"> */</span>
+public class ExplorerFrame extends JFrame {
+
+	<span class="annotation">// 窗口的宽</span>
+	public static final int WIDTH = 800;
+
+	<span class="annotation">// 窗口的高</span>
+	public static final int HEIGHT = 550;
+
+	<span class="annotation">// 菜单栏</span>
+	private JMenuBar menuBar;
+	<span class="annotation">// 计算机菜单</span>
+	private JMenu menu1;
+	<span class="annotation">// 计算机菜单子项，分别是：文件树、退出</span>
+	private JMenuItem item1, item2;
+
+	<span class="annotation">// 记录当前位置的文本域</span>
+	private JTextField locationText = null;
+
+	<span class="annotation">// 刷新按钮和上级按钮</span>
+	private JButton refreshButton, backButton;
+
+	<span class="annotation">// 显示文件的主面板</span>
+	private JPanel mainPanel;
+	<span class="annotation">// 主面板滚动</span>
+	private JScrollPane mainScroller;
+
+	<span class="annotation">// 下方的文件详细信息条</span>
+	private JPanel detailPanel;
+
+	<span class="annotation">// 显示文件详细信息，放在detailPanel里面</span>
+	private JLabel fileDetail;
+}</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	添加菜单栏方法</h5>
+
+			<p>
+				菜单栏位于窗口顶部，用于显示程序的核心功能。以本程序为例，菜单栏包含一个菜单，这个菜单下面有两个菜单项：文件树、退出。点击“文件树”会显示当前目录下面的目录树信息，并且可以到处为txt格式的文件；点击“退出”则会直接退出程序。
+			</p>
+			<p>
+				菜单栏显示效果：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01054/01054002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<code>addMenuBar</code> 方法：
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 添加菜单栏</span>
+<span class="annotation"> * 一个菜单：计算机</span>
+<span class="annotation"> * 菜单下有两个菜单项：文件树、退出</span>
+<span class="annotation"> */</span>
+private void addMenuBar() {
+	<span class="annotation">// 创建菜单栏</span>
+	this.menuBar = new JMenuBar();
+
+	<span class="annotation">// 计算机菜单</span>
+	this.menu1 = new JMenu("计算机 (O)");
+	this.menu1.setMnemonic(KeyEvent.VK_O);
+
+	<span class="annotation">// 文件树菜单项</span>
+	this.item1 = new JMenuItem("文件树");
+	this.item1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK));
+
+	<span class="annotation">// 退出菜单项</span>
+	this.item2 = new JMenuItem("退出");
+	this.item2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
+	<span class="annotation">// 为退出菜单项添加退出事件</span>
+	this.item2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	});
+
+	<span class="annotation">// 把两个菜单项添加到“计算机”菜单</span>
+	this.menu1.add(this.item1);
+	this.menu1.add(this.item2);
+
+	<span class="annotation">// 把“计算机”添加到菜单栏</span>
+	this.menuBar.add(this.menu1);
+
+	<span class="annotation">// 把菜单栏添加到窗口上</span>
+	this.setJMenuBar(this.menuBar);
+}</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	添加工具栏方法</h5>
+
+			<p>
+				工具栏区域核心是一个 <code>JPanel</code> 面板，面板中有一个 <code>JTextField</code> 用于显示当前目录位置，有两个 <code>JButton</code> 用于返回上级目录、刷新主面板
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 添加状态栏</span>
+<span class="annotation"> * 当前位置文本初始化为：计算机</span>
+<span class="annotation"> * 刷新按钮点击会刷新当前显示面板</span>
+<span class="annotation"> * 上级按钮点击会返回到上级目录</span>
+<span class="annotation"> * 在窗口的北部</span>
+<span class="annotation"> */</span>
+private void addLocationTextField() {
+	JPanel p = new JPanel();
+
+	<span class="annotation">// 当前位置文本域：只读</span>
+	this.locationText = new JTextField(61);
+	this.locationText.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204)));
+	this.locationText.setEditable(false);
+	this.locationText.setText("计算机");
+	p.add(this.locationText);
+
+	<span class="annotation">// 刷新按钮</span>
+	this.refreshButton = new JButton(new ImageIcon(
+			System.getProperty("user.dir") + File.separator + "images"
+					+ File.separator + "icon" + File.separator
+					+ "refresh_16.png"));
+	this.refreshButton.setBorder(null);
+	this.refreshButton.setBorderPainted(false);
+	this.refreshButton.setContentAreaFilled(false);
+	this.refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	this.refreshButton.setToolTipText("刷新");
+
+	<span class="annotation">// 上一级按钮</span>
+	this.backButton = new JButton(new ImageIcon(
+			System.getProperty("user.dir") + File.separator + "images"
+					+ File.separator + "icon" + File.separator
+					+ "back_16.png"));
+	this.backButton.setBorder(null);
+	this.backButton.setBorderPainted(false);
+	this.backButton.setContentAreaFilled(false);
+	this.backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	this.backButton.setToolTipText("上一级");
+
+	<span class="annotation">// 把“刷新按钮”和“上一级按钮”添加到面板</span>
+	p.add(this.backButton);
+	p.add(this.refreshButton);
+
+	<span class="annotation">// 把面板添加到窗口的“北部”</span>
+	this.add(BorderLayout.NORTH, p);
+}</pre>
+
+			<h5 id="f2-4" class="title-2th">4、	添加主面板方法</h5>
+
+			<p>
+				主面板使用网格布局显示当前目录下的全部文件列表，在窗口的中部，使用 <code>JScrollPane</code> 包裹一个 <code>JPanel</code> 实现滚动效果
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 添加主面板</span>
+<span class="annotation"> * 主面板有一个JScrollPane负责显示滚动效果，上下边框为1，颜色为(204,204,204)，单次滚动距离为20</span>
+<span class="annotation"> * 在JScrollPane又有一个JPanel，背景色白色，空白边框15</span>
+<span class="annotation"> */</span>
+private void addMainPanel() {
+	<span class="annotation">// 主面板</span>
+	this.mainPanel = new JPanel();
+
+	<span class="annotation">// 使用网格布局显示文件列表</span>
+	this.mainPanel.setLayout(new GridLayout(5, 1));
+	this.mainPanel.setBackground(Color.WHITE);
+	this.mainPanel.setBorder(BorderFactory
+			.createEmptyBorder(15, 15, 15, 15));
+
+	<span class="annotation">// 添加一个滚动面板，负责显示滚动效果</span>
+	<span class="annotation">// 垂直方向显示滚动条</span>
+	<span class="annotation">// 每次滚动20</span>
+	this.mainScroller = new JScrollPane(this.mainPanel);
+	this.mainScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0,
+			new Color(204, 204, 204)));
+	this.mainScroller
+			.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	this.mainScroller.getVerticalScrollBar().setUnitIncrement(20);
+
+	<span class="annotation">// 把滚动面板添加到窗口中</span>
+	this.add(BorderLayout.CENTER, this.mainScroller);
+}</pre>
+
+			<h5 id="f2-5" class="title-2th">5、	添加状态栏方法</h5>
+
+			<p>
+				状态栏显示文件信息，包括：文件名、字节数、最后修改时间
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 添加详细信息区域</span>
+<span class="annotation"> * 一个左对齐显示的JPanel</span>
+<span class="annotation"> * 在窗口的南部</span>
+<span class="annotation"> */</span>
+private void addDetail() {
+	this.detailPanel = new JPanel();
+	this.detailPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	this.fileDetail = new JLabel(" ");
+	this.detailPanel.add(this.fileDetail);
+	this.add(BorderLayout.SOUTH, this.detailPanel);
+}</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、创建窗口、启动程序</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	构造方法</h5>
+
+			<p>
+				两个构造方法，一个无参，一个有参（可以定义Title）
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 使用默认的title显示窗口，title为ExplorerFrame</span>
+<span class="annotation"> */</span>
+public ExplorerFrame() throws HeadlessException {
+	this("ExplorerFrame");
+}
+
+<span class="annotation">/**</span>
+<span class="annotation"> * 使用指定的Title显示窗口</span>
+<span class="annotation"> * 该窗口禁用缩放、居中</span>
+<span class="annotation"> * 会把菜单、当前位置、主面板、详细信息条显示到面板</span>
+<span class="annotation"> * 第一次显示的是系统的根目录</span>
+<span class="annotation"> */</span>
+public ExplorerFrame(String title) throws HeadlessException {
+	super(title);
+
+	<span class="annotation">// 窗口样式设置</span>
+	Font font = new Font("Dialog", Font.PLAIN, 12);
+
+	Enumeration&lt;?&gt; keys = UIManager.getDefaults().keys();
+	while (keys.hasMoreElements()) {
+		Object key = keys.nextElement();
+		Object value = UIManager.get(key);
+		if (value instanceof javax.swing.plaf.FontUIResource) {
+			UIManager.put(key, font);
+		}
+	}
+
+	<span class="annotation">// 设置窗口大小</span>
+	this.setSize(WIDTH, HEIGHT);
+	<span class="annotation">// 禁止缩放</span>
+	this.setResizable(false);
+	<span class="annotation">// 居中</span>
+	this.setLocation(
+			(Toolkit.getDefaultToolkit().getScreenSize().width - WIDTH) / 2,
+			(Toolkit.getDefaultToolkit().getScreenSize().height - HEIGHT) / 2);
+	<span class="annotation">// 关闭窗口</span>
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+	<span class="annotation">/* 以下为添加组件代码 */</span>
+
+	<span class="annotation">// 添加菜单</span>
+	this.addMenuBar();
+
+	<span class="annotation">// 添加位置文本域、刷新按钮、上级按钮</span>
+	this.addLocationTextField();
+
+	<span class="annotation">// 添加主面板</span>
+	this.addMainPanel();
+
+	<span class="annotation">// 添加详细信息显示条</span>
+	this.addDetail();
+
+	<span class="annotation">// 显示窗口</span>
+	this.validate();
+	this.setVisible(true);
+}</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	程序启动</h5>
+
+			<pre>
+package org.net5ijy.explorer;
+
+public class RunExplorer {
+	public static void main(String[] args) {
+		new ExplorerFrame("计算机");
+	}
+}</pre>
+
+			<p>
+				运行效果如下：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01054/01054003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01053.html" style="font-size:12px;">第五十三节&nbsp;&nbsp;&nbsp;&nbsp;Swing 和简单资源管理器程序简介</a>
+			<br />
+			<a href="java01055.html" style="font-size:12px;">第五十五节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发核心功能）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

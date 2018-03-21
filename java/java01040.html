@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java IO 技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十节&nbsp;&nbsp;&nbsp;&nbsp;IO 流概述和字节流</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、IO 流概述</a></li>
+				<li><a href="#f2">二、InputStream 和 OutputStream 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	InputStream 类</a></li>
+						<li><a href="#f2-2">2、	OutputStream 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、FileInputStream 和 FileOutputStream 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	FileInputStream 类 API</a></li>
+						<li><a href="#f3-2">2、	使用 FileInputStream 类读取文件</a></li>
+						<li><a href="#f3-3">3、	FileOutputStream 类 API</a></li>
+						<li><a href="#f3-4">4、	使用 FileOutputStream 类写文件</a></li>
+						<li><a href="#f3-5">5、	复制文件</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、IO 流概述</h4>
+
+			<p>
+				前面介绍了 <code>File</code> 类的基本操作方法，但是如何读取文件内容、如何向文件写入数据，这就需要 IO 技术来实现。
+			</p>
+			<p>
+				IO 就是处理设备之间数据传输的技术，通过流的方式操作数据。
+			</p>
+			<p>
+				在 Java 中，流操作分为两种：字节流和字符流。
+			</p>
+			<p>
+				流操作分为两个方向：输入流（从输入设备到程序）和输出流（从程序到输出设备）。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、InputStream 和 OutputStream 类</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	InputStream 类</h5>
+
+			<pre>
+java.io;
+
+public abstract class InputStream {}
+</pre>
+
+			<p>
+				此抽象类是字节输入流体系中所有类的超类。
+			</p>
+			<p>
+				主要有以下方法：
+			</p>
+			<pre>
+<span class="methodClassName">public void close() throws IOException</span>
+	关闭输入流并释放所有系统资源。
+
+<span class="methodClassName">public void mark(int readlimit)</span>
+	在输入流中标记当前位置。
+
+<span class="methodClassName">public void reset() throws IOException</span>
+	将此流重新定位到最后一次对流调用mark方法时的位置。
+
+<span class="methodClassName">public abstract int read() throws IOException</span>
+	从输入流读取下一个字节，返回0到255范围内的int值。
+	如果因为已经到达流末尾而没有可用的字节，则返回值-1。
+	在输入数据可用、检测到流末尾或者抛出异常前，此方法一直阻塞。
+
+<span class="methodClassName">public int read(byte[] b) throws IOException</span>
+	从输入流中读取一定数量的字节，并将其存储在缓冲区数组b中。
+	以整数形式返回实际读取的字节数。
+	在输入数据可用、检测到文件末尾或者抛出异常前，此方法一直阻塞。
+	效果等同于：
+	read(b, 0, b.length)
+
+<span class="methodClassName">public int read(byte[] b, int off, int len) throws IOException</span>
+	将输入流中最多len个字节读入byte数组，但读取的字节也可能小于该值。以整数形式返回实际读取的字节数。
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	OutputStream 类</h5>
+
+			<pre>
+java.io;
+
+public abstract class OutputStream {}
+</pre>
+
+			<p>
+				此抽象类是输出字节流体系中所有类的超类，字节输出流接受字节并将这些其发送到某个设备。
+			</p>
+			<p>
+				主要有以下方法：
+			</p>
+			<pre>
+<span class="methodClassName">public void close() throws IOException</span>
+	关闭输出流并释放所有系统资源。
+
+<span class="methodClassName">public void flush() throws IOException</span>
+	刷新输出流并强制写出所有缓冲的字节。
+	如果输出流的实现已经缓冲了以前写入的字节，则调用此方法指示将这些字节立即写入目标。
+
+<span class="methodClassName">public void write(byte[] b) throws IOException</span>
+	将b.length个字节从指定的byte数组写入输出流，与调用write(b, 0, b.length)的效果完全相同。
+
+<span class="methodClassName">public void write(byte[] b, int off, int len) throws IOException</span>
+	将指定byte数组中从偏移量off开始的len个字节写入输出流。
+
+<span class="methodClassName">public abstract void write(int b) throws IOException</span>
+	将指定的字节写入输出流。
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、FileInputStream 和 FileOutputStream 类</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	FileInputStream 类 API</h5>
+
+			<pre>
+java.io;
+
+public class FileInputStream extends InputStream {}
+</pre>
+
+			<p>
+				从文件系统中的某个文件中获得输入字节。该类重写了 <code>InputStream</code> 类的主要方法。
+			</p>
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public FileInputStream(File file) throws FileNotFoundException</span>
+	通过打开一个关联到实际文件的连接来创建一个FileInputStream。
+	如果指定文件不存在，或者不是一个常规文件，或者无法打开进行读取，则抛出FileNotFoundException。
+
+<span class="methodClassName">public FileInputStream(String name) throws FileNotFoundException</span>
+	通过打开一个关联到实际文件的连接来创建一个FileInputStream，该文件通过文件系统中的路径名name指定。
+</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	使用 FileInputStream 类读取文件</h5>
+
+			<p>
+				有 <code>D:\tmp\java\javanote\src\org\net5ijy\javanote\io\测试FileInputStream.txt</code> 文件，内容为：
+			</p>
+			<pre>
+测试FileInputStream
+</pre>
+
+			<p>
+				首先使用 <code>FileInputStream</code> 读取文件中的第一个中文。
+			</p>
+			<p>
+				因为文件编码为 <code>UTF-8</code>，所以读取第一个中文需要读取三个字节。
+			</p>
+			<pre>
+private static void test1() throws IOException {
+	<span class="annotation">// 定义输入流</span>
+	FileInputStream fis = null;
+
+	try {
+		
+		<span class="annotation">// 创建FileInputStream对象</span>
+		fis = new FileInputStream(
+			"D:\\tmp\\java\\javanote\\src\\org\\net5ijy\\javanote\\io\\测试FileInputStream.txt");
+
+		<span class="annotation">// 读取第一个中文</span>
+		<span class="annotation">// 由于UTF-8编码一个中文3个字节</span>
+		<span class="annotation">// 所以需要读三个字节</span>
+		int b1 = fis.read();
+		int b2 = fis.read();
+		int b3 = fis.read();
+
+		<span class="annotation">// 创建字节数组</span>
+		byte[] buf = new byte[]{ (byte)b1, (byte)b2, (byte)b3};
+
+		<span class="annotation">// 创建String对象也要指定UTF-8编码</span>
+		String line = new String(buf, "UTF-8");
+		System.out.print(line);
+		
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭输入流</span>
+		try {
+			if (fis != null)
+				fis.close();
+		} catch (IOException e) {}
+	}
+}
+</pre>
+
+			<p>
+				再使用 <code>FileInputStream</code> 读一下整行文本。
+			</p>
+			<p>
+				由于 <code>UTF-8</code> 编码一个中文 3 个字节，前两个中文占 6 个字节，后面的字母是 15 个字节，所以内容一共是 21 个字节，需要创建一个 21 长度的 <code>byte</code> 数组接收读取的内容。
+			</p>
+
+			<pre>
+private static void test2() throws IOException {
+	<span class="annotation">// 定义输入流</span>
+	FileInputStream fis = null;
+
+	try {
+		
+		<span class="annotation">// 创建FileInputStream对象</span>
+		fis = new FileInputStream(
+			"D:\\tmp\\java\\javanote\\src\\org\\net5ijy\\javanote\\io\\测试FileInputStream.txt");
+
+		<span class="annotation">// 前两个中文占6个字节，后面的字母是15个字节</span>
+		<span class="annotation">// 所以创建21长度的byte数组接收读取的内容</span>
+		byte[] buf = new byte[21];
+		fis.read(buf);
+
+		<span class="annotation">// 创建String对象也要指定UTF-8编码</span>
+		String line = new String(buf, "UTF-8");
+		System.out.print(line);
+		
+	} catch (IOException e) {
+		<span class="annotation">// 捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭输入流</span>
+		try {
+			if (fis != null)
+				fis.close();
+		} catch (IOException e) {}
+	}
+}
+</pre>
+
+			<p>
+				运行程序
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	try {
+		test1();
+		
+		System.out.println();
+
+		test2();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+测
+测试FileInputStream
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 FileStreamAPI.java 文件。</span>
+
+			<h5 id="f3-3" class="title-2th">3、	FileOutputStream 类 API</h5>
+
+			<pre>
+java.io;
+
+public class FileOutputStream extends OutputStream {}
+</pre>
+
+			<p>
+				该类重写了 <code>OutputStream</code> 类的主要方法。
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public FileOutputStream(File file) throws FileNotFoundException</span>
+	创建向File文件中写入数据的输出流。
+	如果该文件存在，而不是一个常规文件，或文件不存在，但无法创建它，或无法打开，则抛出FileNotFoundException。
+
+<span class="methodClassName">public FileOutputStream(File file, boolean append) throws FileNotFoundException</span>
+	如果第二个参数为true，则将字节追加到文件。
+
+<span class="methodClassName">public FileOutputStream(String name) throws FileNotFoundException</span>
+	创建向指定名称文件中写入数据的输出流。
+
+<span class="methodClassName">public FileOutputStream(String name, boolean append) throws FileNotFoundException</span>
+	创建向指定名称文件中写入数据的输出流，如果第二个参数为true，则将字节追加到文件。
+</pre>
+
+			<h5 id="f3-4" class="title-2th">4、	使用 FileOutputStream 类写文件</h5>
+
+			<p>
+				在前面，演示了使用 <code>FileInputStream</code> 类读取文件中的字节并使用对应编码创建字符串输出文本内容到控制台。
+			</p>
+			<p>
+				下面再看看如何把字符串输出到文件。
+			</p>
+			<p>
+				首先需要把字符串按照一定的编码方式转为 <code>byte</code> 数组，然后使用 <code>FileOutputStream</code> 把字节数组写入到文件。
+			</p>
+			<pre>
+<span class="annotation">// 定义输出流</span>
+FileOutputStream fos = null;
+
+try {
+	
+	<span class="annotation">// 创建FileOutputStream输出流对象</span>
+	<span class="annotation">// 指定目标文件</span>
+	fos = new FileOutputStream(
+		"D:\\tmp\\java\\javanote\\src\\org\\net5ijy\\javanote\\io\\测试FileOutputStream.txt");
+
+	String line = "测试FileInputStream\n";
+
+	<span class="annotation">// 使用UTF-8编码把字符串转为byte数组</span>
+	byte[] buf = line.getBytes("UTF-8");
+
+	<span class="annotation">// fos.write(buf);</span>
+
+	<span class="annotation">// 把byte数组写入到输出流</span>
+	for(int i = 0; i < buf.length; i++) {
+		fos.write(buf[i]);
+	}
+} catch (IOException e) {
+	<span class="annotation">// 需要捕获IOException</span>
+	e.printStackTrace();
+	throw e;
+} finally {
+	<span class="annotation">// 在finally代码块关闭输出流</span>
+	try {
+		if (fos != null)
+			fos.close();
+	} catch (IOException e) {}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 FileStreamAPI.java 文件。</span>
+
+			<h5 id="f3-5" class="title-2th">5、	复制文件</h5>
+
+			<p>
+				在前面的例子中，演示了读取文件、写入文件，如果程序使用循环方式不停地（在文件未读取完的情况下）读取文件中的字节，然后把读取的字节写入到另外一个文件，是不是就可以实现文件的复制了呢？
+			</p>
+			<p>
+				代码如下：
+			</p>
+			<pre>
+private static void copyFile(String src, String dst) throws IOException {
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long start = System.currentTimeMillis();
+
+	<span class="annotation">// 定义输入流和输出流</span>
+	FileInputStream fis = null;
+	FileOutputStream fos = null;
+	try {
+		
+		fis = new FileInputStream(src);
+		fos = new FileOutputStream(dst);
+
+		<span class="annotation">// 也可以使用File对象作为参数构造输入输出流对象</span>
+		<span class="annotation">// fis = new FileInputStream(new File(src));</span>
+		<span class="annotation">// fos = new FileOutputStream(new File(dst));</span>
+
+		int i = -1;
+
+		<span class="annotation">// 循环从输入流读取字节</span>
+		<span class="annotation">// 然后写出到输出流</span>
+		while((i = fis.read()) != -1) {
+			fos.write(i);
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭IO流</span>
+		try {
+			if (fis != null)
+				fis.close();
+			if (fos != null)
+				fos.close();
+		} catch (IOException e) {}
+	}
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long end = System.currentTimeMillis();
+	System.out.println(end - start);
+}
+</pre>
+
+			<p>
+				上面的方法是输入流读取一个字节，输出流写出一个字节，效率较低，所以可以使用 <code>read(byte[])</code> 和 <code>write(byte[])</code> 方法使用缓冲来读写数据，如下：
+			</p>
+
+			<pre>
+private static void bufferedCopyFile(String src, String dst) throws IOException {
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long start = System.currentTimeMillis();
+
+	<span class="annotation">// 定义输入流和输出流</span>
+	FileInputStream fis = null;
+	FileOutputStream fos = null;
+	try {
+		fis = new FileInputStream(src);
+		fos = new FileOutputStream(dst);
+
+		<span class="annotation">// 定义一个字节缓冲数组</span>
+		byte[] buf = new byte[1024];
+		int i = -1;
+
+		<span class="annotation">// 循环从输入流读取buf长度的字节存放到buf中</span>
+		<span class="annotation">// 然后把buf写到输出流</span>
+		while((i = fis.read(buf)) != -1) {
+			fos.write(buf, 0, i);
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭IO流</span>
+		try {
+			if (fis != null)
+				fis.close();
+			if (fos != null)
+				fos.close();
+		} catch (IOException e) {}
+	}
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long end = System.currentTimeMillis();
+	System.out.println(end - start);
+}
+</pre>
+
+			<p>
+				运行程序
+			</p>
+			<pre>
+public static void main(String[] args) {
+	String src = "D:\\src.bmp";
+	String dst = "D:\\tmp\\java\\dst.bmp";
+
+	try {
+
+		<span class="annotation">// 使用 FileInputStream 和 FileOutputStream 复制文件</span>
+		copyFile(src, dst);
+
+		<span class="annotation">// 使用 FileInputStream 和 FileOutputStream 复制文件，自定义缓冲</span>
+		bufferedCopyFile(src, dst);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+21092
+162
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 FileStreamTest.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01039.html" style="font-size:12px;">第三十九节&nbsp;&nbsp;&nbsp;&nbsp;File 类型及文件操作</a>
+			<br />
+			<a href="java01041.html" style="font-size:12px;">第四十一节&nbsp;&nbsp;&nbsp;&nbsp;缓冲字节流 和 RandomAccessFile 类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

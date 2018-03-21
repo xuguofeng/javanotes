@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十二节&nbsp;&nbsp;&nbsp;&nbsp;封装</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、封装思想</a></li>
+				<li><a href="#f2">二、访问权限修饰关键字</a></li>
+				<li><a href="#f3">三、this 和 super 关键字</a></li>
+				<li><a href="#f4">四、static 关键字</a></li>
+				<li><a href="#f5">五、构造方法概述</a></li>
+				<li><a href="#f6">六、构造方法互相调用</a></li>
+				<li><a href="#f7">七、构造代码块</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、封装思想</h4>
+			<p>
+				核心思想就是“隐藏细节”、“数据安全”：将对象不需要让外界访问的成员变量和方法私有化，只提供符合开发者意愿的公有方法来访问这些数据和逻辑，保证了程序的安全性。
+			</p>
+			<p>具体的实现方式就是：</p>
+			<p>
+				使用 <code>private</code> 关键字把成员变量修改成私有，防止外部程序直接随意调用或修改成员变量，然后对外提供公共 <code>public</code> 的 <code>set</code> 和 <code>get</code> 方法按照开发者的意愿设置和获取成员变量的值。
+			</p>
+			<p>
+				也可以把只在本类内部使用的方法使用 <code>private</code>，这就是封装的思想，是面向对象最基本的开发规范之一。
+			</p>
+			<p>
+				我们可以使用这种方式将上一节中“<a target="_blank" href="java01011.html#f3">类与对象举例</a>”的代码重构以下，并添加一个开机方法。
+			</p>
+
+			<br />
+
+			<pre>
+public class MobilePhone2 {
+	
+	<span class="annotation">// 使用 <span class="high-light">private</span> 关键字把成员变量私有化</span>
+	private String os;
+	private String phoneNumber;
+	private String brand;
+	private double dumpEnergy;
+
+	<span class="annotation">// 对外提供访问、设置成员变量的 <span class="high-light">public</span> 方法</span>
+	<span class="annotation">// 这样就可以按照我们自己的意愿来访问、设置成员变量</span>
+	<span class="annotation">// 而且也有助于在方法内部对数据有效性进行验证</span>
+	public void setOs(String os){
+		this.os = os;
+	}
+	public String getOs(){
+		return this.os;
+	}
+	public void setPhoneNumber(String phoneNumber){
+		this.phoneNumber = phoneNumber;
+	}
+	public String getPhoneNumber(){
+		return this.phoneNumber;
+	}
+	public void setBrand(String brand){
+		this.brand = brand;
+	}
+	public String getBrand(){
+		return this.brand;
+	}
+	public void setDumpEnergy(double dumpEnergy){
+		this.dumpEnergy = dumpEnergy;
+	}
+	public double getDumpEnergy(){
+		return this.dumpEnergy;
+	}
+
+	<span class="annotation">// 发短信的方法，不需要做修改</span>
+	public void sendMessage(String message, String targetPhoneNumber){
+		System.out.println("发给" + targetPhoneNumber + ", 内容是：" + message);
+	}
+
+	<span class="annotation">// 充电方法，不需要做修改</span>
+	public double charge(){
+		System.out.println("正在充电, 剩余电量：" + dumpEnergy * 100 + "%");
+		return dumpEnergy;
+	}
+	
+	<span class="annotation">// 对外提供的开机方法</span>
+	public void startup(){
+		System.out.println("正在开机......");
+		
+		<span class="annotation">// 调用私有开机方法</span>
+		startup2();
+
+		System.out.println("完成开机");
+	}
+
+	<span class="annotation">// 私有的开机方法，封装开机细节</span>
+	private void startup2(){
+		System.out.println("启动操作系统......");
+		System.out.println("加载开机启动项......");
+		System.out.println("......");
+	}
+
+	public static void main(String[] args){
+		
+		MobilePhone2 mobile = new MobilePhone2();
+		mobile.setOs("Andriod");
+		mobile.setPhoneNumber("12345678901");
+		mobile.setBrand("红米2");
+		mobile.setDumpEnergy(0.87d);
+
+		<span class="annotation">// 调用开机方法</span>
+		<span class="annotation">mobile.startup();</span>
+
+		// 调用mobile对象的方法
+		mobile.sendMessage("你好，我是***，这是一个测试短信，打扰了", "12345678902");
+		double de = mobile.charge(); // 因为方法有返回值，所以可以使用double类型变量接收
+
+		System.out.println(de);
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+正在开机......
+启动操作系统......
+加载开机启动项......
+......
+完成开机
+发给12345678902, 内容是：你好，我是***，这是一个测试短信，打扰了
+正在充电, 剩余电量：87.0%
+0.87
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 oop 中的 MobilePhone2.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、访问权限修饰关键字</h4>
+			<p>
+				Java 中主要有 <code>private</code>、<code>protected</code>、<code>public</code> 和 默认访问权限 四种。
+			</p>
+			<p>
+				<code>public</code> 修饰符，具有最大的访问权限，可以访问任何一个在 CLASSPATH 下的类、接口、异常等。
+			</p>
+			<p>
+				<code>protected</code> 修饰符，主要作用就是用来保护子类，子类可以访问这些成员变量和方法，其余类不可以。
+			</p>
+			<p>
+				default 修饰，主要是本包的类可以访问。
+			</p>
+			<p>
+				<code>private</code> 修饰符，访问权限仅限于本类内部，在实际开发过程中，大多数的成员变量和方法都是使用 <code>private</code> 修饰的。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01012/01012001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				Java 的访问控制是停留在编译层的，只在编译时进行访问权限检查，不会在类文件中留下痕迹。
+			</p>
+			<p>
+				通过反射机制，还是可以访问类的私有成员的。
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、this 和 super 关键字</h4>
+			<p>
+				<code>this</code> 关键字是当前对象的引用。
+			</p>
+			<p>
+				当对象成员变量与方法的局部变量重名时，可以使用 this 关键字来区分。可以使用 this 实现构造方法之间的调用。
+			</p>
+			<p>
+				当子类和父类成员变量同名时，可以使用super来引用区别出父类成员。
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、static 关键字</h4>
+			<p>
+				（1）<code>static</code> 关键字主要用于成员变量和方法的共享。
+			</p>
+			<p>
+				（2）<code>static</code> 修饰的成员变量和方法，类的所有实例共享，可以使用类名访问。
+			</p>
+			<p>
+				（3）<code>static</code> 修饰的成员变量和方法，如果是 <code>public</code>，外部类可以使用类名访问。
+			</p>
+			<p>
+				（4）<code>static</code> 修饰的成员变量和方法随着类的加载而加载。
+			</p>
+			<p>
+				（5）静态成员变量和方法存放在方法区，非静态成员变量和方法存放在堆内存的对象中。
+			</p>
+			<p>
+				（6）静态方法只能调用静态成员变量和方法，不能调用非静态成员变量和方法。
+			</p>
+			<p>
+				（7）静态方法不能使用 <code>this</code>、<code>super</code> 关键字。
+			</p>
+			<p>
+				（8）静态代码块在类加载时执行，且只执行一次，可用于初始化配置。
+			</p>
+			<p>
+				（9）<code>static</code> 结合 <code>final</code> 关键字可以实现定义常量的功能。
+			</p>
+
+			<br />
+
+			<p>
+				还是用我们的 MobilePhone 类举例，增加一个成员变量 state 代表当前状态：0 表示出厂、1 表示在用、2 表示关机、3 表示停机等等。
+			</p>
+			<p>
+				但是我们在为这个成员变量设置值的时候，可能对这几种状态的对应关系不是特别明确，如果值设置错误，就会造成程序 bug。此时就可以使用类静态变量来定义这些状态，使用的时候直接使用类名获取就行。
+			</p>
+			<p>
+				这是一种较常用的编程思想，在实际开发中，我们通常还要结合 <code>final</code> 修饰（防止使用者修改变量的值）、或者将这些静态变量定义在接口或枚举中。
+			</p>
+			<pre>
+/*
+	<span class="annotation">代表手机状态的四个静态变量</span>
+*/
+public static final int INIT_STATE       = 0;
+public static final int USEFUL_STATE     = 1;
+public static final int POWER_OFF_STATE  = 2;
+public static final int HALT_STATE       = 3;
+
+<span class="annotation">// 手机状态属性</span>
+private int state;
+
+public int getState(){
+	return this.state;
+}
+public void setState(int state){
+	this.state = state;
+}
+
+<span class="annotation">// 返回当前状态说明</span>
+public String currentState(){
+	switch (this.state) {
+		case INIT_STATE:
+			return "出厂状态";
+		case USEFUL_STATE:
+			return "在用状态";
+		case POWER_OFF_STATE:
+			return "关机状态";
+		case HALT_STATE:
+			return "停机状态";
+		default:
+			return "未知状态";
+	}
+}
+
+public static void main(String[] args){
+	// 使用new关键字调用MobilePhone的默认构造方法创建实例
+	Mobile mobile = new Mobile();
+
+	<span class="annotation">// 注意此处set方法填写的参数是使用静态变量传递的</span>
+	<span class="annotation">mobile.setState(Mobile.initState);</span>
+	String state = mobile.currentState();
+	System.out.println(state);
+}
+
+<span class="phase-title">输出：</span>
+
+出厂状态
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 oop 中的 MobilePhone3.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、构造方法概述</h4>
+			<p>
+				什么是构造方法？
+			</p>
+			<p>
+				（1）对象实例化时调用的方法，用于对象成员初始化。
+			</p>
+			<p>
+				（2）名称与类名相同，无返回值，可以有参数，可以重载多个，可以互相调用。
+			</p>
+			<p>
+				（3）一个类如果没有定义构造方法，默认有一个无参构造方法；如果定义了构造方法，那么默认构造方法就被覆盖了。
+			</p>
+			<p>
+				（4）可以使用 <code>private</code>、<code>protect</code>、<code>public</code> 等关键字修饰。
+			</p>
+			<p>
+				（5）构造方法中可以有 <code>return</code> 语句。
+			</p>
+
+			<br />
+
+			<p>
+				为之前的 MobilePhone 类添加构造方法
+			</p>
+
+			<pre>
+<span class="annotation">// 无参数构造方法，会覆盖默认的无参构造方法</span>
+public MobilePhone4() {
+	this.os = "Android";
+	this.phoneNumber = null;
+	this.brand = null;
+	this.dumpEnergy = 0d;
+}
+
+<span class="annotation">// 两个参数，可以初始化 Mobile 的 os 和 brand</span>
+public MobilePhone4(String os, String brand) {
+	this.os = os;
+	this.phoneNumber = null;
+	this.brand = brand;
+	this.dumpEnergy = 0d;
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、构造方法互相调用</h4>
+			<p>
+				在前面的例子中，无参的构造方法可以精简一下，就是调用有参数的构造方法进行初始化。
+			</p>
+			<pre>
+<span class="annotation">// 无参数构造方法，会覆盖默认的无参构造方法</span>
+public MobilePhone4(){
+	this("Android", null); <span class="annotation">// 调用另外一个构造方法</span>
+}
+
+<span class="annotation">// 两个参数，可以初始化 MobilePhone 的 os 和 brand</span>
+public MobilePhone4(String os, String brand){
+	this.os = os;
+	this.phoneNumber = null;
+	this.brand = brand;
+	this.dumpEnergy = 0d;
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f7" class="title-1th">七、构造代码块</h4>
+			<p>
+				类中使用 <code>{}</code> 将构造对象前需要执行的代码封装起来，就是构造代码块。
+			</p>
+			<p>
+				在调用父类构造方法之后，在本类构造方法初始化之前执行。可以用于初始化所有本类对象都相同的一些数据，使用较少。
+			</p>
+			<pre>
+public class MobilePhone4 {
+	
+	// 代码
+
+	/*
+		<span class="annotation">构造代码块</span>
+	*/
+	{
+		System.out.println("创建一个MobilePhone4对象");
+	}
+
+	// 代码
+}
+			</pre>
+
+			<br />
+
+			<span class="src-introduce">五、六、七部分演示代码在项目 oop 中的 MobilePhone4.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01011.html" style="font-size:12px;">第十一节&nbsp;&nbsp;&nbsp;&nbsp;面向对象思想、类和对象</a>
+			<br />
+			<a href="java01013.html" style="font-size:12px;">第十三节&nbsp;&nbsp;&nbsp;&nbsp;继承（一）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

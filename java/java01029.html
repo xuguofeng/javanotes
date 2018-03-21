@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十九节&nbsp;&nbsp;&nbsp;&nbsp;ArrayList 类、队列和栈</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、ArrayList 类</a></li>
+				<li><a href="#f2">二、使用 ArrayList 演示集合方法</a></li>
+				<li><a href="#f3">三、队列和栈</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	队列</a></li>
+						<li><a href="#f3-2">2、	双端队列</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、LinkedList 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	概述</a></li>
+						<li><a href="#f4-2">2、	构造方法</a></li>
+						<li><a href="#f4-3">3、	主要方法</a></li>
+						<li><a href="#f4-4">4、	实现队列、堆栈操作</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、ArrayList 类</h4>
+
+			<p>
+				<code>List</code> 接口的数组实现，不同步，所以比 <code>Vector</code> 类效率高，查询速度快。
+			</p>
+
+			<pre>
+java.util;
+
+public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt; implements List&lt;E&gt;, RandomAccess, Cloneable, Serializable {}
+</pre>
+
+			<p>
+				每个 <code>ArrayList</code> 实例都有自己的容量，即用来存储元素的数组大小，随着不断添加元素，集合容量自动增长。
+			</p>
+			<p>
+				在添加大量元素前，应用程序可以使用 <code>ensureCapacity</code> 操作来增加 <code>ArrayList</code> 实例的容量，这可以减少递增式再分配的数量。
+			</p>
+			<p>
+				<code>Vector</code> 类内部也是数组实现，是同步的，即线程安全的。此类在 JDK1.0 出现，从 Java 2 平台 v1.2 开始，此类实现 <code>List</code> 接口，成为 Java 集合框架的成员。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public ArrayList()</span>
+	构造一个初始容量为10的空集合。
+
+<span class="methodClassName">public ArrayList( Collection&lt;? extends E&gt; c )</span>
+	构造一个包含指定集合元素的新集合。
+
+<span class="methodClassName">public ArrayList( int initialCapacity )</span>
+	构造一个具有指定容量的空集合。
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public void ensureCapacity( int minCapacity )</span>
+	如有必要，增加此ArrayList实例的容量，以确保能够容纳最小容量参数所指定的元素。
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、使用 ArrayList 演示集合方法</h4>
+
+			<br />
+
+			<p>
+				<span class="high-light">演示 Collection 的主要方法</span>
+			</p>
+			<pre>
+<span class="annotation">// 创建ArrayList对象</span>
+List list1 = new ArrayList();
+
+<span class="annotation">// add方法</span>
+list1.add("元素1");
+list1.add("元素2");
+list1.add("元素3");
+
+System.out.println(list1);
+
+<span class="annotation">// addAll方法</span>
+List list2 = new ArrayList();
+list2.addAll(list1);
+list2.add("元素4");
+
+System.out.println(list2);
+
+<span class="annotation">// size方法</span>
+System.out.println(list1.size());
+
+<span class="annotation">// contains、containsAll方法</span>
+System.out.println(list1.contains("元素1"));
+System.out.println(list2.containsAll(list1));
+
+<span class="annotation">// remove、removeAll方法</span>
+list1.remove("元素1");
+System.out.println(list1);
+
+list2.removeAll(list1);
+System.out.println(list2);
+
+<span class="annotation">// retainAll方法</span>
+list1.retainAll(list2);
+System.out.println(list1);
+
+<span class="annotation">// clear方法</span>
+list2.clear();
+System.out.println(list2);
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">演示 List 的主要方法</span>
+			</p>
+
+			<pre>
+<span class="annotation">// 创建ArrayList对象</span>
+List list1 = new ArrayList();
+
+list1.add("元素1");
+list1.add("元素2");
+list1.add("元素3");
+
+System.out.println(list1);
+
+<span class="annotation">// add(int index, E element)方法</span>
+list1.add(1, "元素1-1"); // 在1索引位置添加元素元素1-1
+
+System.out.println(list1);
+
+// addAll(int index, Collection&lt;? extends E&gt; c) 略
+
+<span class="annotation">// get(index)方法</span>
+Object ele1 = list1.get(1);
+System.out.println(ele1);
+
+<span class="annotation">// indexOf方法</span>
+System.out.println(list1.indexOf("元素3"));
+System.out.println(list1.indexOf("元素0"));
+System.out.println(list1.lastIndexOf("元素1-1"));
+
+<span class="annotation">// remove(index)方法</span>
+list1.remove(1);
+System.out.println(list1);
+
+<span class="annotation">// set(int index, E element)方法</span>
+list1.set(1, "元素1-1");
+System.out.println(list1);
+
+<span class="annotation">// subList方法</span>
+List list2 = list1.subList(1, list1.size());
+System.out.println(list2);
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 ArrayListAPI.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、队列和栈</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	队列</h5>
+
+			<pre>
+java.util;
+
+public interface Queue&lt;E&gt; extends Collection&lt;E&gt; {}
+</pre>
+
+			<p>
+				用于在处理元素前保存元素，除了基本的集合操作外，队列还提供其他的插入、提取和检查方式。
+			</p>
+			<p>
+				队列通常以先进先出（FIFO）的方式排序元素。
+			</p>
+			<p>
+				队列的头都是调用 <code>remove()</code> 或 <code>poll()</code> 所移除的元素。
+			</p>
+			<p>
+				<code>offer</code> 方法可插入一个元素，所有的新元素都插入队列的末尾。
+			</p>
+			<p>
+				<code>element()</code> 和 <code>peek()</code> 返回队列的头，但不移除。
+			</p>
+			<p>
+				<code>Queue</code> 实现通常不允许插入 null 元素。
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	双端队列</h5>
+
+			<pre>
+java.util;
+
+public interface Deque&lt;E&gt; extends Queue&lt;E&gt; {}
+</pre>
+
+			<p>
+				一个支持在两端插入和移除元素的双端队列实现。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01029/01029001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				此接口扩展了 <code>Queue</code> 接口，在将双端队列用作队列时，将得到先进先出行为。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01029/01029002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				双端队列也可用作后进先出的堆栈。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01029/01029003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、LinkedList 类</h4>
+
+			<h5 id="f4-1" class="title-2th">1、	概述</h5>
+
+			<pre>
+java.util;
+
+public class LinkedList&lt;E&gt; extends AbstractSequentialList&lt;E&gt; implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, Serializable {}
+</pre>
+
+			<p>
+				<code>List</code> 接口的链表实现，与 <code>ArrayList</code> 相比，该实现在插入删除元素时速度很快，而查询速度较慢。
+			</p>
+			<p>
+				除了实现 <code>List</code> 接口外，该类还实现了 <code>Deque</code> 接口，所以链表集合可以用作堆栈、队列或双端队列操作。
+			</p>
+			<p>
+				该类不是同步的，如果多个线程同时访问，而其中至少一个线程从结构上修改了该类对象，则必须保持外部同步，即：
+			</p>
+			<p>
+				<code>List list = Collections.synchronizedList( new LinkedList(...) );</code>
+			</p>
+
+			<h5 id="f4-2" class="title-2th">2、	构造方法</h5>
+			<pre>
+<span class="methodClassName">public LinkedList()</span>
+
+<span class="methodClassName">public LinkedList( Collection&lt;? extends E&gt; c )</span>
+</pre>
+
+			<h5 id="f4-3" class="title-2th">3、	主要方法</h5>
+
+			<p>
+				在此只列出 <code>LinkedList</code> 实现的非 <code>List</code> 接口方法
+			</p>
+			<pre>
+<span class="methodClassName">public void addFirst(E e)</span>
+	将指定元素插入集合的头部。
+
+<span class="methodClassName">public void addLast(E e)</span>
+	将指定元素添加到集合的尾部。
+
+<span class="methodClassName">public E element()</span>
+	获取但不移除此集合的头（第一个元素）。
+
+<span class="methodClassName">public E getFirst()</span>
+	返回此集合的第一个元素。
+
+<span class="methodClassName">public E getLast()</span>
+	返回此集合的最后一个元素。
+
+<span class="methodClassName">public boolean offer(E e)</span>
+	将指定元素添加到此集合的末尾（最后一个元素）。
+
+<span class="methodClassName">public boolean offerFirst(E e)</span>
+	在此集合开头插入指定的元素。
+
+<span class="methodClassName">public boolean offerLast(E e)</span>
+	在此集合末尾插入指定的元素。
+
+<span class="methodClassName">public E peek()</span>
+	获取但不移除此集合的头（第一个元素）。
+
+<span class="methodClassName">public E peekFirst()</span>
+	获取但不移除此集合的第一个元素；如果此列表为空，则返回null。
+
+<span class="methodClassName">public E peekLast()</span>
+	获取但不移除此集合的最后一个元素；如果此列表为空，则返回null。
+
+<span class="methodClassName">public E poll()</span>
+	获取并移除此集合的头（第一个元素）
+
+<span class="methodClassName">public E pollFirst()</span>
+	获取并移除此集合的第一个元素；如果此列表为空，则返回null。
+
+<span class="methodClassName">public E pollLast()</span>
+	获取并移除此集合的最后一个元素；如果此列表为空，则返回null。
+
+<span class="methodClassName">public E pop()</span>
+	从此集合所表示的堆栈弹出一个元素。
+
+<span class="methodClassName">public void push(E e)</span>
+	将元素推入此集合所表示的堆栈。
+
+<span class="methodClassName">public E removeFirst()</span>
+	移除并返回此集合的第一个元素。
+
+<span class="methodClassName">public E removeLast()</span>
+	移除并返回此集合的最后一个元素。
+</pre>
+
+			<h5 id="f4-4" class="title-2th">4、	实现队列、堆栈操作</h5>
+
+			<p>
+				<span class="high-light">队列操作</span>
+			</p>
+
+			<pre>
+Queue queue = new LinkedList();
+
+queue.offer( "元素1" );
+queue.offer( "元素2" );
+queue.offer( "元素3" );
+
+<span class="annotation">// poll方法，获取并移除此队列的头</span>
+while(!queue.isEmpty()) {
+	System.out.println(queue.poll());
+}
+
+queue.offer( "元素1" );
+queue.offer( "元素2" );
+queue.offer( "元素3" );
+
+<span class="annotation">// peek方法，获取不移除此队列的头</span>
+while(!queue.isEmpty()) {
+	System.out.println(queue.peek());
+	queue.remove();
+}
+</pre>
+
+			<p>
+				<span class="high-light">堆栈操作</span>
+			</p>
+
+			<pre>
+Deque deque = new LinkedList();
+
+deque.push( "元素1" );
+deque.push( "元素2" );
+deque.push( "元素3" );
+
+<span class="annotation">// pop方法，获取并移除此堆栈的头</span>
+while(!deque.isEmpty()) {
+	System.out.println(deque.pop());
+}
+
+deque.push( "元素1" );
+deque.push( "元素2" );
+deque.push( "元素3" );
+
+<span class="annotation">// peek方法，获取不移除此堆栈的头</span>
+while(!deque.isEmpty()) {
+	System.out.println(deque.peek());
+	deque.remove();
+}
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 QueueTest.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01028.html" style="font-size:12px;">第二十八节&nbsp;&nbsp;&nbsp;&nbsp;Collection 接口和 List 接口</a>
+			<br />
+			<a href="java01030.html" style="font-size:12px;">第三十节&nbsp;&nbsp;&nbsp;&nbsp;Set 接口</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

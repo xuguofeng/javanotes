@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十五节&nbsp;&nbsp;&nbsp;&nbsp;接口和多态</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、接口介绍</a></li>
+				<li><a href="#f2">二、implements 关键字</a></li>
+				<li><a href="#f3">三、接口实现业务监控案例</a></li>
+				<li><a href="#f4">四、多态</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、接口介绍</h4>
+			<p>
+				接口 <code>interface</code> 技术主要是用来描述类具有什么功能，而并不给出功能的具体实现。
+			</p>
+			<p>
+				一个类可以实现 <code>implement</code> 多个接口，并在需要使用接口的地方，随时使用实现了该接口的类对象。
+			</p>
+			<p>
+				接口并不是类，而是对类的一组需求的描述，这些类要遵从接口描述的统一格式进行定义。比如  <code>Comparable</code> 接口，定义了一个用于比较对象的方法，实现了该接口的类需要实现  <code>int compareTo(Object object)</code> 方法。
+			</p>
+			<p>
+				接口的所有方法自动是  <code>public abstract</code> 的。在接口中可以使用  <code>static final</code> 定义常量，而且很常用。
+			</p>
+			<p>
+				实现类必须实现接口的全部方法，否则还是一个接口或抽象类。
+			</p>
+			<p>
+				java 语言没有多继承，但是可以实现多个接口，需要实现所有接口的方法。
+			</p>
+			<p>
+				接口可以继承，而且可以多继承，实现子接口的类也需要实现父接口方法。
+			</p>
+			<p>
+				接口可以降低程序的耦合度。
+			</p>
+			<p>
+				接口可以多实现，抽象类只能单继承。
+			</p>
+			<p>
+				抽象类可以定义非抽象方法，接口中不能定义已实现方法。
+			</p>
+			<p>
+				抽象类是对子类的通用功能，接口是对需求功能的封装。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、implements 关键字</h4>
+			<p>
+				使用 <code>implements</code> 定义类和接口的实现关系。
+			</p>
+
+			<pre>
+public interface InterfaceA {
+	public static final int NUM = 1; <span class="annotation"> // 定义常量</span>
+	public static final String NAME = "interface A"; <span class="annotation"> // 定义常量</span>
+	public void testA();
+}</pre>
+
+			<pre>
+/*
+	<span class="annotation">一个接口可以继承另一个接口</span>
+*/
+public interface InterfaceB extends InterfaceA {
+	public void testB();
+}</pre>
+
+			<pre>
+public interface InterfaceC {
+	public void testC();
+}</pre>
+
+			<pre>
+public class ClassA implements InterfaceA {
+	public void testA() {
+		System.out.println("Class A：" + NUM);
+		System.out.println("Class A：" + NAME);
+	}
+}</pre>
+
+			<pre>
+/*
+	<span class="annotation">实现 InterfaceB 接口的类也需要实现 InterfaceA 的方法</span>
+*/
+public class ClassB implements InterfaceB {
+	public void testA() {
+		System.out.println("Class B：" + NUM);
+		System.out.println("Class B：" + NAME);
+	}
+	public void testB() {
+		System.out.println("Class B：" + NUM);
+		System.out.println("Class B：" + NAME);
+	}
+}</pre>
+
+			<pre>
+/*
+	<span class="annotation">一个类可以实现多个接口，必须实现所有方法</span>
+*/
+public class ClassC implements InterfaceB, InterfaceC {
+	public void testA() {
+		System.out.println("Class C：" + NUM);
+		System.out.println("Class C：" + NAME);
+	}
+	public void testB() {
+		System.out.println("Class C：" + NUM);
+		System.out.println("Class C：" + NAME);
+	}
+	public void testC() {
+		System.out.println("Class C：" + NUM);
+		System.out.println("Class C：" + NAME);
+	}
+}</pre>
+
+			<pre>
+/*
+	<span class="annotation">未实现全部方法的实现类是一个抽象类</span>
+*/
+public abstract class AbstractC implements InterfaceC {
+	public abstract void testC();
+}</pre>
+
+			<pre>
+public class ExtendsAbstractC extends AbstractC {
+	public void testC() {
+		System.out.println("我是C接口的实现类");
+	}
+}</pre>
+
+			<pre>
+public class TestInterface {
+	public static void main(String[] args) {
+		
+		ClassA a = new ClassA();
+		a.testA();
+
+		ClassB b = new ClassB();
+		b.testA();
+		b.testB();
+
+		ClassC c = new ClassC();
+		c.testA();
+		c.testB();
+		c.testC();
+
+		ExtendsAbstractC c2 = new ExtendsAbstractC();
+		c2.testC();
+
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+Class A：1
+Class A：interface A
+Class B：1
+Class B：interface A
+Class B：1
+Class B：interface A
+Class C：1
+Class C：interface A
+Class C：1
+Class C：interface A
+Class C：1
+Class C：interface A
+我是C接口的实现类</pre>
+
+			<span class="src-introduce">演示代码在项目 Interface1 中。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、接口实现业务监控案例</h4>
+			<p>
+				其实，使用接口实现上一节业务监控的案例是最合适、最符合 java 面向接口编程思想的方式。
+			</p>
+			<p>
+				我们再把程序做下升级，需要做的就是以下两步：
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">首先把 MonitorService 抽象类改为接口：</span>
+			</p>
+			<pre>
+public interface MonitorService {
+	public void doMonitor(MonitorBusiness business);
+}</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">让 MonitorServiceA、MonitorServiceB、MonitorServiceC、MonitorServiceD 四个类实现 MonitorService 接口：</span>
+			</p>
+
+			<pre>
+public class MonitorServiceA implements MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控A类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceB implements MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控B类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceC implements MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控C类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceD implements MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控D类业务：" + business.getName());
+	}
+}</pre>
+
+			<span class="src-introduce">演示代码在项目 Interface2 中。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、多态</h4>
+			<p>
+				（1）某类事物的多种存在形态；
+			</p>
+			<p>
+				（2）java 中可以使用父类变量引用子类对象；
+			</p>
+			<p>
+				（3）java 中可以使用接口变量引用实现类对象；
+			</p>
+			<p>
+				（4）在这个过程中，会对子类对象做自动类型提升。子类的特有功能就无法访问了。如果需要使用子类特有的功能，可以强制类型转换。
+			</p>
+
+			<br />
+
+			<p>
+				<code>instanceof</code> 运算符可以在运行时判断某个对象是否为特定类的一个实例，返回一个 boolean 值。
+			</p>
+			<p>
+				使用我们之前编写的 <code>MobilePhone</code>、<code>Computer</code> 演示下多态和 <code>instanceof</code> 的使用：
+			</p>
+
+			<pre>
+MobilePhone mobile = new MobilePhone();
+System.out.println(mobile instanceof ElectronicProduct);
+System.out.println(mobile instanceof MobilePhone);
+
+Computer computer = new Computer();
+System.out.println(computer instanceof ElectronicProduct);
+System.out.println(computer instanceof Computer);
+
+/*
+	<span class="annotation">使用ElectronicProduct变量引用一个Mobile对象</span>
+*/
+<span class="high-light">ElectronicProduct m2 = new MobilePhone();</span>
+System.out.println(m2 instanceof ElectronicProduct);
+System.out.println(m2 instanceof MobilePhone);
+System.out.println(m2 instanceof Computer);
+
+/*
+	<span class="annotation">使用ElectronicProduct变量引用一个Computer对象</span>
+*/
+<span class="high-light">ElectronicProduct c2 = new Computer();</span>
+System.out.println(c2 instanceof ElectronicProduct);
+System.out.println(c2 instanceof Computer);
+System.out.println(c2 instanceof MobilePhone);
+
+<span class="phase-title">输出：</span>
+
+true
+true
+true
+true
+true
+true
+false
+true
+true
+false</pre>
+
+			<p>
+				类似的代码我们在“业务监控案例”中也编写过，我们使用<code>MonitorService</code>接口的变量引用了其实现类<code>MonitorServiceA</code>、<code>MonitorServiceB</code>、<code>MonitorServiceC</code>、<code>MonitorServiceD</code>的实例对象。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01015/01015001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 MultipleInheritance 中。</span>
+
+			<br /><br />
+
+			<a href="java01014.html" style="font-size:12px;">第十四节&nbsp;&nbsp;&nbsp;&nbsp;继承和抽象类</a>
+			<br />
+			<a href="java01016.html" style="font-size:12px;">第十六节&nbsp;&nbsp;&nbsp;&nbsp;内部类和 Object 类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

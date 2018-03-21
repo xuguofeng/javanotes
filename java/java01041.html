@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java IO 技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十一节&nbsp;&nbsp;&nbsp;&nbsp;缓冲字节流 和 RandomAccessFile 类</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、缓冲字节流</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	缓冲字节流 API</a></li>
+						<li><a href="#f1-2">2、	复制文件</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、RandomAccessFile 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	RandomAccessFile 类 API</a></li>
+						<li><a href="#f2-2">2、	复制文件</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、ByteArrayInputStream 和 ByteArrayOutputStream 类</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、缓冲字节流</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	缓冲字节流 API</h5>
+
+			<p>
+				<span class="high-light">BufferedInputStream</span>
+			</p>
+
+			<pre>
+java.io;
+
+public class BufferedInputStream extends FilterInputStream {}
+</pre>
+			<p>
+				在创建 <code>BufferedInputStream</code> 时，会创建一个内部缓冲区数组以提高读取效率。
+			</p>
+			<pre>
+<span class="methodClassName">public BufferedInputStream(InputStream in)</span>
+
+<span class="methodClassName">public BufferedInputStream(InputStream in, int size)</span>
+	创建一个长度为size的内部缓冲区数组并将其存储在buf中。
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">BufferedOutputStream</span>
+			</p>
+
+			<pre>
+java.io;
+
+public class BufferedOutputStream extends FilterOutputStream {}
+</pre>
+			<p>
+				该类实现缓冲的输出流。
+			</p>
+			<pre>
+<span class="methodClassName">public BufferedOutputStream(OutputStream out)</span>
+
+<span class="methodClassName">public BufferedOutputStream(OutputStream out, int size)</span>
+</pre>
+
+			<h5 id="f1-2" class="title-2th">2、	复制文件</h5>
+
+			<pre>
+private static void copyFile(String src, String dst) throws IOException {
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long start = System.currentTimeMillis();
+
+	BufferedInputStream bis = null;
+	BufferedOutputStream bos = null;
+
+	try {
+		bis = new BufferedInputStream(new FileInputStream(src));
+		bos = new BufferedOutputStream(new FileOutputStream(dst));
+
+		int i = -1;
+
+		<span class="annotation">// 循环从输入流读取字节</span>
+		<span class="annotation">// 然后写到输出流</span>
+		while((i = bis.read()) != -1) {
+			bos.write(i);
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭IO流</span>
+		try {
+			if (bis != null)
+				bis.close();
+			if (bos != null)
+				bos.close();
+		} catch (IOException e) {}
+	}
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long end = System.currentTimeMillis();
+	System.out.println(end - start);
+}
+</pre>
+
+			<p>
+				自定义 <code>buf</code> 缓冲提高读写效率。
+			</p>
+			<pre>
+private static void bufferedCopyFile(String src, String dst) throws IOException {
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long start = System.currentTimeMillis();
+
+	BufferedInputStream bis = null;
+	BufferedOutputStream bos = null;
+
+	try {
+		bis = new BufferedInputStream(new FileInputStream(src));
+		bos = new BufferedOutputStream(new FileOutputStream(dst));
+
+		byte[] buf = new byte[1024 * 1024 * 10]; // 10MB缓冲
+		int i = -1;
+
+		<span class="annotation">// 循环从输入流读取字节</span>
+		<span class="annotation">// 然后写到输出流</span>
+		while((i = bis.read(buf)) != -1) {
+			bos.write(buf, 0, i);
+			bos.flush();
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭IO流</span>
+		try {
+			if (bis != null)
+				bis.close();
+			if (bos != null)
+				bos.close();
+		} catch (IOException e) {}
+	}
+
+	<span class="annotation">// 用于计算程序运行时间</span>
+	long end = System.currentTimeMillis();
+	System.out.println(end - start);
+}
+</pre>
+
+			<p>
+				运行程序
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	String src = "D:\\src.bmp";
+	String dst = "D:\\tmp\\java\\dst.bmp";
+
+	try {
+
+		// 使用 BufferedInputStream 和 BufferedOutputStream 复制文件
+		copyFile(src, dst);
+
+
+		// 使用 BufferedInputStream 和 BufferedOutputStream 复制文件
+		bufferedCopyFile(src, dst);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+471
+39
+</pre>	
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 BufferedStreamTest.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、RandomAccessFile 类</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	RandomAccessFile 类 API</h5>
+
+			<pre>
+java.io;
+
+public class RandomAccessFile extends Object implements DataOutput, DataInput, Closeable {}
+</pre>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public RandomAccessFile(File file, String mode) throws FileNotFoundException</span>
+	创建从中读取和向其中写入（可选）的随机访问文件流，文件由File参数指定。
+	mode参数的取值：r、rw、rws、rwd
+
+<span class="methodClassName">public RandomAccessFile(String name, String mode) throws FileNotFoundException</span>
+	创建从中读取和向其中写入（可选）的随机访问文件流，文件具有指定名称。
+</pre>
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public long length() throws IOException</span>
+	返回文件的长度。
+
+<span class="methodClassName">public int read() throws IOException</span>
+	从文件中读取一个字节。
+
+<span class="methodClassName">public int read(byte[] b) throws IOException</span>
+	将最多b.length个字节从文件读入byte数组。
+
+<span class="methodClassName">public int read(byte[] b, int off, int len) throws IOException</span>
+	将最多len个字节从文件读入b数组。
+	off为写入数组b中的初始偏移量。
+
+<span class="methodClassName">public final String readLine() throws IOException</span>
+	从文件读取文本下一行。
+
+<span class="methodClassName">public void write(byte[] b) throws IOException</span>
+	将b.length个字节从指定byte数组写入到文件，并从当前文件指针开始。
+
+<span class="methodClassName">public void write(byte[] b, int off, int len) throws IOException</span>
+	将len个字节从指定byte数组off处开始写入到文件。
+
+<span class="methodClassName">public void write(int b) throws IOException</span>
+	向文件写入指定字节。
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	复制文件</h5>
+
+			<pre>
+<span class="annotation">// 定义输入流和输出流</span>
+RandomAccessFile in = null;
+RandomAccessFile out = null;
+try {
+	
+	in = new RandomAccessFile(src, "r");
+	out = new RandomAccessFile(dst, "rw");
+
+	int len = -1;
+	byte[] buf = new byte[1024];
+
+	<span class="annotation">// 循环从输入流读取字节</span>
+	<span class="annotation">// 然后写到输出流</span>
+	while((len = in.read(buf)) != -1) {
+		out.write(buf, 0, len);
+	}
+} catch (IOException e) {
+	<span class="annotation">// 需要捕获IOException</span>
+	e.printStackTrace();
+	throw e;
+} finally {
+	<span class="annotation">// 在finally代码块关闭IO流</span>
+	try {
+		if (in != null)
+			in.close();
+		if (out != null)
+			out.close();
+	} catch (IOException e) {}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 RandomAccessFileAPI.java 和 RandomAccessFileTest.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、ByteArrayInputStream 和 ByteArrayOutputStream 类</h4>
+
+			<br />
+
+			<p>
+				<span class="high-light">ByteArrayInputStream</span>
+			</p>
+
+			<pre>
+java.io;
+
+public class ByteArrayInputStream extends InputStream {}
+</pre>
+
+			<p>
+				包含一个内部缓冲区，该缓冲区包含从流中读取的字节。
+			</p>
+
+			<p>
+				构造方法
+			</p>
+
+			<pre>
+<span class="methodClassName">public ByteArrayInputStream(byte[] buf)</span>
+	创建一个ByteArrayInputStream，使用buf作为其缓冲区数组。
+</pre>
+
+			<p>
+				主要方法
+			</p>
+
+			<pre>
+<span class="methodClassName">public int read()</span>
+	从此输入流中读取下一个数据字节。
+
+<span class="methodClassName">public int read(byte[] b, int off, int len)</span>
+	将最多len个字节从输入流读入byte数组。
+	off为目标数组b的起始偏移量。
+</pre>
+
+			<br /><br />
+
+			<p>
+				<span class="high-light">ByteArrayOutputStream</span>
+			</p>
+
+			<pre>
+java.io;
+
+public class ByteArrayOutputStream extends OutputStream {}
+</pre>
+
+			<p>
+				此类实现了一个输出流，其中的数据被写入一个 <code>byte</code> 数组。缓冲区会随着数据的不断写入而自动增长。可使用 <code>toByteArray()</code> 和 <code>toString()</code> 获取数据。
+			</p>
+
+			<p>
+				构造方法
+			</p>
+
+			<pre>
+<span class="methodClassName">public ByteArrayOutputStream()</span>
+	创建一个新的byte数组输出流。缓冲区的容量最初是32字节，如有必要可增加其大小。
+</pre>
+
+			<p>
+				主要方法
+			</p>
+
+			<pre>
+<span class="methodClassName">public int size()</span>
+	返回缓冲区的当前大小。
+
+<span class="methodClassName">public byte[] toByteArray()</span>
+	创建一个新分配的byte数组。
+
+<span class="methodClassName">public void write(byte[] b, int off, int len)</span>
+	将指定byte数组中从偏移量off开始的len个字节写入此byte数组输出流。
+
+<span class="methodClassName">public void write(int b)</span>
+	将指定的字节写入此byte数组输出流。
+
+<span class="methodClassName">public void writeTo(OutputStream out) throws IOException</span>
+	将此输出流的全部内容写入到指定的输出流。
+</pre>
+
+			<p>
+				这两个类使用的不多，在此讲一个简单使用场景。
+			</p>
+			<p>
+				如果想把图片或者其他类型的二进制文件保存到数据库中，需要先把文件转成二进制 <code>byte</code> 数组，然后通过数据库 <code>ORM</code> 框架进行存储。
+			</p>
+			<p>
+				可以使用 <code>FileInputStrram</code> 把数据读取到 <code>ByteArrayOutputStream</code> 中，然后使用 <code>ByteArrayOutputStream</code> 的 <code>toByteArray()</code> 方法把数据转为 <code>byte[]</code> 即可。
+			</p>
+			<p>
+				这是 <code>ByteArrayOutputStream</code> 的一个使用场景。
+			</p>
+			<p>
+				其实把二进制文件转为 <code>byte[]</code> 的方法有很多，暂时先介绍这一种。
+			</p>
+
+			<br />
+
+			<p>
+				<a href="java01040.html" style="font-size:12px;">第四十节&nbsp;&nbsp;&nbsp;&nbsp;IO 流概述和字节流</a>
+			</p>
+			<p>
+				<a href="java01042.html" style="font-size:12px;">第四十二节&nbsp;&nbsp;&nbsp;&nbsp;字符流（一）</a>
+			</p>
+			
+
+			<br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

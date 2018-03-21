@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十七节&nbsp;&nbsp;&nbsp;&nbsp;基本数据类型包装类</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、Integer 类介绍</a></li>
+				<li><a href="#f3">三、Integer 字段</a></li>
+				<li><a href="#f4">四、Integer 类构造方法</a></li>
+				<li><a href="#f5">五、Integer 类主要方法</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+			<p>
+				包装类就是将基本数据类型封装成类，因为基本数据类型其实不是很符合面向对象的思想，而在类中可以定义更多的功能方法操作数据，比如基本数据类型与字符串之间的转换。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<table class="table table-bordered table-striped">
+							<tr>
+								<th>基本数据类型</th><th>包装类型</th>
+							</tr>
+							<tr>
+								<td>byte</td><td>Byte</td>
+							</tr>
+							<tr>
+								<td>short</td><td>Short</td>
+							</tr>
+							<tr>
+								<td>int</td><td>Integer</td>
+							</tr>
+							<tr>
+								<td>long</td><td>Long</td>
+							</tr>
+							<tr>
+								<td>double</td><td>Double</td>
+							</tr>
+							<tr>
+								<td>float</td><td>Float</td>
+							</tr>
+							<tr>
+								<td>char</td><td>Character</td>
+							</tr>
+							<tr>
+								<td>boolean</td><td>Boolean</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</p>
+
+			<p>
+				在此以 <code>Integer</code> 类举例。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Integer 类介绍</h4>
+
+			<pre>
+java.lang;
+
+public final class Integer extends Number implements Comparable&lt;Integer&gt; {}
+</pre>
+
+			<p>
+				<code>Integer</code> 类在对象中包装了一个基本类型 <code>int</code> 的值。
+			</p>
+			<p>
+				该类提供了多个方法，能在 <code>int</code> 类型和 <code>String</code> 类型之间互相转换，还提供了处理 <code>int</code> 类型时非常有用的一些常量和方法。
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Integer 字段</h4>
+
+			<pre>
+<span class="methodClassName">public static final int MAX_VALUE</span>
+	int类型数据的最大值。
+
+	例：
+	int max = Integer.MAX_VALUE;
+	System.out.println(max);  // 2147483647
+
+<span class="methodClassName">public static final int MIN_VALUE</span>
+	int类型数据的最小值。
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、Integer 类构造方法</h4>
+
+			<pre>
+<span class="methodClassName">public Integer(int value)</span>
+	构造一个新的Integer对象，有指定的int值。
+
+<span class="methodClassName">public Integer(String s) throws NumberFormatException</span>
+	构造一个新的Integer对象，表示String参数所指示的int值。
+
+	例：
+	Integer a1 = new Integer(1);
+	System.out.println(a1); // 1
+
+	Integer a2 = new Integer("2");
+	System.out.println(a2); // 2
+</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、Integer 类主要方法</h4>
+
+			<pre>
+<span class="methodClassName">public int compareTo(Integer anotherInteger)</span>
+	在数字上比较两个Integer对象。
+
+	例：
+	Integer a1 = 1;
+	Integer a2 = 5;
+	System.out.println( a1.compareTo(a2) ); // -1
+
+<span class="methodClassName">public int intValue()</span>
+	以int类型返回该Integer的值。
+
+<span class="methodClassName">public static int parseInt(String s) throws NumberFormatException</span>
+	将字符串参数作为有符号的十进制整数进行解析。
+
+<span class="methodClassName">public static int parseInt(String s, int radix) throws NumberFormatException</span>
+	使用第二个参数指定的基数，将字符串参数解析为有符号的整数。
+
+	例：
+	String str = "15";
+	Integer a3 = Integer.parseInt( str );
+	Integer a4 = Integer.parseInt( str, 16 );
+	System.out.println( a3 ); // 15
+	System.out.println( a4 ); // 21
+
+<span class="methodClassName">public static int signum(int i)</span>
+	返回指定int值的符号函数。如果值为负，则返回-1；如果值为零，则返回0；如果值为正，则返回1。
+
+	例：
+	System.out.println( Integer.signum(10) );  // 1
+	System.out.println( Integer.signum(-10) ); // -1
+	System.out.println( Integer.signum(0) );   // 0
+
+<span class="methodClassName">public static String toBinaryString(int i)</span>
+	二进制字符串
+
+<span class="methodClassName">public static String toHexString(int i)</span>
+	十六进制字符串
+
+<span class="methodClassName">public static String toOctalString(int i)</span>
+	八进制字符串
+
+	例：
+	Integer a1 = 153;
+
+	String binary = Integer.toBinaryString(a1);
+	String hex = Integer.toHexString(a1);
+	String octal = Integer.toOctalString(a1);
+
+	System.out.println( binary ); // 10011001
+	System.out.println( hex );    // 99
+	System.out.println( octal );  // 231
+
+<span class="methodClassName">public static String toString(int i, int radix)</span>
+	字符串表示形式，第二个参数指定基数
+        
+	例如：
+	Integer.toString(27, 16).toUpperCase();
+
+<span class="methodClassName">public static Integer valueOf(int i)</span>
+	返回一个表示指定的int值的Integer实例
+
+<span class="methodClassName">public static Integer valueOf(String s) throws NumberFormatException</span>
+	返回保存指定String值的Integer对象
+
+<span class="methodClassName">public static Integer valueOf(String s, int radix) throws NumberFormatException</span>
+	返回保存指定String值的Integer对象，第二个参数提供的基数
+
+	例：
+	Integer a1 = Integer.valueOf( 153 );
+	Integer a2 = Integer.valueOf( "153" );
+	Integer a3 = Integer.valueOf( "153", 16 );
+
+	System.out.println(a1); // 153
+	System.out.println(a2); // 153
+	System.out.println(a3); // 339
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.integer 包。</span>
+
+			<br /><br />
+
+			<a href="java01026.html" style="font-size:12px;">第二十六节&nbsp;&nbsp;&nbsp;&nbsp;String 和 StringBuffer</a>
+			<br />
+			<a href="java01028.html" style="font-size:12px;">第二十八节&nbsp;&nbsp;&nbsp;&nbsp;Collection 接口和 List 接口</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java开发环境</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四节&nbsp;&nbsp;&nbsp;&nbsp;Java开发环境搭建（三）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、工作空间与创建项目</a></li>
+				<li><a href="#f2">二、Editplus 开发环境（简单环境）</a></li>
+				<li><a href="#f3">三、Editplus 开发环境（高级环境）</a></li>
+				<li><a href="#f4">四、QuickStart 程序的一些细节</a></li>
+				<li><a href="#f5">五、CLASSPATH 环境变量（了解为主）</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、工作空间与创建项目</h4>
+			<p>
+				工作空间：统一存放 java 项目的目录，我们的全部代码演示项目都在 <code>D:\tmp\java</code> 这个工作空间下；
+			</p>
+			<p>
+				项目：存放一整套 java 程序源代码（.java文件）和字节码文件（.class文件）的目录。您可以直接把源代码文件放在项目根目录下，也可以创建 <code>src</code> 目录存放源代码文件，创建 <code>bin</code> 目录用于存放字节码文件；
+			</p>
+			<p>
+				我们就演示下如何在工作空间中创建 java 项目：
+			</p>
+			<pre>
+D:\tmp\java>md quickstart
+
+D:\tmp\java>
+</pre>
+			<p>
+				或者使用界面操作创建文件夹，也是一样的效果。
+			</p>
+			<p>
+				创建好 <code>quickstart</code> 项目，我们就可以在项目下面编写源代码、或者再创建 src 目录后在 src 目录下编写源代码。
+			</p>
+			<p>
+				后面我们还会讲解使用包（package）来管理项目中的类。
+			</p>
+
+			<hr />
+			
+			<h4 id="f2" class="title-1th">二、Editplus 开发环境（简单环境）</h4>
+			<p>
+				如果需要经常开发软件，使用 notepad 编写程序不是很方便，所以我们需要更加优秀的文本编辑器来搭建开发环境，Editplus 就是一个很好的选择
+			</p>
+			<p>
+				下载 editplus 并安装，安装过程略
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				打开软件，点击“工具”，选择“配置用户工具”
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				在工具组 1 点击“添加工具”选择应用程序，创建 javac 编译工具，配置参数如下
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+菜单文字：javac
+命令：D:\Program Files\Java6\jdk1.6.0_45\bin\javac.exe
+参数：-d D:\tmp\java\quickstart\. -classpath D:\tmp\java\quickstart\. -encoding UTF-8 $(FileName)
+初始目录：$(FileDir)
+动作：捕捉输出
+
+菜单文字：自定义，在此我们取名javac
+命令：使用的是jdk安装目录下bin下的javac.exe
+参数：-d选项指定编译后.class文件的存放位置；
+	-classpath选项指定编译时在哪个目录下寻找依赖的类；
+	-encoding选项指定使用的编码方式，与源文件的编码一致；
+	$(FileName)是一个代表当前文件名称的变量，Editplus会为我们传入。
+
+<span class="high-light">* 参数中的项目目录需要根据自己的项目确定</span>
+</pre>
+			<p>
+				使用 editplus 打开之前编写的 QuickStart.java 文件，点击“工具”，可以看到javac工具，点击进行编译，出现编译错误
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				原来我们之前使用 notepad 编写的 .java 文件使用的 ANSI 编码，而我们在创建 javac 工具时使用的 UTF-8 编码方式，所以需要修改 .java 文件的编码方式。点击“文档”，选择“文件编码”，选择“更改文件编码方式”，将 ANSI 修改为 UTF-8
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				修改后保存文件，再使用 javac 工具编译
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				在工具组 1 点击“添加工具”选择应用程序，创建 java 运行工具，配置参数如下
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004007.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+菜单文字：java
+命令：D:\Program Files\Java6\jdk1.6.0_45\bin\java.exe
+参数：-classpath D:\tmp\java\quickstart\. $(FileNameNoExt)
+初始目录：$(FileDir)
+动作：捕捉输出
+
+菜单文字：自定义，在此我们取名java
+命令：使用的是jdk安装目录下bin下的java.exe
+参数：-classpath选项指定编译时在哪个目录下寻找需要的类。
+	$(FileNameNoExt)是不带扩展名的文件名，Editplus会为我们传入。
+
+<span class="high-light">* 参数中的项目目录需要根据自己的项目确定</span>
+</pre>
+			<p>
+				使用 java 工具运行 QuickStart
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004008.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				注意：使用这种方式配置较为基础，只带有基础的编译、运行功能，当我们创建了新的项目，又需要修改工具的参数配置，对于初学者比较麻烦，所以我们推荐使用下面的方法进行配置。
+			</p>
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Editplus 开发环境（高级环境）</h4>
+			<p>
+				解压插件 <code>Editplus4Java.zip</code> ，得到 <code>Editplus4Java.class</code> 文件，将该文件复制到工作空间 <code>D:\tmp\java</code> 目录下，如下：
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004011.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				修改之前配置的 javac 工具
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004012.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+菜单文字：编译工具
+命令：D:\Program Files\Java6\jdk1.6.0_45\bin\java.exe
+参数：-classpath D:\tmp\java\. Editplus4Java D:\tmp\java\ $(FilePath) UTF-8
+初始目录：$(FileDir)
+动作：捕捉输出
+</pre>
+
+			<p>
+				修改之前配置的 java 工具
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004013.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+菜单文字：运行工具
+命令：D:\Program Files\Java6\jdk1.6.0_45\bin\java.exe
+参数：-classpath D:\tmp\java\. Editplus4Java D:\tmp\java\ $(FilePath)
+初始目录：$(FileDir)
+动作：捕捉输出
+</pre>
+			<br />
+
+			<p>
+				打开 QuickStart.java，使用“编译工具”进行编译，然后使用“运行工具”运行程序。
+			</p>
+			<br />
+			<p>
+				建议使用这种方式配置 Editplus 开发环境。
+			</p>
+
+			<hr />
+			
+			<h4 id="f4" class="title-1th">四、QuickStart 程序的一些细节</h4>
+			<p>
+				在实际开发过程中，要及时使用 <kbd>Ctrl+s</kbd> 进行保存，避免异常关机时代码丢失
+			</p>
+			<p>
+				javac 命令在编译时会检查代码编写是否正确，所以在编译失败时可以根据返回信息判断是哪里出的问题，如下
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004009.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				java 命令运行程序时不需要加.class后缀
+			</p>
+			<p>
+				程序运行时JVM会在该类中寻找 main 方法，如果没有，会出现 <code>java.lang.NoSuchMethodError: main</code>，翻译一下就是没有这样一个方法错误:main
+			</p>
+			<p>
+				public、class、static、void为 java 关键字，{} 为编写代码的代码块，后续会详细说明
+			</p>
+			<p>
+				main 方法是所有 java 软件的入口方法，大到 Weblogic、Tomcat 这样的 web 服务器，小到我们的 QuickStart，都是从 main 方法入口启动程序的。编写格式必须是这样的格式 
+			</p>
+			<pre>
+public static void main(String[] args){
+	// 执行代码
+}
+</pre>
+			<p>
+				<code>System.out.println("你好，Java");</code>代码就是让程序输出一行文字“你好，Java”，并且结尾换行
+			</p>
+			<p>
+				.java文件（以后我们会称之为源文件）中只能有一个 public 的类，而且该类的名称需要和 .java 文件名一致。关于 public、private、protected 等访问权限修饰关键字以后会详细讲解
+			</p>
+			<hr />
+			
+			<h4 id="f5" class="title-1th">五、CLASSPATH 环境变量（了解为主）</h4>
+			<p>
+				当 JVM 运行时，如果设置了 CLASSPATH 变量，那么 JVM 会到该目录下寻找 java 类文件
+			</p>
+			<p>
+				该变量配置的方式不同，寻找顺序也不同
+			</p>
+			<p>
+				在我的 D:\tmp\java\quickstart\ 和 C:\ 下都有一个 QuickStart.class 文件
+			</p>
+			<p>
+				第一个输出：“你好，Java”
+			</p>
+			<p>
+				第二个输出：“你好，Java，我在C盘下”
+			</p>
+			<p>
+				打开 cmd ，切换到 D:\tmp\java\quickstart\ ，我们的例子始终在此目录下进行
+			</p>
+
+			<br />
+			<p>
+				可以使用 set 命令设置临时环境变量
+			</p>
+			<pre>
+D:\>cd tmp\java\quickstart
+
+D:\tmp\java\quickstart>set classpath			<span class="annotation">## 查看 classpath 环境变量的值</span>
+环境变量 classpath 没有定义
+
+D:\tmp\java\quickstart>set classpath=C:\		<span class="annotation">## 设置 classpath 环境变量的值为 C:\</span>
+
+D:\tmp\java\quickstart>set classpath
+classpath=C:\
+
+D:\tmp\java\quickstart>set classpath=			<span class="annotation">## 清空 classpath 环境变量的值</span>
+
+D:\tmp\java\quickstart>set classpath
+环境变量 classpath 没有定义
+</pre>
+			<p>
+				可以总结出以下规律
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01004/01004010.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br /><br /><br />
+
+			<p>
+				<a href="java01003.html" style="font-size:12px;">第三节&nbsp;&nbsp;&nbsp;&nbsp;Java开发环境搭建（二）</a>
+			</p>
+			<p>
+				<a href="java01005.html" style="font-size:12px;">第五节&nbsp;&nbsp;&nbsp;&nbsp;Java语言基础</a>
+			</p>
+
+			<br />
+
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

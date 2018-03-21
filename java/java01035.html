@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>泛型</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十五节&nbsp;&nbsp;&nbsp;&nbsp;泛型</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、简单使用</a></li>
+				<li><a href="#f3">三、泛型类、方法和接口</a></li>
+				<li><a href="#f4">四、高级用法</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+			<p>
+				JDK1.5 的新特性，用来限制 <code>Collection</code>、<code>Map</code> 存储元素以及方法参数的类型。将运行时可能出现的类型异常问题转到编译期，提高程序的安全性。避免了集合元素使用时的类型转换操作。使用<code>&lt;泛型类型&gt;</code>方式表示。
+			</p>
+			<p>
+				比如之前演示的 <code>TreeSet</code>，定义 <code>Mobile</code> 和 <code>Comparator</code> 的时候都使用到了泛型：
+			</p>
+			<pre>
+public class Mobile implements Comparable<span class="high-light">&lt;Mobile&gt;</span> {
+	public int compareTo(Mobile m) {
+		return 0;
+	}
+}
+</pre>
+			<pre>
+new Comparator<span class="high-light">&lt;Mobile&gt;</span>() {
+	public int compare(Mobile m1, Mobile m2) {
+		return m2.getProductId() - m1.getProductId();
+	}
+}
+</pre>
+
+			<p>
+				这样定义的好处在于可以限制 <code>compareTo</code> 和 <code>compare</code> 方法传递的参数，如果传递的参数类型与泛型类型不一致，在编译时就会出现编译错误，可以提高代码在运行时期的安全性。
+			</p>
+			<p>
+				主要特点：
+			</p>
+			<p>
+				（1）泛型技术是给编译器使用的技术，用于编译时期，确保类型的安全；
+			</p>
+			<p>
+				（2）运行时，会将泛型去掉，生成的 class 文件是不带泛型的，这个称为泛型擦除；
+			</p>
+			<p>
+				（3）泛型的补偿：在运行时，通过获取元素的类型进行转换动作。不需要显示的类型转换。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、简单使用</h4>
+
+			<br />
+
+			<p>
+				<span class="high-light">List 泛型</span>
+			</p>
+
+			<pre>
+private static void testListGeneric() {
+
+	List<span class="high-light">&lt;Mobile&gt;</span> mobiles = new ArrayList<span class="high-light">&lt;Mobile&gt;</span>();
+
+	Mobile m1 = new Mobile(1, "18012341234");
+	Mobile m2 = new Mobile(2, "18012341235");
+	Mobile m3 = new Mobile(3, "18012341236");
+	Mobile m4 = new Mobile(4, "18012341237");
+
+	<span class="annotation">// 如果在List中add非Mobile类型对象</span>
+	<span class="annotation">// 会出现编译错误</span>
+	mobiles.add(m1);
+	mobiles.add(m2);
+	mobiles.add(m3);
+	mobiles.add(m4);
+
+	Iterator<span class="high-light">&lt;Mobile&gt;</span> iterator = mobiles.iterator();
+
+	while(iterator.hasNext()) {
+		<span class="annotation">// 此处不再需要强制类型转换</span>
+		<span class="annotation">// 因为迭代器中保存的就是Mobile对象</span>
+		Mobile m = iterator.next();
+		System.out.println(m);
+	}
+}
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">Map 泛型</span>
+			</p>
+
+			<pre>
+private static void testMapGeneric() {
+
+	Map<span class="high-light">&lt;Integer, Mobile&gt;</span> mobiles = new HashMap<span class="high-light">&lt;Integer, Mobile&gt;</span>();
+
+	Mobile m1 = new Mobile(1, "18012341234");
+	Mobile m2 = new Mobile(2, "18012341235");
+	Mobile m3 = new Mobile(3, "18012341236");
+	Mobile m4 = new Mobile(4, "18012341237");
+
+	mobiles.put(new Integer(m1.getProductId()), m1);
+	mobiles.put(new Integer(m2.getProductId()), m2);
+	mobiles.put(new Integer(m3.getProductId()), m3);
+	mobiles.put(new Integer(m4.getProductId()), m4);
+
+	Set<span class="high-light">&lt;Entry&lt;Integer, Mobile&gt;&gt;</span> entrySet = mobiles.entrySet();
+
+	Iterator<span class="high-light">&lt;Entry&lt;Integer, Mobile&gt;&gt;</span> iterator = entrySet.iterator();
+
+	while(iterator.hasNext()) {
+		Entry<span class="high-light">&lt;Integer, Mobile&gt;</span> entry = iterator.next();
+		Integer id = entry.getKey();
+		Mobile m = entry.getValue();
+		System.out.println(id + ": " + m);
+	}
+}
+</pre>
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、泛型类、方法和接口</h4>
+
+			<br />
+
+			<p>
+				<span class="high-light">泛型类</span>
+			</p>
+			<p>
+				在定义类时在类名后使用泛型，格式如下：
+			</p>
+
+			<pre>
+public class ClassName&lt;XX&gt; {
+	private XX xx; // 在类中使用
+}
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">泛型方法</span>
+			</p>
+			<p>
+				注意：静态方法泛型只能定义在方法上
+			</p>
+
+			<pre>
+public &lt;YY&gt; void methodName(YY yy) {
+	// TODO
+}
+
+public void methodName2(XX xx) {
+	// TODO
+}
+
+public static &lt;YY&gt; void methodName(YY yy) {
+	// TODO
+}
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">泛型接口</span>
+			</p>
+
+			<pre>
+public interface InterfaceName&lt;XX&gt; {
+	void methodName(XX xx);
+}
+
+class ImplClassName implements InterfaceName&lt;String&gt; {
+	void methodName(String str) {
+		// TODO
+	}
+}
+
+class ImplClassName2&lt;T> implements InterfaceName&lt;T&gt; {
+	void methodName(T t) {
+		// TODO
+	}
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、高级用法</h4>
+
+			<br />
+
+			<p>
+				<span class="high-light">? extends E</span>
+			</p>
+			<p>
+				此泛型代表的是 E 的子类，例如：
+			</p>
+			<p>
+				<code>Collection</code> 接口的 <code>boolean addAll(Collection&lt;? extends E&gt; c)</code> 方法
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">? super E</span>
+			</p>
+			<p>
+				此泛型代表的是 E 的父类，例如：
+			</p>
+			<p>
+				<code>TreeSet</code> 类的构造方法 <code>public TreeSet(Comparator&lt;? super E&gt; comparator)</code> 方法
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">?</span>
+			</p>
+			<p>
+				<code>Collection</code> 接口的 <code>boolean containsAll(Collection&lt;?&gt; c)</code> 方法
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 GenericTest.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01034.html" style="font-size:12px;">第三十四节&nbsp;&nbsp;&nbsp;&nbsp;Hashtable 、Properties 和集合数组工具类</a>
+			<br />
+			<a href="java01036.html" style="font-size:12px;">第三十六节&nbsp;&nbsp;&nbsp;&nbsp;System 和 Runtime 类</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

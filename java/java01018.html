@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十八节&nbsp;&nbsp;&nbsp;&nbsp;异常</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、异常的体系</a></li>
+				<li><a href="#f2">二、核心的几个类</a></li>
+				<li><a href="#f3">三、演示 Error 和 Exception</a></li>
+				<li><a href="#f4">四、NullPointerException 和 ArrayIndexOutOfBoundsException 类</a></li>
+				<li><a href="#f5">五、异常处理</a></li>
+				<li><a href="#f6">六、异常处理原则</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、异常的体系</h4>
+			<p>
+				Error，通常由 JVM 抛出的、影响程序运行的严重问题，不需要编写代码处理，如运行的类不存在或内存溢出等。
+			</p>
+			<p>
+				Exception，就是将程序运行期间出现的不正常情况封装成对象，然后使用特定语法结构对其进行捕获、抛出等操作，通常使用 <code>try catch finally</code> 来进行处理。
+			</p>
+			<p>
+				异常体系的示例图
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01018/01018001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、核心的几个类</h4>
+			<p>
+				<code>Throwable</code> 类是 Java 语言中所有错误或异常的超类。只有当对象是此类（或其子类之一）的实例时，才能通过 Java 虚拟机或者 Java throw 语句抛出。类似地，只有此类或其子类之一才可以是 <code>catch</code> 子句中的参数类型。
+			</p>
+			<p>
+				两个子类的实例，<code>Error</code> 和 <code>Exception</code>，通常用于指示发生了异常情况。
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+public Throwable()
+
+public Throwable( String message )
+
+public Throwable( String message, Throwable cause )
+
+public Throwable( Throwable cause )
+</pre>
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+public String getMessage()
+
+public void printStackTrace()
+
+public void printStackTrace( PrintStream s )
+
+public void printStackTrace( PrintWriter s )
+</pre>
+
+			<br />
+
+			<p>
+				<code>Error</code> 及其子类对象是应用程序不应该试图捕获的严重问题。
+			</p>
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+public Error()
+
+public Error( String message )
+
+public Error( String message, Throwable cause )
+
+public Error( Throwable cause )
+</pre>
+
+			<br />
+
+			<p>
+				<code>Exception</code> 类及其子类是 <code>Throwable</code> 的一种形式，应用程序应该对 <code>Exception</code> 及其子类进行捕获处理。
+			</p>
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+public Exception()
+
+public Exception( String message )
+
+public Exception( String message, Throwable cause )
+
+public Exception( Throwable cause )
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、演示 Error 和 Exception</h4>
+			<p>
+				<span class="high-light">演示 OutOfMemoryError</span>
+			</p>
+			<p>
+				因为 JVM 默认的内存是 64MB，创建一个 800MB 的字节数组会出现 OutOfMemoryError 错误
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	// 演示OutOfMemoryError
+	testOutOfMemoryError();
+}
+
+public static byte[] testOutOfMemoryError() {
+	byte[] buffer = new byte[1024 * 1024 * 800]; <span class="annotation">// 创建一个800MB的字节数组</span>
+	return buffer;
+}
+
+<span class="phase-title">输出：</span>
+
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+	at TestException.testOutOfMemoryError(TestException.java:8)
+	at TestException.main(TestException.java:4)
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">演示 ArrayIndexOutOfBoundsException</span>
+			</p>
+			<p>
+				编写一个格式化输出 int 数组的方法。
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	int[] array = {1, 2, 5};
+	System.out.println(printArray(array));
+}
+
+public static String printArray(int[] array) {
+	String str = "[ ";
+	for (int i = 0; i &lt;= array.length; i++) {
+		if (i == array.length - 1)
+			str += array[i] + " ]";
+		else
+			str += array[i] + ", ";
+	}
+	return str;
+}
+
+<span class="phase-title">输出：</span>
+
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 3
+	at TestException.printArray(TestException.java:43)
+	at TestException.main(TestException.java:23)
+</pre>
+
+			<p>
+				之所以出现这个问题，原因就是在遍历数组的代码中 <code>i &lt;= 数组的长度</code>，当 i 等于数组长度时，下标就越界了。只要把 <code>i &lt;= array.length</code> 修改为 <code>i &lt; array.length</code> 即可。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">演示 NullPointerException</span>
+			</p>
+			<p>
+				在 <code>printArray(int[] array)</code> 方法中并没有对参数进行 null 判断，所以当参数为 null，就会出现 <code>NullPointerException</code>
+			</p>
+
+			<pre>
+public static void main(String[] args) {
+	int[] array = null;
+	System.out.println(printArray(array));
+}
+
+<span class="phase-title">输出：</span>
+
+Exception in thread "main" java.lang.NullPointerException
+	at TestException.printArray(TestException.java:39)
+	at TestException.main(TestException.java:23)
+</pre>
+
+			<span class="src-introduce">演示代码在项目 Exception 的 TestException.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、NullPointerException 和 ArrayIndexOutOfBoundsException 类</h4>
+			<p>
+				<span class="high-light">NullPointerException 类</span>
+			</p>
+			<pre>
+public NullPointerException()
+	构造不含有详细消息的NullPointerException。
+
+public NullPointerException(String s)
+	构造含有指定详细消息的NullPointerException。
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">ArrayIndexOutOfBoundsException 类</span>
+			</p>
+			<pre>
+public ArrayIndexOutOfBoundsException()
+	构造不含有详细消息的ArrayIndexOutOfBoundsException。
+
+public ArrayIndexOutOfBoundsException(int index)
+	构造具有指示不合理索引ArrayIndexOutOfBoundsException对象。
+
+public ArrayIndexOutOfBoundsException(String s)
+	构造具有指定详细消息的ArrayIndexOutOfBoundsException对象。
+</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、异常处理</h4>
+			<p>
+				在程序运行过程中，如果出现不正常的情况，JVM 会将其封装为 <code>Error</code> 或 <code>Exception</code> 的子类对象，然后抛给程序。
+			</p>
+			<p>
+				对于 <code>Error</code> 不需要在程序中进行处理。
+			</p>
+			<p>
+				对于 <code>RuntimeException</code> 及其子类异常，也可以不进行处理，因为这类异常通常是调用者的原因导致的，比较严重，需要修改程序来进行处理，比如配置文件找不到、类找不到等问题。
+			</p>
+			<p>
+				对于非 <code>RuntimeException</code> 及其子类异常，编译时会进行检测，必须对其进行处理，而处理的方式主要有两种：
+			</p>
+			<p>
+				第一种使用 <code>try</code>、<code>catch</code> 等关键字捕获；
+			</p>
+			<p>
+				第二种在方法声明时使用 <code>throws</code> 向上抛出，而这个方法的调用者还需要对其进行处理。
+			</p>
+			<p>
+				为了比较全面的演示这几个关键字，需要找到 <code>InnerClass</code> 项目中的 <code>MobilePhone</code> 类。需求是这样的：
+			</p>
+			<p>
+				在开机过程中，如果检查到电量不足 5%，抛出 <code>EnergyNotEnoughException</code> 异常；
+			</p>
+			<p>
+				在开机过程中，如果检查到手机没有操作系统，抛出 <code>OSNotFoundException</code> 异常，该异常继承 <code>RuntimeException</code>。
+			</p>
+			<p>
+				在使用手机功能时，如果检查到手机未开机，抛出 <code>NotStartupException</code> 异常。
+			</p>
+
+			<br />
+
+			<p>
+				这个需求里面涉及到了基础的异常捕获、抛出等处理操作，还有自定义异常。
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">首先，定义 EnergyNotEnoughException、OSNotFoundException 和 NotStartupException</span>
+			</p>
+
+			<pre>
+public class EnergyNotEnoughException extends Exception {
+	public EnergyNotEnoughException(){
+		super();
+	}
+	public EnergyNotEnoughException(String message){
+		super(message);
+	}
+}
+</pre>
+
+			<pre>
+public class OSNotFoundException extends RuntimeException {
+	public OSNotFoundException(){
+		super();
+	}
+	public OSNotFoundException(String message){
+		super(message);
+	}
+}
+</pre>
+
+			<pre>
+public class NotStartupException extends Exception {
+	public NotStartupException(){
+		super();
+	}
+	public NotStartupException(String message){
+		super(message);
+	}
+}
+</pre>
+
+			<p>
+				然后，在 <code>MobilePhone</code> 的私有开机方法中加入检查剩余电量的代码，如果电量少于 5%，抛出 <code>EnergyNotEnoughException</code>。
+			</p>
+			<p>
+				如果这样做，那么在公有的开机方法中必须对这个异常进行 <code>try......catch</code> 操作，记录下异常信息，然后继续向上抛出，抛给开机方法的调用者。
+			</p>
+			<p>
+				而且我们还需要修改下 <code>ElectronicProduct</code> 类的 <code>startup()</code> 声明方式。
+			</p>
+			<p>
+				在 <code>MobilePhone</code> 的私有开机方法中加入检查操作系统的代码，如果无操作系统，抛出 <code>OSNotFoundException</code>，因为这个异常是<code>RuntimeException</code> 的子类，所以可以不进行捕获和 <code>throws</code>。
+			</p>
+			<p>
+				在 <code>MobileMp3</code> 的 <code>play</code>方法中检查手机的 <code>state</code>值，如果非可用状态，抛出 <code>NotStartupException</code>。
+			</p>
+
+			<br />
+
+			<p>
+				修改 <code>MobilePhone</code> 的代码片段：
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	// 代码
+
+	// 内部MP3类
+	public class MobileMp3 extends Mp3 {
+		public void play() throws NotStartupException{
+
+			<span class="annotation">// 当手机状态非可用状态时，抛出NotStartupException</span>
+			if (getState() != ElectronicProduct.USEFUL_STATE)
+				throw new NotStartupException("未开机，Mp3功能不可用");
+
+			for (int i = 0; i < songList.length; i++) {
+				currentSong = i;
+				play(audio); // 使用外部类的AudioDriven对象播放声音
+				play(screen); // 使用外部类的Screen对象显示歌词
+			}
+		}
+		public void play(AudioDriven audio) {
+			audio.soundPlay(songList[currentSong]);
+		}
+		public void play(Screen screen) {
+			screen.display(lyricList[currentSong]);
+		}
+	}
+
+	// 开机方法
+	public void startup() throws EnergyNotEnoughException{
+		System.out.println("手机正在开机......");
+
+		<span class="annotation">// 私有开机方法会抛出EnergyNotEnoughException，需要捕获</span>
+		try {
+			startup2();
+		} catch (EnergyNotEnoughException e) {
+			e.printStackTrace(); <span class="annotation">// 打印堆栈信息</span>
+			System.out.println(e.getMessage()); <span class="annotation">// 记录异常信息，实际开发时需要记录文件日志</span>
+			throw e; <span class="annotation">// 继续向上抛出异常</span>
+		}
+		
+		System.out.println("手机完成开机，一切正常！");
+	}
+
+	<span class="annotation">// 在方法内部使用throw关键字抛出了异常</span>
+	<span class="annotation">// 所以需要在声明时使用throws关键字把异常抛给调用者</span>
+	private void startup2() throws EnergyNotEnoughException{
+
+		<span class="annotation">// 手机无操作系统，无法开机，抛出OSNotFoundException</span>
+		if (this.getOs() == null || "".equals(this.getOs()))
+			throw new OSNotFoundException("手机无操作系统，无法开机");
+
+		System.out.println("手机启动操作系统......");
+		System.out.println("手机加载开机启动项......");
+		System.out.println("手机......");
+
+		// 开机了
+		this.setState(ElectronicProduct.USEFUL_STATE);
+
+		<span class="annotation">// 检查到电量少于5%，虽然已经开机，但是还需要抛出EnergyNotEnoughException</span>
+		if (this.getDumpEnergy() &lt; 0.05)
+			throw new EnergyNotEnoughException("手机电量不足5%"); // 抛出异常
+	}
+
+	// 代码
+}
+</pre>
+
+			<br />
+
+			<p>
+				测试代码：
+			</p>
+
+			<pre>
+public class TestInnerClass {
+	public static void main(String[] args) {
+		MobilePhone mobile = new MobilePhone();
+
+		mobile.setOs("安卓");
+		mobile.setBrand("华为");
+
+		mobile.setDumpEnergy(0.5d);
+
+		mobile.setPhoneNumber("18902120812");
+
+		try {
+			mobile.startup();
+			MobilePhone.MobileMp3 mp3 = mobile.new MobileMp3();
+
+			mp3.songList = new String[]{"当爱已成往事", "飘雪", "千千阙歌"};
+			mp3.lyricList = new String[]{"当爱已成往事-歌词", "飘雪-歌词", "千千阙歌-歌词"};
+			mp3.play();
+		} catch (EnergyNotEnoughException e) {
+			<span class="annotation">e.printStackTrace();</span>
+			<span class="annotation">// 记录异常信息，实际开发时需要记录文件日志</span>
+			<span class="annotation">System.out.println(e.getMessage());</span>
+			<span class="annotation">// 因为电量不足，可以选择关机操作</span>
+			<span class="annotation">mobile.shutdown();</span>
+		} catch (OSNotFoundException e) {
+			<span class="annotation">e.printStackTrace();</span>
+			<span class="annotation">System.out.println(e.getMessage());</span>
+		} catch (NotStartupException e) {
+			<span class="annotation">e.printStackTrace();</span>
+			<span class="annotation">System.out.println(e.getMessage());</span>
+		}
+	}
+}
+</pre>
+
+			<p>
+				try 代码块中是需要捕获异常的代码。
+			</p>
+			<p>
+				catch 代码块是捕获到异常后进行处理的代码，在此代码块依然可以使用 throw 抛出异常。
+			</p>
+			<p>
+				finally 代码块是 try 代码块执行后执行的代码块，不论实际是否捕获到异常都会执行，通常用于关闭释放数据源、或关闭文件流，对于这个关键字我们在 IO 部分再进行详细的案例讲解。
+			</p>
+			<p>
+				在 catch 多个异常时，如果中间存在继承关系，要把父类异常放在下面。
+			</p>
+
+			<span class="src-introduce">演示代码在项目 Exception 中。</span>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、异常处理原则</h4>
+			<p>
+				（1）方法内部如果抛出了需要检测的异常，那么在方法上需要声明或者在方法内捕获，否则编译失败；
+			</p>
+			<p>
+				（2）如果调用了声明异常的方法，需要进行 <code>throws</code> 或 <code>try......catch</code>；
+			</p>
+			<p>
+				（3）如果功能内部可以对异常进行处理，就使用 <code>try......catch</code> 进行处理。否则需要 <code>throws</code> 让调用者进行处理；
+			</p>
+			<p>
+				（4）如果一个方法抛出了多个异常，那么在调用时就需要使用多个 <code>catch</code> 代码块进行处理；
+			</p>
+			<p>
+				（5）在子类覆盖父类方法时，如果方法抛出了异常，子类也需要抛出同样的异常或抛出该异常的子类；
+			</p>
+			<p>
+				（6）如果父类方法抛出多个异常，子类覆盖方法时只能抛出父类方法异常的子集；
+			</p>
+			<p>
+				（7）如果父类方法未抛出异常，子类覆盖方法时不能抛出异常；
+			</p>
+			<p>
+				（8）在实际开发过程中使用了 <code>try......catch</code>，如果 <code>catch</code> 代码块只是一些信息记录的代码，并未对异常进行处理，那么还是需要把异常抛出。比如我们业务监控的程序，在遍历全部业务，对业务逐个进行监控时，如果数据层方法出现异常，需要抛出给业务层方法，业务层方法捕获到异常也无法处理，继续向上抛出，最后会抛给遍历全部业务的for循环代码块，在循环体内捕获到异常后，处理方式有两种：一、如果数据严谨性特别高，通常需要把异常直接抛出去，结束遍历操作，让上一层调用者选择到底是结束程序或是重新对全部业务重新遍历；二、如果数据严谨性不是很高，可以允许部分业务监控数据的缺失，此时可以在捕获到异常后的 <code>catch</code> 代码中对该业务数据进行重新查询，如果这次还是出现问题，放弃此业务的监控，继续循环监控下面的业务。
+			</p>
+
+			<br />
+
+			<a href="java01017.html" style="font-size:12px;">第十七节&nbsp;&nbsp;&nbsp;&nbsp;package 和 import 关键字</a>
+			<br />
+			<a href="java01019.html" style="font-size:12px;">第十九节&nbsp;&nbsp;&nbsp;&nbsp;java 和 javac 命令</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十四节&nbsp;&nbsp;&nbsp;&nbsp;继承和抽象类</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、抽象类概述</a></li>
+				<li><a href="#f2">二、抽象类案例</a></li>
+				<li><a href="#f3">三、业务监控案例</a></li>
+				<li><a href="#f4">四、抽象类业务监控案例</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、抽象类概述</h4>
+			<p>
+				（1）某个类有一些特定的子类共有的方法，但是父类无法确定子类的具体实现方式，这时就可以使用 <code>abstract</code> 关键字来修饰这些方法，这样的方法只需要声明，不需要方法体，此时这个类也必须使用 <code>abstract</code> 关键字来修饰，这个类就是抽象类。
+			</p>
+			<p>
+				（2）抽象类不可以实例化，但是需要有构造方法，用于初始化数据。
+			</p>
+			<p>
+				（3）可以定义抽象类的变量引用非抽象子类的实例对象，这就是 java 中多态的体现。
+			</p>
+			<p>
+				（4）抽象类可以有具体实现的方法，即使不含抽象方法，也可以定义为抽象类。
+			</p>
+			<p>
+				（5）非抽象子类必须实现全部的抽象方法。
+			</p>
+			<p>
+				（6）抽象方法不可以使用 <code>private</code>、<code>static</code>、<code>final</code> 关键字修饰。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、抽象类案例</h4>
+			<p>
+				还是使用之前的 MobilePhone 类演示类继承和抽象类。
+			</p>
+			<p>
+				假如我们做一个电子商场的后台系统，电子产品就不只手机一种了。可能会有笔记本电脑、平板电脑等等。产品的属性也不只操作系统、品牌、电量、状态、手机号码这几个。而且这些电子产品可能有很多一致的属性，比如操作系统、品牌等等，这样我们在定义这些类的时候就要写很多重复代码，而且增加了一个属性要在每个类中修改代码。
+			</p>
+			<p>
+				所以，把这些电子产品的一致属性（比如操作系统、品牌、电量、状态等）、一致的功能（比如充电、开机、获取当前状态等）提取出来封装一个抽象的电子产品类型（<code>ElectronicProduct</code>）就很有必要了。
+			</p>
+			<p>
+				然后 MobilePhone 继承这个电子产品抽象类，并且需要使用自己的方式实现充电、开机方法。
+			</p>
+			<p>
+				下面我们就使用简单的代码说明一下。
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">首先定义电子产品类</span>
+			</p>
+			<p>
+				封装操作系统、品牌、电量等成员变量；定义开机方法(抽象方法)；定义充电方法(抽象方法)；定义状态文字说明方法。
+			</p>
+
+			<pre>
+public abstract class ElectronicProduct {
+
+	/*
+		<span class="annotation">定义状态常量</span>
+	*/
+	public static final int INIT_STATE      = 0;
+	public static final int USEFUL_STATE    = 1;
+	public static final int POWER_OFF_STATE = 2;
+	public static final int HALT_STATE      = 3;
+	
+	/*
+		<span class="annotation">电子产品共有的属性</span>
+	*/
+	private String os;
+	private String brand;
+	private double dumpEnergy;
+	private int state;
+
+	<span class="annotation">// setter & getter</span>
+
+	<span class="annotation">// 充电方法</span>
+	public abstract double charge();
+
+	<span class="annotation">// 开机方法</span>
+	public abstract void startup();
+
+	<span class="annotation">// 返回当前状态说明</span>
+	public String currentState(){
+		switch (this.state) {
+			case INIT_STATE:
+				return "出厂状态";
+			case USEFUL_STATE:
+				return "在用状态";
+			case POWER_OFF_STATE:
+				return "关机状态";
+			case HALT_STATE:
+				return "停机状态";
+			default:
+				return "未知状态";
+		}
+	}
+}</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">然后封装手机类型</span>
+			</p>
+			<p>
+				继承抽象类 <code>ElectronicProduct</code>；封装自己的 <code>phoneNumber</code> 成员变量；提供一个无参构造方法；提供一个两个参数构造方法，参数分别是操作系统、品牌；定义属于自己的发短信方法；实现父类的充电、开机方法。
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	<span class="annotation">// 特有属性手机号码</span>
+	private String phoneNumber;
+
+	<span class="annotation">// 无参数构造方法</span>
+	public MobilePhone(){
+		this("Android", null);
+	}
+
+	<span class="annotation">// 两个参数，可以初始化 Mobile 的 os 和 brand </span>
+	public MobilePhone(String os, String brand){
+		this.setOs(os);
+		this.phoneNumber = null;
+		this.setBrand(brand);
+		this.setDumpEnergy(0d);
+	}
+
+	<span class="annotation">// setter & getter</span>
+
+	<span class="annotation">// 发短信的方法</span>
+	public void sendMessage(String message, String targetPhoneNumber){
+		System.out.println("发给" + targetPhoneNumber + ", 内容是：" + message);
+	}
+
+	<span class="annotation">// 实现父类抽象方法</span>
+	public double charge(){
+		System.out.println("正在充电, 剩余电量：" + this.getDumpEnergy() * 100 + "%");
+		return this.getDumpEnergy();
+	}
+	
+	<span class="annotation">// 实现父类抽象方法</span>
+	public void startup(){
+		System.out.println("正在开机......");
+		// 调用私有开机方法
+		startup2();
+		System.out.println("完成开机");
+	}
+
+	<span class="annotation">// 私有的开机方法，封装开机细节</span>
+	private void startup2(){
+		System.out.println("启动操作系统......");
+		System.out.println("加载开机启动项......");
+		System.out.println("......");
+	}
+}</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">封装电脑类型</span>
+			</p>
+			<p>
+				继承抽象类 <code>ElectronicProduct</code>；实现父类的充电、开机方法。
+			</p>
+
+			<pre>
+public class Computer extends ElectronicProduct {
+
+	<span class="annotation">// 实现充电方法</span>
+	public double charge() {
+		System.out.println("电脑正在充电, 剩余电量：" + this.getDumpEnergy() * 100 + "%");
+		return this.getDumpEnergy();
+	}
+
+	<span class="annotation">// 实现开机方法</span>
+	public void startup() {
+		System.out.println("电脑正在开机......");
+		System.out.println("电脑完成开机");
+	}
+}</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">测试代码</span>
+			</p>
+			<pre>
+public static void main(String[] args){
+	// 创建Mobile对象
+	Mobile mobile = new Mobile();
+	
+	mobile.setOs("Andriod");
+	mobile.setPhoneNumber("12345678901");
+	mobile.setBrand("红米2");
+	mobile.setDumpEnergy(0.87d);
+
+	mobile.startup();
+
+	mobile.sendMessage("你好，我是***，这是一个测试短信，打扰了", "12345678902");
+	double de = mobile.charge();
+
+	mobile.setState(ElectronicProduct.INIT_STATE);
+	String state = mobile.currentState();
+	System.out.println(state);
+
+	// 创建Computer对象
+	Computer computer = new Computer();
+	String computerState = computer.currentState();
+	System.out.println(computerState);
+	computer.charge();
+}
+
+<span class="phase-title">输出：</span>
+
+正在开机......
+启动操作系统......
+加载开机启动项......
+......
+完成开机
+发给12345678902, 内容是：你好，我是***，这是一个测试短信，打扰了
+正在充电, 剩余电量：87.0%
+出厂状态
+出厂状态
+电脑正在充电, 剩余电量：0.0%</pre>
+
+			<span class="src-introduce">演示代码在项目 Abstract1 中。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、业务监控案例</h4>
+			<p>
+				为了说明抽象类继承在实际开发中的应用，我们需要讲一个稍微有点难度的案例。案例是这样的：
+			</p>
+			<p>
+				有 10 个需要监控的业务，分为 3 类，分别是 A 类、B 类、C 类，而每个类别的业务监控的方式都是不同的，现在要求我们编写一个大体的实现架构。
+			</p>
+			<p>
+				这部分先根据我们学习过的知识来实现这个需求，在下一部分会使用抽象类继承的方式来实现。
+			</p>
+
+			<br />
+			<p>
+				首先需要定义业务类 <code>MonitorBusiness</code>，封装业务信息。在这里我们只编写 id、name、businessType 三个属性。
+			</p>
+			<pre>
+public class MonitorBusiness {
+	private int id;
+	private String name;
+	private String businessType;
+
+	public MonitorBusiness() {}
+
+	public MonitorBusiness(int id, String name, String businessType) {
+		this.id = id;
+		this.name = name;
+		this.businessType = businessType;
+	}
+
+	// setter & getter
+}</pre>
+
+			<br />
+			<p>
+				第二步需要为每个类别的业务定义不同的监控类，分别是 <code>MonitorServiceA</code>、<code>MonitorServiceB</code>、<code>MonitorServiceC</code> 。在这里我们只在 <code>doMonitor</code> 方法中输出一句话。
+			</p>
+			<pre>
+public class MonitorServiceA {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控A类业务：" + business.getName());
+	}
+}</pre>
+			<pre>
+public class MonitorServiceB {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控B类业务：" + business.getName());
+	}
+}</pre>
+			<pre>
+public class MonitorServiceC {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控C类业务：" + business.getName());
+	}
+}</pre>
+
+			<br />
+			<p>
+				第三步需要编写一个获取全部业务的类 <code>LoadBusiness</code>，使用长度为 10 的数组代表全部业务。
+			</p>
+			<p>
+				这个类在后面的案例讲解中会做修改，而实际开发过程中是编写代码从数据库或者文件读取业务数据并封装对象，所以案例讲解中此类的修改并不影响我们的软件架构。
+			</p>
+			<pre>
+public class LoadBusiness {
+	public static MonitorBusiness[] loadBusiness() {
+		MonitorBusiness[] businesses = new MonitorBusiness[10];
+		businesses[0] = new MonitorBusiness(1, "业务1", "A");
+		businesses[1] = new MonitorBusiness(2, "业务2", "A");
+		businesses[2] = new MonitorBusiness(3, "业务3", "A");
+		businesses[3] = new MonitorBusiness(4, "业务4", "B");
+		businesses[4] = new MonitorBusiness(5, "业务5", "B");
+		businesses[5] = new MonitorBusiness(6, "业务6", "B");
+		businesses[6] = new MonitorBusiness(7, "业务7", "C");
+		businesses[7] = new MonitorBusiness(8, "业务8", "C");
+		businesses[8] = new MonitorBusiness(9, "业务9", "C");
+		businesses[9] = new MonitorBusiness(10, "业务10", "A");
+		return businesses;
+	}
+}</pre>
+
+			<br />
+			<p>
+				最后需要编写一个主监控入口，用于整合每个功能模块。
+			</p>
+
+			<pre>
+public class Monitor {
+	public void runMonitor() {
+
+		/*
+			<span class="annotation">获取到全部监控业务</span>
+		*/
+		MonitorBusiness[] businesses = LoadBusiness.loadBusiness();
+
+		/*
+			<span class="annotation">遍历全部业务，为每一个业务执行监控</span>
+		*/
+		for (int i = 0; i < businesses.length; i++) {
+			MonitorBusiness business = businesses[i];
+			String type = business.getBusinessType();
+
+			/*
+				<span class="annotation">判断busineddType使用的监控方式</span>
+			*/
+			if ("A".equals(type)){
+				MonitorServiceA serviceA = new MonitorServiceA();
+				serviceA.doMonitor(business);
+			} else if ("B".equals(type)){
+				MonitorServiceB serviceB = new MonitorServiceB();
+				serviceB.doMonitor(business);
+			} else if ("C".equals(type)){
+				MonitorServiceC serviceC = new MonitorServiceC();
+				serviceC.doMonitor(business);
+			} else {
+				System.out.println(business.getName() + "未找到监控方法");
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Monitor monitor = new Monitor();
+		monitor.runMonitor();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+正在监控A类业务：业务1
+正在监控A类业务：业务2
+正在监控A类业务：业务3
+正在监控B类业务：业务4
+正在监控B类业务：业务5
+正在监控B类业务：业务6
+正在监控C类业务：业务7
+正在监控C类业务：业务8
+正在监控C类业务：业务9
+正在监控A类业务：业务10</pre>
+
+			<span class="src-introduce">演示代码在项目 Abstract2 中。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、抽象类业务监控案例</h4>
+			<p>
+				在前面“业务监控案例”中，我们基本实现了 A、B、C 三类共 10 个业务的监控需求。
+			</p>
+			<p>
+				但是，过了一段时间，增加了两个新的业务“业务11”和“业务12”，这两个业务被划分为 D 类业务，实现方式需要适当的修改了。
+			</p>
+			<p>
+				首先我们要像 A、B、C 类一样再定义一个 <code>MonitorServiceD</code>，并编写 <code>doMonitor</code> 方法。
+			</p>
+			<p>
+				然后在 <code>Monitor</code> 类的 <code>runMonitor</code> 方法中增加一个判断 D 类别的分支判断。
+			</p>
+			<p>
+				经过以上两步，新的监控实现就完成了。
+			</p>
+			<p>
+				但是，在实际生产环境下，我们的软件是需要封装成一个 <code>jar</code> 文件来运行的，随意修改已经编写好的类是不现实的，而且现在业务只分为 4 个类别，如果以后增加到 10 个或者是 20 个，难道我们要编写那么多的分支吗？
+			</p>
+			<p>
+				所以现在的实现方式需要做改动，大体思路是这样的：
+			</p>
+			<p>
+				首先 <code>MonitorBusiness</code> 中 <code>businessType</code> 属性不再只保存业务类别 A、B、C、D，而是保存该业务所属类别的监控类的类名。
+			</p>
+			<p>
+				然后从 <code>MonitorServiceA</code>、<code>MonitorServiceB</code>、<code>MonitorServiceC</code>、<code>MonitorServiceD</code> 这几个类抽取共同信息封装一个抽象类 <code>MonitorService</code>，让这四个类去继承 <code>MonitorService</code> 并实现 <code>doMonitor</code> 方法。
+			</p>
+
+			<pre>
+public abstract class MonitorService {
+	public abstract void doMonitor(MonitorBusiness business);
+}</pre>
+
+			<pre>
+public class MonitorServiceA extends MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控A类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceB extends MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控B类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceC extends MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控C类业务：" + business.getName());
+	}
+}</pre>
+
+			<pre>
+public class MonitorServiceD extends MonitorService {
+	public void doMonitor(MonitorBusiness business) {
+		System.out.println("正在监控D类业务：" + business.getName());
+	}
+}</pre>
+
+			<br />
+
+			<p>
+				修改 <code>LoadBusiness</code>类，增加 业务11 和 业务12 划分在 D 类别中。
+			</p>
+			<pre>
+public class LoadBusiness {
+	public static MonitorBusiness[] loadBusiness() {
+		MonitorBusiness[] businesses = new MonitorBusiness[12];
+		businesses[0] = new MonitorBusiness(1, "业务1", "MonitorServiceA");
+		businesses[1] = new MonitorBusiness(2, "业务2", "MonitorServiceA");
+		businesses[2] = new MonitorBusiness(3, "业务3", "MonitorServiceA");
+		businesses[3] = new MonitorBusiness(4, "业务4", "MonitorServiceB");
+		businesses[4] = new MonitorBusiness(5, "业务5", "MonitorServiceB");
+		businesses[5] = new MonitorBusiness(6, "业务6", "MonitorServiceB");
+		businesses[6] = new MonitorBusiness(7, "业务7", "MonitorServiceC");
+		businesses[7] = new MonitorBusiness(8, "业务8", "MonitorServiceC");
+		businesses[8] = new MonitorBusiness(9, "业务9", "MonitorServiceC");
+		businesses[9] = new MonitorBusiness(10, "业务10", "MonitorServiceA");
+		businesses[10] = new MonitorBusiness(11, "业务11", "MonitorServiceD");
+		businesses[11] = new MonitorBusiness(12, "业务12", "MonitorServiceD");
+		return businesses;
+	}
+}</pre>
+
+			<br />
+
+			<p>
+				最后在 <code>Monitor</code> 的 <code>runMonitor</code> 方法中，不再使用分支判断，而是从业务对象里面获取到此业务使用的监控类的类名，实例化这个类（此处涉及到 java 语言的反射机制），并使用它的抽象类父类变量来引用，调用 <code>doMonitor</code> 方法即可实现该业务的监控。
+			</p>
+			<p>
+				此处涉及到异常的处理，暂时先使用 throws 抛出，以后会做详细讲解。
+			</p>
+			<pre>
+public class Monitor {
+	public void runMonitor() throws Exception {
+		MonitorBusiness[] businesses = LoadBusiness.loadBusiness();
+
+		/*
+			<span class="annotation">遍历全部业务，为每一个业务执行监控</span>
+		*/
+		for (int i = 0; i < businesses.length; i++) {
+			MonitorBusiness business = businesses[i];
+			String type = business.getBusinessType();
+
+			/*
+				<span class="annotation">加载业务使用的监控类</span>
+			*/
+			Class cls = Class.forName(type);
+
+			/*
+				<span class="annotation">创建监控类对象，此处使用抽象类 MonitorService 变量引用子类实例对象，是多态的基础体现</span>
+			*/
+			MonitorService monitorService = (MonitorService) cls.newInstance();
+
+			/*
+				<span class="annotation">调用 doMonitor 方法</span>
+			*/
+			monitorService.doMonitor(business);
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		Monitor monitor = new Monitor();
+		monitor.runMonitor();
+	}
+}</pre>
+
+			<p>
+				经过这样的架构升级之后，我们就可以摆脱掉编写分支结构的烦恼了。
+			</p>
+			<p>
+				而且在增加新的业务类别（比如 E 类别）和业务（比如 业务13 和 业务14）时，我们只需要编写一个新的类 <code>MonitorServiceE</code> 继承 <code>MonitorService</code> ，实现 <code>doMonitor</code> 方法，放到 <code>classpath</code> 下，然后在新的业务上配置 <code>businessType</code> 等于 <code>MonitorServiceE</code> 类名即可（业务数据通常是配置数据库或文件）。这样我们就不再涉及到类的修改了。
+			</p>
+
+			<span class="src-introduce">演示代码在项目 Abstract3 中。</span>
+
+			<br /><br />
+
+			<a href="java01013.html" style="font-size:12px;">第十三节&nbsp;&nbsp;&nbsp;&nbsp;继承（一）</a>
+			<br />
+			<a href="java01015.html" style="font-size:12px;">第十五节&nbsp;&nbsp;&nbsp;&nbsp;接口和多态</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

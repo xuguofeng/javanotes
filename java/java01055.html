@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十五节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发核心功能）</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、主面板显示文件列表</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	添加字段 currentDir、parentDir 和 currentFileArray</a></li>
+						<li><a href="#f1-2">2、	编写方法向主面板添加文件 Label</a></li>
+						<li><a href="#f1-3">3、	初始化主面板</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、添加文件 Label 鼠标监听</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	双击事件</a></li>
+						<li><a href="#f2-2">2、	鼠标移入、移出事件</a></li>
+						<li><a href="#f2-3">3、	单击事件</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、回退、刷新按钮功能</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	回退功能</a></li>
+						<li><a href="#f3-2">2、	刷新功能</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、其他</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	刷新窗口、释放内存</a></li>
+						<li><a href="#f4-2">2、	ImageUtil 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、运行程序</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、主面板显示文件列表</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	添加字段</h5>
+
+			<p>
+				<code>currentDir </code> 字段用来保存当前目录的 <code>File</code> 对象
+			</p>
+			<p>
+				<code>parentDir </code> 字段用来保存上级目录的 <code>File</code> 对象
+			</p>
+			<p>
+				<code>currentFileArray </code> 字段用来保存当前目录子文件的 <code>File</code> 对象数组
+			</p>
+			<p>
+				<code>labelFileMap</code> 字段保存 <code>Label</code> 和 <code>File</code> 下标的关系，以便可以获取到点击的 <code>Label</code> 所对应的 <code>File</code> 索引
+			</p>
+			<pre>
+<span class="annotation">// 当前目录</span>
+private File currentDir = null;
+
+<span class="annotation">// 上级目录</span>
+private File parentDir = null;
+
+<span class="annotation">// 当前目录的全部子文件</span>
+private File[] currentFileArray = {};
+
+<span class="annotation">// 保存主面板中Label和子文件index的对应关系</span>
+private Map&lt;JLabel, Integer&gt; labelFileMap = new HashMap&lt;JLabel, Integer&gt;();</pre>
+
+			<h5 id="f1-2" class="title-2th">2、	编写方法向主面板添加文件 Label</h5>
+
+			<p>
+				该方法需要传入一个 <code>File[]</code> 对象，内部会判断数组长度来设置主面板布局方式，然后遍历数组获取 <code>File</code> 对象创建 <code>Label</code> 在主面板显示，需要特殊注意两点：
+			</p>
+			<p>
+				1）为 <code>Label</code> 添加鼠标监听器，以便在鼠标点击、移入、移出时做出响应
+			</p>
+			<p>
+				2）使用 <code>labelFileMap</code> 保存 <code>Label</code> 和 <code>File</code> 下标的关系，以便可以获取到点击的 <code>Label</code> 所对应的 <code>File</code> 索引
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 在主面板显示文件</span>
+<span class="annotation"> * </span>
+<span class="annotation"> * @param files 需要显示的文件数组</span>
+<span class="annotation"> */</span>
+private void listFileToPanel(File[] files) {
+
+	<span class="annotation">// 把主面板清空</span>
+	this.mainPanel.removeAll();
+
+	<span class="annotation">// 为主面板设置布局</span>
+	if (files.length &lt; 15) {
+		this.mainPanel.setLayout(new GridLayout(3, 5, 25, 25));
+	} else {
+		int rows = files.length % 5 == 0 ? files.length / 5 : files.length / 5 + 1;
+		this.mainPanel.setLayout(new GridLayout(rows, 5, 25, 25));
+	}
+
+	String fileName = "";
+	File f = null;
+	JLabel l;
+
+	<span class="annotation">// 遍历数组，逐一在面板显示</span>
+	for (int i = 0; i &lt; files.length; i++) {
+		f = files[i];
+
+		<span class="annotation">// 获取文件名或路径</span>
+		<span class="annotation">// 长度如果大于10则只显示前10个字符，后面使用点替换</span>
+		if (f.getName() == null || "".equals(f.getName()))
+			fileName = f.getAbsolutePath();
+		else
+			fileName = f.getName().length() &lt;= 10 ? files[i].getName() : files[i].getName().substring(0, 10) + "...";
+
+		<span class="annotation">// 创建JLabel显示单个文件</span>
+		<span class="annotation">// 根据文件/目录显示不同的图片效果</span>
+		l = new JLabel(fileName, new ImageIcon(ImageUtil.getImage(f
+				.isFile() ? "image_file" : "image_folder")),
+				SwingConstants.CENTER);
+		l.setVerticalTextPosition(JLabel.BOTTOM);
+		l.setHorizontalTextPosition(JLabel.CENTER);
+		l.setToolTipText(f.getName());<span class="annotation">// 设置提示信息</span>
+		l.setCursor(new Cursor(Cursor.HAND_CURSOR));<span class="annotation">// 鼠标移入显示手形</span>
+
+		l.addMouseListener(new FileLabelMouseListener());<span class="annotation">// 添加鼠标移入、移出、点击监听</span>
+		this.labelFileMap.put(l, Integer.valueOf(i));<span class="annotation">// 保存对应关系</span>
+
+		this.mainPanel.add(l);<span class="annotation">// 添加到主面板</span>
+	}
+
+	<span class="annotation">// 如果文件数组长度小于15，则使用空白JLabel填充剩余的位置</span>
+	if (files.length &lt; 15) {
+		for (int i = 0; i &lt; 15 - files.length; i++)
+			this.mainPanel.add(new JLabel(" "));
+	}
+	this.validate();
+}</pre>
+
+			<h5 id="f1-3" class="title-2th">3、	初始化主面板</h5>
+
+			<p>
+				这个步骤比较简单，主要就是在创建窗口对象时调用一个 <code>init</code> 方法，初始化根目录内容
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 第一次打开窗口显示根目录</span>
+<span class="annotation"> * 首先获取系统根目录</span>
+<span class="annotation"> * 把根目录显示到主面板区域</span>
+<span class="annotation"> * 最后设置当前文件数组</span>
+<span class="annotation"> */</span>
+private void init() {
+	<span class="annotation">// 获取系统根目录</span>
+	File[] roots = File.listRoots();
+	<span class="annotation">// 把根目录显示到主面板区域</span>
+	listFileToPanel(roots);
+	<span class="annotation">// 设置当前文件数组</span>
+	this.currentFileArray = roots;
+}</pre>
+
+			<p>
+				<span class="high-light">在构造方法中调用这个方法即可</span>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、添加文件 Label 鼠标监听</h4>
+
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 文件JLabel的鼠标监听器</span>
+<span class="annotation"> * 当鼠标移入文件标签时，标签前景色变为红色，移出变为黑色</span>
+<span class="annotation"> * 点击时会判断是否为目录，如果是目录，会获取此目录子文件并显示在面板中，而且当前目录、父级目录、当前文件数组都会重新设置</span>
+<span class="annotation"> * 鼠标按下是会在详细信息条显示此File的详情</span>
+<span class="annotation"> * 当前位置文本域会变为此目录</span>
+<span class="annotation"> */</span>
+private class FileLabelMouseListener extends MouseAdapter {
+
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+}</pre>
+
+			<h5 id="f2-1" class="title-2th">1、	双击事件</h5>
+
+			<p>
+				双击文件 <code>Label</code> 会跳转到指定目录并显示这个目录下面的文件，在工具栏显示当前目录位置信息
+			</p>
+			<pre>
+@Override
+public void mouseClicked(MouseEvent e) {
+	int count = e.getClickCount();
+
+	JLabel jl = (JLabel) e.getSource();
+	int index = labelFileMap.get(jl);
+	File clickedFile = currentFileArray[index];
+
+	<span class="annotation">// 双击</span>
+	if (count == 2) {
+		<span class="annotation">// 如果File存在且为目录</span>
+		if (clickedFile.exists() && clickedFile.isDirectory()) {
+			<span class="annotation">// 设置当前目录</span>
+			currentDir = clickedFile;
+
+			<span class="annotation">// 设置父级目录</span>
+			if (clickedFile.getParentFile() != null)
+				parentDir = clickedFile.getParentFile();
+
+			<span class="annotation">// 获取目录下文件并显示</span>
+			File[] files = currentDir.listFiles();
+			currentFileArray = files;
+			listFileToPanel(files);
+
+			<span class="annotation">// 设置当前位置</span>
+			locationText.setText(currentDir.getAbsolutePath());
+		}
+	}
+	validateAndGC();
+}</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	鼠标移入、移出事件</h5>
+
+			<p>
+				鼠标移入文件 <code>Label</code> 时显示红色，移出恢复为黑色
+			</p>
+			<pre>
+@Override
+public void mouseEntered(MouseEvent e) {
+	JLabel jl = (JLabel) e.getSource();
+	jl.setForeground(Color.red);
+}
+
+@Override
+public void mouseExited(MouseEvent e) {
+	JLabel jl = (JLabel) e.getSource();
+	jl.setForeground(Color.black);
+}</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	单击事件</h5>
+
+			<p>
+				在状态栏显示文件的名称、字节数、最后修改时间信息
+			</p>
+			<pre>
+@Override
+public void mousePressed(MouseEvent e) {
+	JLabel jl = (JLabel) e.getSource();
+	int index = labelFileMap.get(jl);
+	File clickedFile = currentFileArray[index];
+
+	if (clickedFile.exists())
+		fileDetail.setText(clickedFile.getName() + "     大小："
+				+ clickedFile.length() + " 字节     最后修改时间："
+				+ format.format(new Date(clickedFile.lastModified())));
+	else
+		fileDetail.setText(" ");
+	validateAndGC();
+}</pre>
+
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、回退、刷新按钮功能</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	回退功能</h5>
+
+			<p>
+				返回到上级目录并显示相关信息
+			</p>
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 上级按钮监听器</span>
+<span class="annotation"> */</span>
+private class BackButtonMouseListener extends MouseAdapter {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (parentDir != null) {
+			<span class="annotation">// 当父级目录不为空</span>
+
+			<span class="annotation">// 当前目录设置为父级目录</span>
+			currentDir = parentDir;
+
+			<span class="annotation">// 获取新的父级目录</span>
+			if (parentDir.getParentFile() != null)
+				parentDir = parentDir.getParentFile();
+			else
+				parentDir = null;
+
+			<span class="annotation">// 获取子文件并显示</span>
+			File[] files = currentDir.listFiles();
+			currentFileArray = files;
+			listFileToPanel(files);
+
+			<span class="annotation">// 设置当前位置</span>
+			locationText.setText(currentDir.getAbsolutePath());
+		} else {
+			<span class="annotation">// 当父级目录为空</span>
+
+			<span class="annotation">// 当前目录设置为空</span>
+			currentDir = null;
+
+			<span class="annotation">// 获取根目录并显示</span>
+			File[] files = File.listRoots();
+			currentFileArray = files;
+			listFileToPanel(files);
+
+			<span class="annotation">// 设置当前位置为“计算机”</span>
+			locationText.setText("计算机");
+		}
+		validateAndGC();
+	}
+}</pre>
+
+			<p>
+				在添加按钮时注册监听器
+			</p>
+			<pre>
+this.backButton.addMouseListener(new BackButtonMouseListener());</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	刷新功能</h5>
+
+			<pre>
+<span class="annotation">/**</span>
+<span class="annotation"> * 刷新按钮监听器</span>
+<span class="annotation"> */</span>
+private class RefreshCurrentDirListener extends MouseAdapter {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		refresh();
+	}
+}
+
+void refresh() {
+	File[] files = null;
+	if (currentDir == null)
+		files = File.listRoots();
+	else
+		files = currentDir.listFiles();
+	currentFileArray = files;
+	listFileToPanel(files);
+	validateAndGC();
+}</pre>
+
+			<p>
+				在添加按钮时注册监听器
+			</p>
+			<pre>
+this.refreshButton.addMouseListener(new RefreshCurrentDirListener());</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、其他</h4>
+			<h5 id="f4-1" class="title-2th">1、	刷新窗口、释放内存</h5>
+			<pre>
+void validateAndGC() {
+	this.validate();
+	System.gc();
+}</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	ImageUtil 类</h5>
+			<pre>
+public final class ImageUtil {
+
+	<span class="annotation">/**</span>
+	<span class="annotation"> * 刷新按钮图标的key</span>
+	<span class="annotation"> */</span>
+	public static final String IMAGE_ICON_REFRESH = "image_icon_refresh";
+
+	<span class="annotation">/**</span>
+	<span class="annotation"> * 上级按钮图标的key</span>
+	<span class="annotation"> */</span>
+	public static final String IMAGE_ICON_BACK = "image_icon_back";
+
+	<span class="annotation">/**</span>
+	<span class="annotation"> * 目录图片的key</span>
+	<span class="annotation"> */</span>
+	public static final String IMAGE_FOLDER = "image_folder";
+
+	<span class="annotation">/**</span>
+	<span class="annotation"> * 文件图片的key</span>
+	<span class="annotation"> */</span>
+	public static final String IMAGE_FILE = "image_file";
+
+	private ImageUtil() {
+		super();
+	}
+
+	private static final String IMAGE_PATH = System.getProperty("user.dir") + File.separator + "images";
+
+	private static Map&lt;String, Image&gt; images = new HashMap&lt;String, Image&gt;();
+
+	static {
+		images.put(
+				IMAGE_ICON_REFRESH,
+				Toolkit.getDefaultToolkit().createImage(
+						IMAGE_PATH + File.separator + "icon" + File.separator
+								+ "refresh_16.png"));
+		images.put(
+				IMAGE_ICON_BACK,
+				Toolkit.getDefaultToolkit().createImage(
+						IMAGE_PATH + File.separator + "icon" + File.separator
+								+ "back_16.png"));
+		images.put(
+				IMAGE_FOLDER,
+				Toolkit.getDefaultToolkit().createImage(
+						IMAGE_PATH + File.separator + "folder_74.png"));
+		images.put(
+				IMAGE_FILE,
+				Toolkit.getDefaultToolkit().createImage(
+						IMAGE_PATH + File.separator + "file_75px.png"));
+	}
+
+	public static Image getImage(String key) {
+		return images.get(key);
+	}
+}</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、运行程序</h4>
+
+			<pre>
+package org.net5ijy.explorer;
+
+public class RunExplorer {
+	public static void main(String[] args) {
+		new ExplorerFrame("计算机");
+	}
+}</pre>
+
+			<p>
+				运行效果如下：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01055/01055001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01054.html" style="font-size:12px;">第五十四节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发界面结构）</a>
+			<br />
+			<a href="java01056.html" style="font-size:12px;">第五十六节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发目录树功能）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

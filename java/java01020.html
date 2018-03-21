@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java多线程技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十节&nbsp;&nbsp;&nbsp;&nbsp;java 多线程技术（一）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、线程概述</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、 多线程概念</a></li>
+						<li><a href="#f1-2">2、 Java 中的多线程</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、java实现多线程</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、 Thread 类</a></li>
+						<li><a href="#f2-2">2、 继承 Thread 类实现多线程</a></li>
+						<li><a href="#f2-3">3、 Runnable 接口</a></li>
+						<li><a href="#f2-4">4、 实现 Runnable 接口方式实现多线程</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、Java线程的状态</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、线程概述</h4>
+
+			<h5 id="f1-1" class="title-2th">1、 多线程概念</h5>
+
+			<p>
+				进程(Process)：操作系统是支持多任务的，就是可以“同时”运行多个程序。实际上是 CPU 时间片分配给每一个进程，给用户一种同时执行的感觉。
+			</p>
+			<p>
+				线程(Thread)：一个进程下同时执行多任务，每一个任务就是一个线程，一个进程中至少有一个线程。
+			</p>
+
+			<h5 id="f1-2" class="title-2th">2、 Java 中的多线程</h5>
+
+			<p>
+				Java 虚拟机允许应用程序并发地运行多个执行线程。
+			</p>
+			<p>
+				每个线程都有一个优先级，高优先级线程的执行优先于低优先级线程。
+			</p>
+			<p>
+				每个线程都可以标记为一个守护程序。当某个线程中运行的代码创建一个新 <code>Thread</code> 对象时，该新线程的初始优先级被设定为创建线程的优先级，并且当且仅当创建线程是守护线程时，新线程才是守护程序。
+			</p>
+			<p>
+				当 Java 虚拟机启动时，通常都会有单个非守护线程（通常会调用某个类的 <code>main</code> 方法）。
+			</p>
+			<p>
+				Java 虚拟机会继续执行线程，直到下列任一情况出现时为止：
+			</p>
+			<p>
+				（1）调用了 <code>Runtime</code> 类的 <code>exit</code> 方法。
+			</p>
+			<p>
+				（2）非守护线程的所有线程都已停止运行。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、java实现多线程</h4>
+
+			<h5 id="f2-1" class="title-2th">1、 Thread 类</h5>
+
+			<p>
+				打开 JDK 文档，找到 <code>java.lang.Thread</code> 类。Thread 类及其子类需要使用 <code>run</code> 方法封装线程任务执行的代码。
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+public Thread()
+
+public Thread(Runnable target)
+
+public Thread(String name)
+
+public Thread(Runnable target, String name)
+</pre>
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+public static Thread currentThread()
+	返回对当前正在执行的线程对象的引用。
+
+public final String getName()
+	返回该线程的名称。
+
+public final int getPriority()
+	返回线程的优先级。
+
+public Thread.State getState()
+	返回该线程的状态。
+
+public void interrupt()
+	中断线程。
+
+public final boolean isDaemon()
+	测试该线程是否为守护线程。
+
+public final void join() throws InterruptedException
+	等待该线程终止。
+
+public void run()
+	如果该线程是使用独立的Runnable运行对象构造的，则调用该Runnable对象的run方法；否则，该方法不执行任何操作并返回。
+	Thread的子类应该重写该方法。
+
+public final void setDaemon(boolean on)
+	将该线程标记为守护线程或用户线程。当正在运行的线程都是守护线程时，Java 虚拟机退出。该方法必须在启动线程前调用。
+
+public final void setName(String name)
+	改变线程名称。
+
+public final void setPriority(int newPriority)
+	更改线程的优先级。
+
+public static void sleep(long millis) throws InterruptedException
+	在指定的毫秒数内让当前正在执行的线程休眠（暂停执行）。
+
+public void start()
+	使该线程开始执行；Java虚拟机调用该线程的run方法。
+</pre>
+
+			<span class="src-introduce">以上内容节选自 JDK 文档。</span>
+
+			<br />
+
+			<h5 id="f2-2" class="title-2th">2、 继承 Thread 类实现多线程</h5>
+
+			<p>
+				通过 JDK 文档我们可以看到：
+			</p>
+			<p>
+				一种方法是将类声明为 <code>Thread</code> 的子类，该子类应重写 <code>run</code> 方法，接下来可以分配并启动该子类的实例。
+			</p>
+			<p>
+				下面是 JDK 提供的案例代码：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01020/01020001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				为了和我们之前讲解的 MobilePhone 的例子衔接上，我们还是演示相关的例子。
+			</p>
+			<p>
+				需求是 4 个 MobilePhone 工厂，“同时”生产手机，然后在控制台打印生产了多少台手机。
+			</p>
+			<p>
+				演示代码还是放在 javanote 项目下，在 src 下创建 <code>org.net5ijy.javanote.threadstart</code>包。
+			</p>
+			<p>
+				首先定义一个类 <code>MobileFactory1</code>，继承 Thread 类。
+			</p>
+			<p>
+				有 <code>name</code>、<code>allCount</code>、<code>currentCount</code> 属性，分别代表名称、需要生成的手机数量、已经生产的手机数量。
+			</p>
+			<p>
+				run 方法中使用 for 循环实现生成 allCount 台手机，而且需要打印现在已经生产的手机数量。
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">此处注意需要继承 java.lang.Thread 类</span>
+*/
+class MobileFactory1 extends Thread {
+
+	private String name = "MobileFactory1-1";
+	private int allCount = 100;
+	private int currentCount = 0;
+
+	public MobileFactory1() {}
+	public MobileFactory1(String name) {
+		this.name = name;
+	}
+	public MobileFactory1(String name, int allCount) {
+		this.name = name;
+		this.allCount = allCount;
+	}
+
+	/*
+		<span class="annotation">重写 Thread 的 run 方法</span>
+	*/
+	public void run() {
+		for (int i = 1; i &lt;= allCount; i++) {
+			this.currentCount = i;
+			System.out.println(this.name + " 已经生产 " + this.currentCount + " 台手机");
+
+			<span class="annotation">// 线程休眠 10 毫秒</span>
+			try {
+				Thread.sleep(10);
+			} catch(InterruptedException e) {}
+		}
+	}
+}
+</pre>
+
+			<pre>
+public class ThreadStart {
+	public static void main(String[] args) {
+
+		MobileFactory1 factory1 = new MobileFactory1("工厂1", 10);
+		MobileFactory1 factory2 = new MobileFactory1("工厂2", 10);
+		MobileFactory1 factory3 = new MobileFactory1("工厂3", 10);
+		MobileFactory1 factory4 = new MobileFactory1("工厂4", 10);
+
+		factory1.start(); <span class="annotation">// 调用 start 方法启动线程，而不是 run 方法</span>
+		factory2.start();
+		factory3.start();
+		factory4.start();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+工厂2 已经生产 1 台手机
+工厂3 已经生产 1 台手机
+工厂1 已经生产 1 台手机
+工厂4 已经生产 1 台手机
+工厂2 已经生产 2 台手机
+工厂4 已经生产 2 台手机
+工厂3 已经生产 2 台手机
+工厂1 已经生产 2 台手机
+......
+......
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、 Runnable 接口</h5>
+
+			<p>
+				上面的代码看起来没什么问题，但是如果 MobileFactory1 这个类已经继承了其他的类、或者这个根本就不想被纳入到 Thread 的体系中，怎么办？
+			</p>
+			<p>
+				打开 JDK 文档，找到 <code>java.lang.Runnable</code> 接口。
+			</p>
+			<p>
+				Runnable 接口应该由那些打算通过某一线程执行其实例的类来实现。类必须定义一个称为 <code>run</code> 的无参数方法。
+			</p>
+			<p>
+				Thread 类实现了 Runnable 接口。
+			</p>
+			<p>
+				Runnable 为非 Thread 子类的类提供了一种激活方式。通过实例化某个 Thread 实例并将自身作为运行目标，就可以运行实现 Runnable 的类而无需创建 Thread 的子类。
+			</p>
+			<p>
+				大多数情况下，如果只想重写 run() 方法，而不重写其他 Thread 方法，那么应使用 Runnable 接口。这很重要，因为除非程序员打算修改或增强类的基本行为，否则不应为该类创建子类。
+			</p>
+
+			<pre>
+void run()
+	使用实现接口 Runnable 的对象创建一个线程时，启动该线程将导致在独立执行的线程中调用对象的 run 方法。
+	方法 run 可能执行任何所需的动作。	
+</pre>
+
+			<span class="src-introduce">以上内容节选自 JDK 文档。</span>
+
+			<br />
+
+			<h5 id="f2-4" class="title-2th">4、 实现 Runnable 接口方式实现多线程</h5>
+
+			<p>
+				通过 JDK 文档我们可以看到，除了继承 Thread 类之外，还有一种实现多线程的方式：声明类实现 Runnable 接口，实现 run 方法，在创建 Thread 时作为一个参数来传递并启动。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01020/01020002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				使用这种方式修改下 MobileFactory1 这个类。
+			</p>
+			<p>
+				MobileFactory2 实现 Runnable 接口，属性、构造方法、run方法执行内容 MobileFactory1 相同。
+			</p>
+			<p>
+				实例化 MobileFactory2 类对象，创建 Thread 对象并把 MobileFactory2 实例作为参数传入，然后调用 Thread 对象的 start() 方法即可启动线程。
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">此处注意需要实现 java.lang.Runnable 接口</span>
+*/
+class MobileFactory2 implements Runnable {
+
+	private String name = "MobileFactory2-1";
+	private int allCount = 100;
+	private int currentCount = 0;
+
+	public MobileFactory2() {}
+	public MobileFactory2(String name) {
+		this.name = name;
+	}
+	public MobileFactory2(String name, int allCount) {
+		this.name = name;
+		this.allCount = allCount;
+	}
+
+	/*
+		<span class="annotation">实现 run 方法</span>
+	*/
+	public void run() {
+		for (int i = 1; i &lt;= allCount; i++) {
+			this.currentCount = i;
+			System.out.println(this.name + " 已经生产 " + this.currentCount + " 台手机");
+
+			<span class="annotation">// 线程休眠 10 毫秒</span>
+			try {
+				Thread.sleep(10);
+			} catch(InterruptedException e) {}
+		}
+	}
+}
+</pre>
+
+			<pre>
+public class ThreadStart {
+	public static void main(String[] args) {
+		new Thread(new MobileFactory2("工厂1", 10)).start();
+		new Thread(new MobileFactory2("工厂2", 10)).start();
+		new Thread(new MobileFactory2("工厂3", 10)).start();
+		new Thread(new MobileFactory2("工厂4", 10)).start();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+工厂1 已经生产 1 台手机
+工厂2 已经生产 1 台手机
+工厂3 已经生产 1 台手机
+工厂4 已经生产 1 台手机
+工厂4 已经生产 2 台手机
+工厂2 已经生产 2 台手机
+工厂1 已经生产 2 台手机
+工厂3 已经生产 2 台手机
+工厂4 已经生产 3 台手机
+工厂2 已经生产 3 台手机
+......
+......
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.threadstart 包中的 ThreadStart.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Java线程的状态</h4>
+
+			<p>
+				（1）创建状态：即 <code>new Thread</code> 子类、<code>new Thread(Runnable)</code>，未调用 <code>start()</code> 方法启动之前；
+			</p>
+			<p>
+				（2）运行状态：调用 <code>start()</code> 启动线程之后，此时线程具有了执行的权限，但是不一定在执行，这主要取决于 CPU 时间片是否分配给了此线程，而 CPU 时间片的分配是没有规律的；
+			</p>
+			<p>
+				（3）冻结和休眠状态：调用 <code>wait()</code> 和 <code>sleep()</code> 方法后的状态，前者需要使用 <code>notify()</code> 方法才会恢复运行状态，而后者则是在休眠时间完成后恢复运行状态；
+			</p>
+			<p>
+				（4）死亡状态：<code>run()</code> 方法执行结束，线程就死亡了；
+			</p>
+			<p>
+				（5）CPU 执行资格：可以被 CPU 处理；CPU 执行权：正在被 CPU 处理。
+			</p>
+
+			<br />
+
+			<a href="java01019.html" style="font-size:12px;">第十九节&nbsp;&nbsp;&nbsp;&nbsp;java 和 javac 命令</a>
+			<br />
+			<a href="java01021.html" style="font-size:12px;">第二十一节&nbsp;&nbsp;&nbsp;&nbsp;java 多线程技术（以手机销售为例）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

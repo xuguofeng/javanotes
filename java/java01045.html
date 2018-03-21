@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java IO 技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十五节&nbsp;&nbsp;&nbsp;&nbsp;文件切割与对象序列化流</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、文件切割与合并</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	文件切割</a></li>
+						<li><a href="#f1-2">2、	文件合并</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、对象序列化流</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	ObjectInputStream 类</a></li>
+						<li><a href="#f2-2">2、	ObjectOutputStream 类</a></li>
+						<li><a href="#f2-3">3、	对象流使用</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、文件切割与合并</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	文件切割</h5>
+
+			<p>
+				编写一个 <code>fileSlice</code> 方法，可以切割一个File数组，切割后的文件以“ <code>文件名.part[1,2,3...]</code> ”方式命名，每个文件大小为 1MB。
+			</p>
+			<p>
+				重载一个切割一个File对象的 <code>fileSlice</code> 方法。
+			</p>
+
+			<pre>
+<span class="annotation">// 切割一个文件数组</span>
+private static void fileSlice(File[] files, File dstDir) throws IOException {
+
+	<span class="annotation">// 定义IO流</span>
+	FileInputStream fis = null;
+	FileOutputStream fos = null;
+	try {
+
+		<span class="annotation">// 遍历files数组，逐一进行切割</span>
+		for (int i = 0; i < files.length; i++) {
+
+			File file = files[i];
+
+			<span class="annotation">// 创建读取files[i]的输入流</span>
+			fis = new FileInputStream(file);
+
+			<span class="annotation">// 缓冲区大小 1MB</span>
+			byte[] buf = new byte[SINGLE_FILE_SIZE];
+
+			<span class="annotation">// 小文件个数</span>
+			int count = 1;
+			int len = -1;
+
+			while((len = fis.read(buf)) != -1) {
+
+				<span class="annotation">// 把读取的字节写到小文件中</span>
+				fos = new FileOutputStream(
+						new File(
+						dstDir, 
+						file.getName() + ".part" + (count++)
+						)
+					);
+				fos.write(buf, 0, len);
+				fos.close();
+				fos = null;
+			}
+
+			fis.close();
+			fis = null;
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 关闭IO流</span>
+		try {
+			if (fis != null)
+				fis.close();
+			if (fos != null)
+				fos.close();
+		} catch (IOException e) {}
+	}
+}
+
+<span class="annotation">// 切割一个文件</span>
+private static void fileSlice(File file, File dstDir) throws IOException {
+	fileSlice(new File[]{ file }, dstDir);
+}
+</pre>
+
+			<h5 id="f1-2" class="title-2th">2、	文件合并</h5>
+
+			<p>
+				编写一个 <code>fileRecovery</code> 方法，可以合并一个File数组，在 <code>dstDir</code> 目录读取每个文件的碎片文件，合并碎片文件后保存到 <code>dstDir</code> 目录
+			</p>
+			<p>
+				重载一个可以合并一个File对象的 <code>fileRecovery</code> 方法。
+			</p>
+
+			<pre>
+<span class="annotation">// 恢复文件数组</span>
+private static void fileRecovery(String[] srcFileNames, File dstDir) throws IOException {
+
+	<span class="annotation">// 定义IO流</span>
+	FileInputStream fis = null;
+	FileOutputStream fos = null;
+
+	File sliceFile = null;
+
+	try {
+		for (int i = 0; i < srcFileNames.length; i++) {
+			String srcFileName = srcFileNames[i];
+
+			<span class="annotation">// 定义合并后文件输出流</span>
+			fos = new FileOutputStream(new File(dstDir, srcFileName));
+
+			int count = 1;
+
+			while(true) {
+
+				<span class="annotation">// 读取srcFileName碎片文件</span>
+				sliceFile = new File(dstDir, srcFileName + ".part" + (count++));
+
+				if(!sliceFile.exists())
+					break;
+				
+				int len = -1;
+				byte[] buf = new byte[SINGLE_FILE_SIZE];
+
+				fis = new FileInputStream(sliceFile);
+
+				<span class="annotation">// 写到文件输出流</span>
+				if((len = fis.read(buf)) != -1) {
+					fos.write(buf, 0, len);
+				}
+				fis.close();
+				fis = null;
+			}
+			fos.close();
+			fos = null;
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 关闭IO流</span>
+		try {
+			if (fis != null)
+				fis.close();
+			if (fos != null)
+				fos.close();
+		} catch (IOException e) {}
+	}
+}
+
+<span class="annotation">// 恢复一个文件</span>
+private static void fileRecovery(String srcFileName, File dstDir) throws IOException {
+	fileRecovery(new String[]{ srcFileName }, dstDir);
+}
+</pre>
+
+			<br />
+
+			<p>
+				程序运行
+			</p>
+
+			<pre>
+<span class="annotation">// 切割后单个文件大小</span>
+private static final int SINGLE_FILE_SIZE = 1024 * 1024;
+
+public static void main(String[] args) throws IOException {
+	File dst = new File("D:\\FileSlice");
+
+	File file1 = new File("D:\\src.bmp");
+	File file2 = new File("D:\\测试文件切割和合并.bmp");
+
+	// fileSlice(new File[]{ file1, file2 }, dst);
+
+	fileRecovery(new String[]{ "src.bmp", "测试文件切割和合并.bmp" }, dst);
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 FileSliceAndRecovery.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、对象序列化流</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	ObjectInputStream 类</h5>
+
+			<pre>
+java.io;
+
+public class ObjectInputStream extends InputStream implements ObjectInput, ObjectStreamConstants {}
+</pre>
+
+			<p>
+				对使用 <code>ObjectOutputStream</code> 写入硬盘的基本数据和对象进行反序列化。
+			</p>
+
+			<p>
+				把实现了 <code>java.io.Serializable</code> 接口的类对象（非静态成员和非瞬时成员数据）从硬盘文件读取到输入流，从而实现堆内存对象的硬盘读取。
+			</p>
+			<p>
+				<code>readObject</code> 方法用于从流读取对象，可以使用 Java 的安全强制转换来获取所需的类型。
+			</p>
+			<p>
+				例如：
+			</p>
+			<pre>
+FileInputStream fis = new FileInputStream("t.tmp");
+ObjectInputStream ois = new ObjectInputStream(fis);
+
+int i = ois.readInt();
+String today = (String) ois.readObject();
+Date date = (Date) ois.readObject();
+
+ois.close();
+</pre>
+
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public ObjectInputStream(InputStream in) throws IOException</span>
+	创建从InputStream读取的ObjectInputStream对象
+</pre>
+
+			<p>
+				读取对象方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public final Object readObject() throws IOException, ClassNotFoundException</span>
+</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	ObjectOutputStream 类</h5>
+
+			<pre>
+java.io;
+
+public class ObjectOutputStream extends OutputStream implements ObjectOutput, ObjectStreamConstants {}
+</pre>
+
+			<p>
+				<code>ObjectOutputStream</code> 将基本数据类型和实现了 <code>java.io.Serializable</code> 接口的类对象（非静态成员和非瞬时成员数据）通过 <code>OutputStream</code> 写入硬盘，然后可以使用 <code>ObjectInputStream</code> 从硬盘读取（重构）对象，从而实现对象的持久存储。
+			</p>
+			<p>
+				如果流是网络套接字流，则可以在另一台主机上或另一个进程中重构对象。
+			</p>
+			<p>
+				例如：
+			</p>
+			<pre>
+FileOutputStream fos = new FileOutputStream("t.tmp");
+ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+oos.writeInt(12345);
+oos.writeObject("Today");
+oos.writeObject(new Date());
+
+oos.close();
+</pre>
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public ObjectOutputStream(OutputStream out) throws IOException</span>
+	创建写入指定OutputStream的ObjectOutputStream对象
+</pre>
+			<p>
+				写出对象方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public final void writeObject(Object obj) throws IOException</span>
+	将对象写入ObjectOutputStream。
+	对象的类、类的签名，以及类及其所有超类型的非瞬态和非静态字段的值都将被写入。
+	遇到不应序列化的类时，将抛出异常
+</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	对象流使用</h5>
+
+			<pre>
+public static void main(String[] args) throws Exception {
+	<span class="annotation">// 对象序列化</span>
+	writeObject();
+
+	<span class="annotation">// 对象反序列化</span>
+	readObject();
+}
+
+<span class="annotation">// 对象序列化</span>
+private static void writeObject() throws Exception {
+	MobilePhone m1 = new MobilePhone();
+	m1.setOs("Andriod");
+	m1.setPhoneNumber("12345678901");
+	m1.setBrand("红米2");
+	m1.setDumpEnergy(0.87d);
+
+	MobilePhone m2 = new MobilePhone();
+	m2.setOs("Andriod");
+	m2.setPhoneNumber("12345678901");
+	m2.setBrand("红米2");
+	m2.setDumpEnergy(0.87d);
+
+	<span class="high-light">ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("D:\\mobile.obj"));</span>
+
+	<span class="high-light">oos.writeObject(m1);</span>
+	<span class="high-light">oos.writeObject(m2);</span>
+}
+
+<span class="annotation">// 对象反序列化</span>
+private static void readObject() throws Exception {
+
+	<span class="high-light">ObjectInputStream oos = new ObjectInputStream(new FileInputStream("D:\\mobile.obj"));</span>
+
+	<span class="high-light">MobilePhone m1 = (MobilePhone)oos.readObject();</span>
+	<span class="high-light">MobilePhone m2 = (MobilePhone)oos.readObject();</span>
+
+	System.out.println(m1.getOs());
+	System.out.println(m1.getPhoneNumber());
+	System.out.println(m1.getBrand());
+	System.out.println(m1.getDumpEnergy());
+
+	System.out.println(m2.getOs());
+	System.out.println(m2.getPhoneNumber());
+	System.out.println(m2.getBrand());
+	System.out.println(m2.getDumpEnergy());
+}
+</pre>
+
+			<p>
+				注意：<code>ElectronicProduct</code> 和 <code>MobilePhone</code> 需要实现 <code>java.io.Serializable</code> 接口
+			</p>
+
+			<pre>
+public abstract class ElectronicProduct implements java.io.Serializable {
+
+	// serialVersionUID
+	private static final long serialVersionUID = -3710932565838996795L;
+
+}
+</pre>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct implements java.io.Serializable {
+
+	// serialVersionUID
+	private static final long serialVersionUID = -3710932565838996794L;
+
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 ObjectStreamAPI.java 文件。</span>
+			
+
+			<br /><br />
+
+			<a href="java01044.html" style="font-size:12px;">第四十四节&nbsp;&nbsp;&nbsp;&nbsp;Properties 和 控制台输入输出操作</a>
+			<br />
+			<a href="java01046.html" style="font-size:12px;">第四十六节&nbsp;&nbsp;&nbsp;&nbsp;Eclipse开发环境</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

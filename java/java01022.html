@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java多线程技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十二节&nbsp;&nbsp;&nbsp;&nbsp;线程安全问题及解决</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、问题概述</a></li>
+				<li><a href="#f2">二、同步代码块</a></li>
+				<li><a href="#f3">三、同步方法</a></li>
+				<li><a href="#f4">四、懒汉单例模式的线程安全问题及解决</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、问题概述</h4>
+
+			<p>
+				多个线程操作共享数据，一个线程执行操作共享数据的多条代码，如果在此过程中该线程失去了执行权，而其他线程参与了运算，就可能出现线程安全问题。
+			</p>
+
+			<p>
+				比如，前一节手机销售案例中，我们只创建了一个线程，如果使用两个或者多个线程进行销售，就会发现多个线程销售同一台手机的情况，甚至会出现销售第0台的情况：
+			</p>
+
+			<pre>
+public class MobileSale {
+	public static void main(String[] args) {
+		Mall mall = new Mall("手机商场", 10);
+		mall.setSaleBarCount(2); <span class="annotation">// 使用SaleBarCount参数指定启动线程个数</span>
+		mall.sale();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+<span class="high-light">柜台 1 正在售出第 10 台手机</span>
+<span class="high-light">柜台 2 正在售出第 10 台手机</span>
+柜台 1 正在售出第 8 台手机
+柜台 2 正在售出第 7 台手机
+<span class="high-light">柜台 1 正在售出第 6 台手机</span>
+<span class="high-light">柜台 2 正在售出第 6 台手机</span>
+柜台 2 正在售出第 4 台手机
+柜台 1 正在售出第 3 台手机
+<span class="high-light">柜台 1 正在售出第 2 台手机</span>
+<span class="high-light">柜台 2 正在售出第 2 台手机</span>
+</pre>
+
+			<p>
+				解决办法：把操作共享数据的多条代码封装起来，一个线程执行时，其他线程不允许执行，当前线程执行完毕后，其他线程才可以执行。实现方式有以下两种：
+			</p>
+
+			<p>
+				（1）同步代码块
+			</p>
+			<p>
+				（2）同步方法
+			</p>
+
+			<p>
+				同步的前提多个线程必须使用同一个锁，同步代码块的锁操作是隐式的。虽然解决了线程安全问题，但是会影响程序效率，因为线程执行代码前需要判断同步锁。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、同步代码块</h4>
+
+			<pre>
+synchronized (object) {
+	// 同步代码
+}
+</pre>
+
+			<p>
+				线程进入同步代码块前，会尝试获取 object 对象锁，如果获取到，则进入代码块执行，如果该对象锁已经被其他线程持有，则当前线程挂起，等待锁被释放才有机会获取锁执行代码块。所以多个线程必须使用同一个对象锁，才可以解决问题。
+			</p>
+
+			<p>
+				下面我们使用同步代码块改造销售手机案例的代码
+			</p>
+
+			<p>
+				首先在 Mall 类中定义对象锁
+			</p>
+
+			<p>
+				不能定义在线程的 <code>run</code> 方法中，因为这样每个线程都会创建一个自己的锁，而不是共用同一个锁
+			</p>
+
+			<pre>
+private Object obj = new Object();
+</pre>
+
+			<p>
+				然后修改 SaleBar 类的 <code>run</code> 方法
+			</p>
+
+			<pre>
+public void run() {
+	while(true) {
+
+		// 同步代码块，使用obj对象作为锁
+		synchronized(obj) {
+			if (mobileCount &lt;= 0)
+				break;
+			System.out.println(this.name + " 正在收出第 " + mobileCount + " 台手机");
+			mobileCount--;
+		}
+		try {
+			Thread.sleep(10);
+		} catch(InterruptedException e) {}
+	}
+}
+</pre>
+
+			<p>
+				加入同步代码块之后多线程操作数据就安全了。
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、同步方法</h4>
+
+			<p>
+				使用同步方法时就不需要定义对象锁，因为同步方法的锁是 this 对象或所在类的 Class 对象。
+			</p>
+
+			<p>
+				我们使用同步方法改造第 3 种方式销售手机代码
+			</p>
+
+			<p>
+				在 Mall2 中添加同步方法 <code>saleMobile</code>
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">使用 synchronized 修饰符修饰方法</span>
+	<span class="annotation">使用 this 作为同步锁</span>
+*/
+public synchronized void saleMobile() {
+	if (mobileCount &lt;= 0)
+		return;
+	System.out.println("线程 " + Thread.currentThread().getName() + " 正在售出第 " + mobileCount + " 台手机");
+	mobileCount--;
+}
+</pre>
+
+			<p>
+				在 <code>run</code> 方法中使用同步方法 <code>saleMobile</code>
+			</p>
+
+			<pre>
+public void run() {
+	while(mobileCount &gt; 0) {
+		saleMobile();
+		try {
+			Thread.sleep(10);
+		} catch(InterruptedException e) {}
+	}
+}
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.threadstart 包中的 MobileSale.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、懒汉单例模式的线程安全问题及解决</h4>
+
+			<p>
+				这是我们之前编写的懒汉单例模式代码
+			</p>
+
+			<pre>
+class Person {
+	private static Person person = null;
+	private Person() {}
+
+	public static Person getInstance() {
+		if (person == null)
+			person = new Person();
+		return person;
+	}
+}
+</pre>
+
+			<p>
+				在单线程的情况下，程序不会有任何问题。
+			</p>
+			<p>
+				但是在多线程的情况下，就不一样了，以下情况很有可能发生：
+			</p>
+			<p>
+				当第一个线程进行 <code>if (person == null)</code> 进入 if 代码块后，此时失去执行权，第二个线程也来判断 <code>if (person == null)</code> 进入 if 代码块，然后实例化了 Person 对象并返回。当第一个线程再次回来执行 if 代码块时，又将创建一个 Person 对象返回。这是便出现了两个 Person 对象。
+			</p>
+			<p>
+				为了解决这个问题，代码需要改造一下。
+			</p>
+
+			<p>
+				第一种是把 <code>getInstance()</code> 改为同步方法，但是这种实现方式每次进入方法都会进行锁的判断，会影响效率。
+			</p>
+
+			<pre>
+class Person {
+	private static Person person = null;
+	private Person() {}
+
+	/*
+		<span class="annotation">改造为同步方法</span>
+	*/
+	public static synchronized Person getInstance() {
+		if (person == null)
+			person = new Person();
+		return person;
+	}
+}
+</pre>
+
+			<p>
+				第二种是给 if 代码块里面添加同步代码块
+			</p>
+
+			<pre>
+class Person {
+	private static Person person = null;
+	private Person() {}
+
+	public static Person getInstance() {
+		if (person == null) {
+			synchronized(Person.class) {
+				if (person == null)
+					person = new Person();
+			}
+		}
+		return person;
+	}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.threadstart 包中的 LazySingleton.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01021.html" style="font-size:12px;">第二十一节&nbsp;&nbsp;&nbsp;&nbsp;java 多线程技术（以手机销售为例）</a>
+			<br />
+			<a href="java01023.html" style="font-size:12px;">第二十三节&nbsp;&nbsp;&nbsp;&nbsp;线程间通信（上）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

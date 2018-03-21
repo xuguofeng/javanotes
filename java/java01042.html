@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java IO 技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四十二节&nbsp;&nbsp;&nbsp;&nbsp;字符流（一）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、字符编码(Character encoding)和编码集(Character set)</a></li>
+				<li><a href="#f2">二、字符编码演示</a></li>
+				<li><a href="#f3">三、Reader 和 Writer 类</a></li>
+				<li><a href="#f4">四、InputStreamReader 和 OutputStreamWriter 类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	InputStreamReader 类</a></li>
+						<li><a href="#f4-2">2、	OutputStreamWriter 类</a></li>
+						<li><a href="#f4-3">3、	读取文件</a></li>
+						<li><a href="#f4-4">4、	复制文件</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、字符编码(Character encoding)和编码集(Character set)</h4>
+
+			<p>
+				字符编码(<code>Character encoding</code>)是将字符转为字节或字节数组的过程。
+			</p>
+			<p>
+				字符集(<code>Character set</code>)是多个字符的集合，字符集种类较多，每个字符集包含的字符个数不同，常见字符集有：<code>ASCII字符集</code>、<code>GB2312字符集</code>、<code>GB18030字符集</code>、<code>Unicode字符集</code> 等。
+			</p>
+			<p>
+				计算机要准确的识别和存储各种文字，就需要进行字符编码。中文文字数目大，而且还分为简体中文和繁体中文，而计算机最初是按英语单字节字符设计的，因此，对中文字符进行编码，是中文信息交流的技术基础。
+			</p>
+			<p>
+				常见字符集：
+			</p>
+			<p>
+				<code>ASCII（American Standard Code for Information Interchange，美国信息互换标准编码）</code>是基于罗马字母表的一套电脑编码系统，主要用于显示现代英语和其他西欧语言，是现今最通用的单字节编码系统，并等同于国际标准 <code>ISO 646</code>。
+			</p>
+			<p>
+				<code>GB2312</code> 又称为 <code>GB2312-80</code> 字符集，全称为《信息交换用汉字编码字符集•基本集》，1981年5月1日实施。收录的汉字已经覆盖99.75%的使用频率，基本满足了汉字的计算机处理需要。
+			</p>
+			<p>
+				<code>GB 18030</code> 的全称是 <code>GB18030-2000《信息交换用汉字编码字符集基本集的扩充》</code>，是2000年3月17日发布的新的汉字编码标准，2001年8月31日后在中国市场上发布的软件必须符合本标准。
+			</p>
+			<p>
+				<code>Unicode</code> 字符集编码全称是 <code>Universal Multiple-Octet Coded Character Set</code>，是由 Unicode 学术学会(Unicode Consortium)制订的字符编码系统，支持现今世界各种不同语言书面文本的交换、处理及显示。
+			</p>
+			<p>
+				<code>UTF-8（8-bit Unicode Transformation Format）</code> 是一种针对 <code>Unicode</code> 的可变长度字符编码，又称万国码。建议在实际开发中使用 <code>UTF-8</code> 。
+			</p>
+			<p>
+				在之前的讲解中也介绍过相关的内容，比如：
+			</p>
+			<p>
+				<code>javac</code> 命令使用的 <code>-encoding</code> 选项值需要和 <code>.java</code> 源代码文件的编码方式一致；
+			</p>
+			<p>
+				在演示 <code>FileInputStream</code> 和 <code>FileOutputStream</code> 读取、输出文件内容时介绍过使用 <code>UTF-8</code> 编码、解码字符串。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、字符编码演示</h4>
+
+			<p>
+				英文编码
+			</p>
+
+			<pre>
+byte[] buf = null;
+String line = "";
+
+line = "a-b-c-d";
+
+<span class="annotation">// 使用getBytes()方法</span>
+buf = line.getBytes();
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf));
+
+<span class="annotation">// 使用getBytes("GBK")方法</span>
+buf = line.getBytes("GBK");
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf, "GBK"));
+
+<span class="annotation">// 使用getBytes("UTF-8")方法</span>
+buf = line.getBytes("UTF-8");
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf, "UTF-8"));
+
+<span class="phase-title">输出：</span>
+
+[97, 45, 98, 45, 99, 45, 100]
+a-b-c-d
+[97, 45, 98, 45, 99, 45, 100]
+a-b-c-d
+[97, 45, 98, 45, 99, 45, 100]
+a-b-c-d
+</pre>
+
+			<p>
+				中文编码
+			</p>
+
+			<pre>
+byte[] buf = null;
+String line = "";
+
+line = "测试程序-a-b-c-d";
+
+<span class="annotation">// 使用getBytes()方法</span>
+buf = line.getBytes();
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf));
+
+<span class="annotation">// 使用getBytes("GBK")方法</span>
+<span class="annotation">// 因为GBK中中文占2个字节</span>
+<span class="annotation">// 所以全部为16个字节</span>
+buf = line.getBytes("GBK");
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf, "GBK"));
+
+<span class="annotation">// 使用getBytes("UTF-8")方法</span>
+<span class="annotation">// 因为UTF-8中中文占3个字节</span>
+<span class="annotation">// 所以全部为20个字节</span>
+buf = line.getBytes("UTF-8");
+System.out.println(Arrays.toString(buf));
+
+System.out.println(new String(buf, "UTF-8"));
+System.out.println(new String(buf, "GBK"));
+System.out.println(new String(buf));
+
+<span class="annotation">// 如果编码解码方式不支持中文，出来的字符串就是乱码</span>
+System.out.println(new String(buf, "ISO-8859-1"));
+
+<span class="phase-title">输出：</span>
+
+[-78, -30, -54, -44, -77, -52, -48, -14, 45, 97, 45, 98, 45, 99, 45, 100]
+测试程序-a-b-c-d
+[-78, -30, -54, -44, -77, -52, -48, -14, 45, 97, 45, 98, 45, 99, 45, 100]
+测试程序-a-b-c-d
+[-26, -75, -117, -24, -81, -107, -25, -88, -117, -27, -70, -113, 45, 97, 45, 98, 45, 99, 45, 100]
+测试程序-a-b-c-d
+测试程序-a-b-c-d
+测试程序-a-b-c-d
+???è???¨????-a-b-c-d
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 EncodingTest.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Reader 和 Writer 类</h4>
+
+			<br />
+			<p>
+				<span class="high-light">java.io.Reader</span>
+			</p>
+			<pre>
+java.io;
+
+public abstract class Reader extends Object implements Readable, Closeable {}
+</pre>
+			<p>
+				用于读取字符流的抽象类。子类必须实现的方法只有 <code>read(char[], int, int)</code> 和 <code>close()</code>。但是，多数子类将重写此类定义的一些方法，以提供更高的读取效率。
+			</p>
+			<p>
+				有以下方法：
+			</p>
+			<pre>
+<span class="methodClassName">public abstract void close() throws IOException</span>
+	关闭流并释放资源
+
+<span class="methodClassName">public int read() throws IOException</span>
+	读取单个字符。
+	用于高效单字符输入的子类应重写此方法
+
+<span class="methodClassName">public int read(char[] cbuf) throws IOException</span>
+	将字符读入数组。
+	返回读取的字符数，如果已到达流的末尾，则返回-1
+
+<span class="methodClassName">public abstract int read(char[] cbuf, int off, int len) throws IOException</span>
+	将字符读入数组的某一部分
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">java.io.Writer</span>
+			</p>
+			<pre>
+java.io;
+
+public abstract class Writer extends Object implements Appendable, Closeable, Flushable {}
+</pre>
+
+			<p>
+				写入字符流的抽象类。子类必须实现的方法仅有 <code>write(char[], int, int)</code>、<code>flush()和close()</code>。但是，多数子类将重写此类定义的一些方法，以提供更高的输出效率。
+			</p>
+			<p>
+				有以下方法：
+			</p>
+
+			<pre>
+<span class="methodClassName">public Writer append(char c) throws IOException</span>
+	将指定字符输出到writer
+
+<span class="methodClassName">public Writer append(CharSequence csq) throws IOException</span>
+	将指定字符序列输出到writer
+
+<span class="methodClassName">public abstract void close() throws IOException</span>
+	关闭流，但要先刷新它
+
+<span class="methodClassName">public abstract void flush() throws IOException</span>
+	刷新流的缓冲
+
+<span class="methodClassName">public void write(char[] cbuf) throws IOException</span>
+	写入字符数组
+
+<span class="methodClassName">public abstract void write(char[] cbuf, int off, int len) throws IOException</span>
+	写入字符数组的某一部分
+
+<span class="methodClassName">public void write(int c) throws IOException</span>
+	写入单个字符
+
+<span class="methodClassName">public void write(String str) throws IOException</span>
+	写入字符串
+
+<span class="methodClassName">public void write(String str, int off, int len) throws IOException</span>
+	写入字符串的某一部分
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、InputStreamReader 和 OutputStreamWriter 类</h4>
+
+			<h5 id="f4-1" class="title-2th">1、	InputStreamReader 类</h5>
+
+			<pre>
+java.io;
+
+public class InputStreamReader extends Reader {}
+</pre>
+			<p>
+				是字节流通向字符流的桥梁：使用指定的 <code>charset</code> 读取字节并将其解码为字符。
+			</p>
+			<p>
+				每次调用 <code>read()</code> 方法都会导致从底层输入流读取一个或多个字节。要启用从字节到字符的有效转换，可以提前从底层流读取更多的字节，使其超过满足当前读取操作所需的字节。
+			</p>
+			<p>
+				为了提高效率，可以考虑在 <code>BufferedReader</code> 内包装 <code>InputStreamReader</code>。例如：
+			</p>
+			<p>
+				<code>BufferedReader in = new BufferedReader(new InputStreamReader(System.in));</code>
+			</p>
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public InputStreamReader(InputStream in)</span>
+	创建一个使用默认字符集的InputStreamReader
+
+<span class="methodClassName">public InputStreamReader(InputStream in, String charsetName) throws UnsupportedEncodingException</span>
+	创建指定字符集的InputStreamReader
+</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	OutputStreamWriter 类</h5>
+
+			<pre>
+java.io;
+
+public class OutputStreamWriter extends Writer {}
+</pre>
+			<p>
+				是字符流通向字节流的桥梁：可使用指定的 <code>charset</code> 将要写入流中的字符编码成字节。
+			</p>
+			<p>
+				为了提高效率，可以考虑将 <code>OutputStreamWriter</code> 包装到 <code>BufferedWriter</code> 中。例如：
+			</p>
+			<p>
+				<code>Writer out = new BufferedWriter(new OutputStreamWriter(System.out));</code>
+			</p>
+			<p>
+				构造方法如下：
+			</p>
+			<pre>
+<span class="methodClassName">public OutputStreamWriter(OutputStream out)</span>
+	创建使用默认字符编码的OutputStreamWriter
+
+<span class="methodClassName">public OutputStreamWriter(OutputStream out, String charsetName) throws UnsupportedEncodingException</span>
+	创建指定字符集的OutputStreamWriter
+</pre>
+
+			<h5 id="f4-3" class="title-2th">3、	读取文件</h5>
+
+			<p>
+				使用 <code>InputStreamReader</code> 读取 <code>.java</code> 文件打印在控制台
+			</p>
+			<pre>
+private static void test1(String fileName) {
+	<span class="annotation">// 定义字符输入流</span>
+	InputStreamReader reader = null;
+	try {
+		
+		<span class="annotation">// 创建InputStreamReader对象</span>
+		<span class="annotation">// 使用UTF-8字符集</span>
+		reader = new InputStreamReader(new FileInputStream(src), "UTF-8");
+
+		int i = -1;
+
+		<span class="annotation">// 循环读取字符</span>
+		while ((i = reader.read()) != -1) {
+			<span class="annotation">// 将读取到的字符输出到控制台</span>
+			<span class="annotation">// 不要换行</span>
+			System.out.print( (char)i );
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭输入流</span>
+		try {
+			if (reader != null)
+				reader.close();
+		} catch (IOException e) {}
+	}
+}
+</pre>
+
+			<p>
+				使用 <code>InputStreamReader</code> 自定义缓冲读取 <code>.java</code> 文件打印在控制台
+			</p>
+			<pre>
+private static void test2(String fileName) {
+	<span class="annotation">// 定义字符输入流</span>
+	InputStreamReader reader = null;
+	try {
+		
+		<span class="annotation">// 创建InputStreamReader对象</span>
+		<span class="annotation">// 使用UTF-8字符集</span>
+		reader = new InputStreamReader(new FileInputStream(src), "UTF-8");
+
+		int i = -1;
+		char[] buf = new char[256];
+
+		<span class="annotation">// 循环读取字符放到字符数组buf</span>
+		while ((i = reader.read(buf)) != -1) {
+			<span class="annotation">// 将读取到的字符输出到控制台</span>
+			<span class="annotation">// 不要换行</span>
+			System.out.print( new String(buf, 0, i) );
+		}
+	} catch (IOException e) {
+		<span class="annotation">// 需要捕获IOException</span>
+		e.printStackTrace();
+		throw e;
+	} finally {
+		<span class="annotation">// 在finally代码块关闭输入流</span>
+		try {
+			if (reader != null)
+				reader.close();
+		} catch (IOException e) {}
+	}
+}
+</pre>
+
+			<p>
+				程序运行
+			</p>
+			<pre>
+public static void main(String[] args) {
+	String src = "D:\\tmp\\java\\javanote\\src\\org\\net5ijy\\javanote\\io\\StreamReaderAndWriter.java";
+
+	try {
+		// 使用InputStreamReader读取.java文件打印在控制台；
+		test1(src);
+
+		// 使用InputStreamReader自定义缓冲读取.java文件打印在控制台；
+		test2(src);
+
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+</pre>
+
+			<p>
+				<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 StreamReaderAndWriter.java 文件。</span>
+			</p>
+
+			<br />
+
+			<h5 id="f4-4" class="title-2th">4、	复制文件</h5>
+
+			<p>
+				前面的例子中使用 <code>InputStreamReader</code> 读取文件内容并打印在控制台，如果把文件内容通过输出流输出到另外一个文件，是不是就实现了文本文件的复制了呢？
+			</p>
+
+			<pre>
+<span class="annotation">// 定义输入流和输出流</span>
+InputStreamReader reader = null;
+OutputStreamWriter writer = null;
+try {
+	
+	<span class="annotation">// 创建InputStreamReader和OutputStreamWriter对象</span>
+	<span class="annotation">// 使用UTF-8字符集</span>
+	reader = new InputStreamReader(new FileInputStream(src), "UTF-8");
+	writer = new OutputStreamWriter(new FileOutputStream(dst), "UTF-8");
+
+	int i = -1;
+	char[] buf = new char[256]; // 缓冲区
+
+	<span class="annotation">// 循环读取字符到缓冲区buf</span>
+	<span class="annotation">// 使用OutputStreamWriter写出</span>
+	while ((i = reader.read(buf)) != -1) {
+		<span class="annotation">// 注意：偏移量0，输出长度和读取到的长度一致</span>
+		writer.write( buf, 0, i );
+	}
+} catch (IOException e) {
+	<span class="annotation">// 需要捕获IOException</span>
+	e.printStackTrace();
+	throw e;
+} finally {
+	<span class="annotation">// 在finally代码块关闭IO流</span>
+	try {
+		if (reader != null)
+			reader.close();
+		if (writer != null)
+			writer.close();
+	} catch (IOException e) {}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.io 包中的 StreamReaderAndWriter.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01041.html" style="font-size:12px;">第四十一节&nbsp;&nbsp;&nbsp;&nbsp;缓冲字节流 和 RandomAccessFile 类</a>
+			<br />
+			<a href="java01043.html" style="font-size:12px;">第四十三节&nbsp;&nbsp;&nbsp;&nbsp;字符流（二）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

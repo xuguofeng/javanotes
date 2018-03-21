@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>核心 API</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三十八节&nbsp;&nbsp;&nbsp;&nbsp;时间日期操作</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Date 类</a></li>
+				<li><a href="#f2">二、DateFormat 类</a></li>
+				<li><a href="#f3">三、SimpleDateFormat 类</a></li>
+				<li><a href="#f4">四、Calendar 类</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Date 类</h4>
+
+			<pre>
+java.util;
+
+public class Date {}
+</pre>
+
+			<p>
+				表示时间，精确到毫秒。使用 <code>1970年1月1日00:00:00 GMT</code> 作为起始点。
+			</p>
+			<p>
+				从 JDK 1.1 开始，<code>Date</code> 中的相应方法已废弃，应该使用 <code>Calendar</code> 类实现日期和时间字段之间的转换，使用 <code>DateFormat</code> 类来格式化和解析日期字符串。
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public Date()</span>
+	当前时间对象。
+
+	例子：
+	Date d1 = new Date();
+	System.out.println(d1);
+
+<span class="methodClassName">public Date(long date)</span>
+	使用指定毫秒值封装时间对象。
+
+	例子：
+	Date d2 = new Date(2000);
+	System.out.println(d2);
+</pre>
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public boolean after(Date when)</span>
+	测试此日期是否在指定日期之后。
+
+<span class="methodClassName">public boolean before(Date when)</span>
+	测试此日期是否在指定日期之前。
+
+<span class="methodClassName">public int compareTo(Date anotherDate)</span>
+	比较两个日期的顺序。
+
+<span class="methodClassName">public long getTime()</span>
+	返回自1970年1月1日00:00:00 GMT以来此Date对象表示的毫秒数。
+
+<span class="methodClassName">public void setTime(long time)</span>
+	设置Date对象，以表示1970年1月1日00:00:00 GMT以后time毫秒的时间点。
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api 包中的 DateAPI.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、DateFormat 类</h4>
+
+			<pre>
+java.text;
+
+public abstract class DateFormat extends Format {}
+</pre>
+
+			<p>
+				封装了用于格式化 <code>Date</code> 对象的方法，包括 <code>format</code>、<code>parse</code> 等。
+			</p>
+			<p>
+				日期/时间格式化抽象类，以与语言无关的方式格式化、解析日期或时间。
+			</p>
+			<p>
+				日期/时间格式化子类（如 <code>SimpleDateFormat</code> ）允许进行格式化（也就是日期->文本）、解析（文本->日期）和标准化。
+			</p>
+			<p>
+				格式化风格包括 <code>FULL</code>、<code>LONG</code>、<code>MEDIUM</code> 和 <code>SHORT</code>。
+			</p>
+			<p>
+				要格式化一个当前语言环境下的日期，可使用某个静态工厂方法：<code>myString = DateFormat.getDateInstance().format(myDate);</code>
+			</p>
+			<p>
+				要格式化不同语言环境的日期，可在 <code>getDateInstance()</code> 的调用中指定。<code>DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);</code>
+			</p>
+			<p>
+				还可使用 <code>DateFormat</code> 进行解析，<code>myDate = df.parse(myString)</code>;
+			</p>
+			<p>
+				日期格式不是同步的。建议为每个线程创建独立的格式实例。如果多个线程同时访问一个格式，则它必须保持外部同步。
+			</p>
+			<p>
+				主要有以下方法：
+			</p>
+
+			<pre>
+<span class="methodClassName">public static final DateFormat getInstance()</span>
+	获取SHORT风格的默认日期/时间格式器。
+
+	例子：
+	DateFormat format = DateFormat.getInstance();
+	String dateStr = format.format(new Date());
+	System.out.println(dateStr); // 17-3-31 下午1:18
+
+<span class="methodClassName">public static final DateFormat getDateInstance()</span>
+	获取具有默认语言环境、默认格式化风格的日期格式化器。
+
+	例子：
+	DateFormat format = DateFormat.getDateInstance();
+	String dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017-3-31
+
+<span class="methodClassName">public static final DateFormat getDateInstance(int style)</span>
+	获取具有默认语言环境、给定格式化风格的日期格式化器。
+
+	例子：
+	format = DateFormat.getDateInstance(DateFormat.FULL);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017年3月31日 星期五
+
+	format = DateFormat.getDateInstance(DateFormat.LONG);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017年3月31日
+
+	format = DateFormat.getDateInstance(DateFormat.MEDIUM);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017-3-31
+
+	format = DateFormat.getDateInstance(DateFormat.SHORT);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 17-3-31
+
+<span class="methodClassName">public static final DateFormat getTimeInstance()</span>
+	获取具有默认语言环境、默认格式化风格的时间格式化器。
+
+	例子：
+	DateFormat format = DateFormat.getTimeInstance();
+	String dateStr = format.format(new Date());
+	System.out.println(dateStr); // 13:22:29
+
+<span class="methodClassName">public static final DateFormat getTimeInstance(int style)</span>
+	获取具有默认语言环境、给定格式化风格的时间格式化器。
+
+	例子：
+	format = DateFormat.getTimeInstance(DateFormat.FULL);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 下午01时22分29秒 CST
+
+	format = DateFormat.getTimeInstance(DateFormat.LONG);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 下午01时22分29秒
+
+	format = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 13:22:29
+
+	format = DateFormat.getTimeInstance(DateFormat.SHORT);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 下午1:22
+
+<span class="methodClassName">public static final DateFormat getDateTimeInstance(int dateStyle, int timeStyle)</span>
+	获取具有默认语言环境、给定格式化风格的日期时间格式化器。
+
+	例子：
+	DateFormat format = DateFormat.getDateTimeInstance();
+	String dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017-3-31 13:24:21
+
+	// FULL、LONG、MEDIUM 和 SHORT
+
+	format = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017年3月31日 星期五 下午01时24分21秒 CST
+
+	format = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017年3月31日 下午01时24分21秒
+
+	format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 2017-3-31 13:24:21
+
+	format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	dateStr = format.format(new Date());
+	System.out.println(dateStr); // 17-3-31 下午1:24
+
+<span class="methodClassName">public final String format(Date date)</span>
+	将一个Date格式化为日期/时间字符串。
+
+	例子：
+	DateFormat format = DateFormat.getDateTimeInstance();
+	String dateStr = format.format(new Date());
+	System.out.println(dateStr);
+
+	Date d = format.parse(dateStr);
+	System.out.println(d);
+
+<span class="methodClassName">public Calendar getCalendar()</span>
+	获取与此日期/时间格式器关联的日历。
+
+<span class="methodClassName">public TimeZone getTimeZone()</span>
+	获取时区。
+
+<span class="methodClassName">public Date parse(String source) throws ParseException</span>
+	从给定字符串解析生成一个日期。
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api 包中的 DateFormatAPI.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、SimpleDateFormat 类</h4>
+
+			<pre>
+java.text;
+
+public class SimpleDateFormat extends DateFormat {}
+</pre>
+
+			<p>
+				<code>DateFormat</code> 的非抽象子类，以与语言环境有关的方式来格式化、解析日期，允许进行格式化（日期->文本）、解析（文本->日期）和规范化。
+			</p>
+			<p>
+				用户可以定义日期-时间格式。
+			</p>
+			<p>
+				日期和时间格式由日期和时间模式字符串指定。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01038/01038001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public SimpleDateFormat(String pattern)</span>
+	用给定的模式和默认语言环境的日期格式符号构造 SimpleDateFormat，允许使用者指定一个字符串参数作为转换Date对象的格式。
+</pre>
+
+			<p>
+				有一个需求，某个人的生日是9月16日，而现在是2017年3月20日下午2点18分，需要计算距离这个人的生日还有多少天？
+			</p>
+
+			<pre>
+<span class="annotation">// 获取当前时间Date对象</span>
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+Date now = sdf.parse("2017-03-20 14:18:00");
+
+<span class="annotation">// 获取生日Date对象</span>
+SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+Date birthday = sdf2.parse("2017-09-16");
+
+<span class="annotation">// 计算两个Date对象的毫秒差</span>
+long time = birthday.getTime() - now.getTime();
+
+<span class="annotation">// 计算天数</span>
+long day = time / 1000 / 60 / 60 / 24;
+
+System.out.println(day);
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api 包中的 SimpleDateFormatAPI.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、Calendar 类</h4>
+
+			<pre>
+java.util;
+
+public abstract class Calendar {}
+</pre>
+
+			<p>
+				一个抽象类，为特定时间点与一组诸如 <code>YEAR</code>、<code>MONTH</code>、<code>DAY_OF_MONTH</code>、<code>HOUR</code> 等日历字段之间的转换、操作日历字段提供了一些方法。
+			</p>
+			<p>
+				与其他语言环境敏感类一样，<code>Calendar</code> 提供了一个静态方法 <code>getInstance</code>，以获得此类型的一个通用的对象。
+			</p>
+			<p>
+				<code>Calendar</code> 的 <code>getInstance</code> 方法返回一个 <code>Calendar</code> 对象，其日历字段已由当前日期和时间初始化。
+			</p>
+			<p>
+				<code>Calendar rightNow = Calendar.getInstance();</code>
+			</p>
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public abstract void add(int field, int amount)</span>
+	为给定的日历字段添加或减去指定的值。
+
+	例子：
+	Calendar c = Calendar.getInstance();
+	c.add(Calendar.MONTH, -3); // 月减3
+	Date date = c.getTime();
+	System.out.println(date);
+
+<span class="methodClassName">public int get(int field)</span>
+	返回给定日历字段的值。
+
+	例子：
+	Calendar c = Calendar.getInstance();
+
+	<span class="annotation">// Calendar.AM_PM</span>
+	int a = c.get(Calendar.AM_PM);
+	System.out.println("AM_PM = " + a);
+
+	<span class="annotation">// DATE、DAY_OF_MONTH、DAY_OF_WEEK、DAY_OF_WEEK_IN_MONTH、DAY_OF_YEAR</span>
+	a = c.get(Calendar.DATE);
+	System.out.println("DATE = " + a);
+
+	a = c.get(Calendar.DAY_OF_MONTH);
+	System.out.println("DAY_OF_MONTH = " + a);
+
+	a = c.get(Calendar.DAY_OF_WEEK);
+	System.out.println("DAY_OF_WEEK = " + a);
+
+	a = c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+	System.out.println("DAY_OF_WEEK_IN_MONTH = " + a);
+
+	a = c.get(Calendar.DAY_OF_YEAR);
+	System.out.println("DAY_OF_YEAR = " + a);
+
+	<span class="annotation">// HOUR、HOUR_OF_DAY</span>
+	a = c.get(Calendar.HOUR);
+	System.out.println("HOUR = " + a);
+
+	a = c.get(Calendar.HOUR_OF_DAY);
+	System.out.println("HOUR_OF_DAY = " + a);
+
+	<span class="annotation">// MILLISECOND、MINUTE</span>
+	a = c.get(Calendar.MILLISECOND);
+	System.out.println("MILLISECOND = " + a);
+
+	a = c.get(Calendar.MINUTE);
+	System.out.println("MINUTE = " + a);
+
+	<span class="annotation">// MONTH、YEAR</span>
+	a = c.get(Calendar.MONTH); // MONTH从0开始
+	System.out.println("MONTH = " + a);
+
+	a = c.get(Calendar.YEAR);
+	System.out.println("YEAR = " + a);
+
+	<span class="annotation">// SECOND</span>
+	a = c.get(Calendar.SECOND);
+	System.out.println("SECOND = " + a);
+
+	<span class="annotation">// WEEK_OF_MONTH、WEEK_OF_YEAR</span>
+	a = c.get(Calendar.WEEK_OF_MONTH);
+	System.out.println("WEEK_OF_MONTH = " + a);
+
+	a = c.get(Calendar.WEEK_OF_YEAR);
+	System.out.println("WEEK_OF_YEAR = " + a);
+
+<span class="methodClassName">public int getFirstDayOfWeek()</span>
+	获取一星期的第一天。
+
+<span class="methodClassName">public static Calendar getInstance()</span>
+	使用默认时区、语言环境获得一个基于当前时间日历。
+
+<span class="methodClassName">public static Calendar getInstance(TimeZone zone)</span>
+	使用指定时区、默认语言环境获得一个基于当前时间日历。
+
+	例子：
+	TimeZone zone = TimeZone.getTimeZone("GMT+10");
+	Calendar c = Calendar.getInstance(zone);
+	System.out.println(c.getTimeZone().getID()); // GMT+10:00
+	System.out.println(c.get(Calendar.HOUR_OF_DAY)); // 17
+
+<span class="methodClassName">public final Date getTime()</span>
+	返回此Calendar的Date对象。
+
+	例子：
+	Calendar c = Calendar.getInstance();
+	Date date = c.getTime();
+	System.out.println(date);
+
+<span class="methodClassName">public long getTimeInMillis()</span>
+	返回此Calendar的时间值，以毫秒为单位。
+
+<span class="methodClassName">public TimeZone getTimeZone()</span>
+	获得时区。
+
+<span class="methodClassName">public void set(int field, int value)</span>
+	将给定的日历字段设置为给定值。
+
+<span class="methodClassName">public final void set(int year, int month, int date)</span>
+	设置字段YEAR、 MONTH和DAY_OF_MONTH的值。
+
+<span class="methodClassName">public final void set(int year, int month, int date, int hourOfDay, int minute, int second)</span>
+	设置字段YEAR、MONTH、DAY_OF_MONTH、HOUR、MINUTE和SECOND的值。
+
+<span class="methodClassName">public final void setTime(Date date)</span>
+	使用给定的Date设置此Calendar的时间。
+
+<span class="methodClassName">public void setTimeInMillis(long millis)</span>
+	用给定的long值设置此Calendar的当前时间值。
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api 包中的 CalendarAPI.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01037.html" style="font-size:12px;">第三十七节&nbsp;&nbsp;&nbsp;&nbsp;Math、Random 和 Scanner</a>
+			<br />
+			<a href="java01039.html" style="font-size:12px;">第三十九节&nbsp;&nbsp;&nbsp;&nbsp;File 类型及文件操作</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

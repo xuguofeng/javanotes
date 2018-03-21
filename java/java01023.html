@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java多线程技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十三节&nbsp;&nbsp;&nbsp;&nbsp;线程间通信（上）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、基础版生产者和消费者</a></li>
+				<li><a href="#f2">二、生产、销售线程互相通知状态</a></li>
+				<li><a href="#f3">三、wait 和 notify</a></li>
+				<li><a href="#f4">四、友情提示</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、基础版生产者和消费者</h4>
+
+			<p>
+				生产者 <code>Factory</code>、消费者 <code>Mall</code>。
+			</p>
+			<p>
+				<code>Mall</code> 类型有 <code>name</code>、<code>mobileCount</code>、<code>saleBarCount</code> 等属性，<code>name</code>、<code>saleBarCount</code> 可以设置。<code>mobileCount</code> 属性会被多个线程操作（工厂负责给这个变量加值，柜台负责给这个变量减值）。
+			</p>
+			<p>
+				<code>sale</code> 方法负责创建柜台并启动销售线程（根据 <code>saleBarCount</code> 变量的值创建柜台）。
+			</p>
+			<p>
+				同步方法 <code>addMobile</code> 被 <code>Factory</code> 调用，在库存为 0 时添加指定数量的库存，<code>mobileCount += count</code>。
+			</p>
+			<p>
+				同步方法 <code>saleMobile</code> 被柜台调用，在库存大于 0 时“销售手机”，减掉相应的数量，<code>mobileCount--</code>。
+			</p>
+			<p>
+				内部类 <code>SaleBar</code> 有 <code>name</code> 属性，继承 <code>Thread</code>，<code>run</code> 方法中调用 <code>Mall</code> 的 <code>saleMobile </code>销售手机。
+			</p>
+
+			<br />
+
+			<p>
+				<code>Factory</code> 类型有 <code>name</code> 属性，实现 <code>Runnable</code> 接口。
+			</p>
+			<p>
+				内部 <code>Mall</code> 对象是工厂的“供货对象”。
+			</p>
+			<p>
+				<code>run</code> 方法中调用 <code>Mall</code> 对象的 <code>addMobile</code> 方法给 <code>Mall</code> 供货。
+			</p>
+
+			<p>
+				代码如下：
+			</p>
+
+			<br />
+
+			<pre>
+class Mall {
+	private String name = "Mall-1"; <span class="annotation">// 商场名称</span>
+	private int mobileCount = 0;    <span class="annotation">// 库存</span>
+	private int saleBarCount = 1;   <span class="annotation">// 柜台个数</span>
+
+	public Mall() {}
+	public Mall(String name) {
+		this.name = name;
+	}
+
+	public void setSaleBarCount(int saleBarCount) {
+		this.saleBarCount = saleBarCount;
+	}
+	public int getSaleBarCount() {
+		return this.saleBarCount;
+	}
+
+	/*
+		创建柜台，启动销售线程
+	*/
+	public void sale() {
+		for (int i = 1; i &lt;= saleBarCount; i++) {
+			new SaleBar("柜台 " + i).start();
+		}
+	}
+
+	/*
+		在库存为0时，增加指定数量的库存
+	*/
+	public synchronized boolean addMobile(int count, Factory f) {
+		System.out.println("剩余库存：" + mobileCount);
+		if (mobileCount == 0) {
+			mobileCount += count;
+			System.out.println(f.getFactoryName() + " 已经补充库存完毕：" + mobileCount);
+			return true;
+		}
+		return false;
+	}
+
+	/*
+		销售一台手机
+	*/
+	private synchronized void saleMobile(SaleBar bar) {
+		if (mobileCount &gt; 0) {
+			System.out.println(bar.getBarName() + " 正在售出第 " + mobileCount + " 台手机");
+			mobileCount--;
+		}
+	}
+
+	private class SaleBar extends Thread {
+		private String barName;
+		public SaleBar(String barName) {
+			this.barName = barName;
+		}
+
+		public void setBarName(String barName) {
+			this.barName = barName;
+		}
+		public String getBarName() {
+			return this.barName;
+		}
+		public void run() {
+			while(true) {
+				saleMobile(this); // 调用Mall对象的saleMobile方法销售手机
+				try {
+					Thread.sleep(10);
+				} catch(InterruptedException e) {}
+			}
+		}
+	}
+}
+
+class Factory implements Runnable {
+	private String name;
+	private Mall mall;
+	
+	public Factory(Mall mall) {
+		this.mall = mall;
+	}
+	public Factory(String name, Mall mall) {
+		this.name = name;
+		this.mall = mall;
+	}
+
+	public String getFactoryName() {
+		return this.name;
+	}
+
+	public void run() {
+		while (true) {
+			mall.addMobile(10, this); // 调用Mall对象的addMobile方法供货
+			try {
+				Thread.sleep(10);
+			} catch(InterruptedException e) {}
+		}
+	}
+}
+
+public class MallAndFactoryDemo {
+	public static void main(String[] args) {
+		Mall mall = new Mall("Mall-1");
+		mall.setSaleBarCount(1); // 启动销售线程
+		mall.sale();
+
+		Factory factory = new Factory("手机工厂 1", mall);
+		new Thread(factory).start(); // 启动生成线程
+	}
+}
+</pre>
+
+			<br />
+
+			<p>
+				运行程序：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01023/01023001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.thread2 包中的 MallAndFactoryDemo.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、生产、销售线程互相通知状态</h4>
+
+			<p>
+				在上面的例子中，“供货”线程会一直运行，即使库存充足也会执行供货方法。
+			</p>
+
+			<p>
+				我们的需求是：
+			</p>
+			<p>
+				库存充足时就不供货，即供货线程冻结，同时唤醒销售线程；
+			</p>
+			<p>
+				库存不足时就唤醒供货线程，销售线程冻结。
+			</p>
+			<p>
+				主要是修改 <code>addMobile</code> 和 <code>saleMobile</code> 两个方法
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">在库存为 0 时，增加指定数量的库存</span>
+*/
+public synchronized boolean addMobile(int count, Factory2 f) {
+	if (mobileCount &gt; 0) {
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println("剩余库存：" + mobileCount);
+	mobileCount += count;
+	System.out.println(f.getFactoryName() + " 已经补充库存完毕：" + mobileCount);
+	this.notify(); <span class="annotation">// 唤醒销售线程</span>
+	return true;
+}
+
+/*
+	<span class="annotation">销售一台手机</span>
+*/
+private synchronized void saleMobile(SaleBar2 bar) {
+	if (mobileCount &lt;= 0) {
+		this.notify(); <span class="annotation">// 唤醒供货线程</span>
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println(bar.getBarName() + " 正在售出第 " + mobileCount + " 台手机");
+	mobileCount--;
+}
+</pre>
+
+			<br />
+
+			<p>
+				运行程序：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01023/01023002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.thread2 包中的 MallAndFactoryWithThreadState.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、wait 和 notify</h4>
+
+			<p>
+				<code>Object</code> 类有以下几个方法，用于线程之间的通信。
+			</p>
+
+			<pre>
+public final void wait() throws InterruptedException
+	在当前线程拥有此对象锁时放弃此对象锁的所有权并等待。
+	直到其他线程调用 notify 或 notifyAll 方法通知在此对象锁上等待的线程醒来。
+	然后该线程将等到重新获得此对象锁的所有权后才能继续执行。
+
+public final void notify()
+	唤醒在此对象锁上等待的单个线程。
+	如果所有线程都在此对象上等待，则会选择唤醒其中一个线程。选择是任意性的，并在对实现做出决定时发生。
+	此方法只能由此对象锁的所有者线程来调用。
+
+public final void notifyAll()
+	唤醒在此对象锁上等待的所有线程。
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、友情提示</h4>
+
+			<p>
+				上面的例子，有可能在执行过程中程序停住无法继续，但是 java 虚拟机还在运行。在这种情况下，Editplus 开发环境只能负责编译，运行时就不是很好，因为 java 程序停住后，即使关闭 Editplus 也无法停止正在运行的 java 虚拟机。所以，我们建议大家使用 cmd 命令行的方式运行类似的程序，因为这种方式可以使用 <kbd>Ctrl+C</kbd> 停止强制停止 java 虚拟机。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01023/01023001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br /><br />
+
+			<a href="java01022.html" style="font-size:12px;">第二十二节&nbsp;&nbsp;&nbsp;&nbsp;线程安全问题及解决</a>
+			<br />
+			<a href="java01024.html" style="font-size:12px;">第二十四节&nbsp;&nbsp;&nbsp;&nbsp;线程间通信（下）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

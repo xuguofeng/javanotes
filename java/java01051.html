@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十一节&nbsp;&nbsp;&nbsp;&nbsp;Button （按钮）、Label （标签）、Checkbox （复选框） 和 文本域组件</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Button （按钮）</a></li>
+				<li><a href="#f2">二、Label （标签）</a></li>
+				<li><a href="#f3">三、Checkbox （复选框）</a></li>
+				<li><a href="#f4">四、文本域组件</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	文本框 （TextField）</a></li>
+						<li><a href="#f4-2">2、	文本域 （TextArea）</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、演示程序</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Button （按钮）</h4>
+
+			<pre>
+java.awt;
+
+public class Button extends Component implements Accessible {}
+</pre>
+			<p>
+				创建一个标签按钮。当按下该按钮时，应用程序能执行某项动作。
+			</p>
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public Button(String label) throws HeadlessException</span>
+	构造一个带指定标签的按钮。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public void addActionListener(ActionListener l)</span>
+	添加指定动作侦听器，以接收发自此按钮的动作事件。
+
+<span class="methodClassName">public void removeActionListener(ActionListener l)</span>
+	移除指定动作侦听器，不再接收发自此按钮的动作事件。
+
+<span class="methodClassName">public void setActionCommand(String command)</span>
+	设置此按钮激发的动作事件的命令名称。
+
+<span class="methodClassName">public void setLabel(String label)</span>
+	设置标签。
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Label （标签）</h4>
+
+			<pre>
+java.awt;
+
+public class Label extends Component implements Accessible {}
+</pre>
+			<p>
+				一个可在容器中放置文本的组件。
+			</p>
+			<p>
+				一个标签只显示一行只读文本。
+			</p>
+			<p>
+				文本可由应用程序更改，但是用户不能编辑。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">字段</span>
+			</p>
+			<pre>
+<span class="methodClassName">public static final int CENTER</span>
+	指示标签文本居中。
+
+<span class="methodClassName">public static final int LEFT</span>
+	指示标签文本左对齐。
+
+<span class="methodClassName">public static final int RIGHT</span>
+	指示标签文本右对齐。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public Label(String text, int alignment) throws HeadlessException</span>
+	构造一个显示指定文本字符串的新标签，以指定方式对齐文字，可能的alignment值有Label.LEFT、Label.RIGHT和Label.CENTER。
+
+<span class="methodClassName">public Label(String text) throws HeadlessException</span>
+	使用指定字符串构造一个新的标签，文字左对齐。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public void setAlignment(int alignment)</span>
+	设置标签的文字对齐方式，可能的值有Label.LEFT、Label.RIGHT和Label.CENTER。
+
+<span class="methodClassName">public void setText(String text)</span>
+	设置标签显示的文本。
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Checkbox （复选框）</h4>
+
+			<pre>
+java.awt;
+
+public class Checkbox extends Component implements ItemSelectable, Accessible {}
+</pre>
+			<p>
+				复选框是一个可处于“开”(true) 或“关”(false) 状态的图形组件。
+			</p>
+			<p>
+				单击复选框可将其状态从“开”更改为“关”，或从“关”更改为“开”。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01051/01051001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public Checkbox(String label) throws HeadlessException</span>
+	使用指定标签创建一个复选框，状态为“关”，并且不属于任何复选框组。
+
+<span class="methodClassName">public Checkbox(String label, boolean state) throws HeadlessException</span>
+	使用指定标签创建一个复选框，state为指定状态，不属于任何复选框组。
+
+<span class="methodClassName">public Checkbox(String label, boolean state, CheckboxGroup group) throws HeadlessException</span>
+	构造具有指定标签的复选框，state为指定状态，处于指定复选框组中。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public void addItemListener(ItemListener l)</span>
+	添加指定项侦听器，以接收来自此复选框的项事件。
+
+<span class="methodClassName">public void removeItemListener(ItemListener l)</span>
+	移除项侦听器，这样项侦听器将不再接收发自此复选框的项事件。
+
+<span class="methodClassName">public void setState(boolean state)</span>
+	设置状态。
+
+<span class="methodClassName">public boolean getState()</span>
+	确定此复选框是处于“开”状态，还是处于“关”状态。
+	true指示复选框处于“开”状态，false指示复选框处于“关”状态。
+
+<span class="methodClassName">public void setCheckboxGroup(CheckboxGroup g)</span>
+	为复选框指定复选框组。
+	如果复选框已经在另一个复选框组中，则首先从这个复选框组中提取该复选框。
+
+<span class="methodClassName">public void setLabel(String label)</span>
+	设置文字便签。
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、文本域组件</h4>
+
+			<h5 id="f4-1" class="title-2th">1、	文本框 （TextField）</h5>
+
+			<pre>
+java.awt;
+
+public class TextField extends TextComponent {}
+</pre>
+
+			<p>
+				允许编辑的单行文本组件。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public TextField(String text, int columns) throws HeadlessException</span>
+	构造显示指定文本的新TextField。
+	宽度足够容纳指定列数。列是近似平均字符宽度，与平台有关。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public void setColumns(int columns)</span>
+	设置此TextField的列数。
+
+<span class="methodClassName">public int getColumns()</span>
+	获取此TextField的列数。
+
+<span class="methodClassName">public void addActionListener(ActionListener l)</span>
+	添加指定操作侦听器，以从此TextField接收操作事件。
+
+<span class="methodClassName">public void removeActionListener(ActionListener l)</span>
+	移除指定操作侦听器，不再从此TextField接收操作事件。
+
+<span class="methodClassName">public void addTextListener(TextListener l)</span>
+	添加指定文本事件侦听器，以接收此TextField发出的文本事件。
+
+<span class="methodClassName">public void removeTextListener(TextListener l)</span>
+	移除指定文本事件侦听器，不再接收此TextField发出的文本事件。
+
+<span class="methodClassName">public void setBackground(Color c)</span>
+	设置此TextField背景色。
+
+<span class="methodClassName">public Color getBackground()</span>
+	获得此TextField背景色。
+
+<span class="methodClassName">public void setCaretPosition(int position)</span>
+	设置文本插入符位置。
+
+<span class="methodClassName">public int getCaretPosition()</span>
+	返回文本插入符位置。
+
+<span class="methodClassName">public String getSelectedText()</span>
+	返回TextField所表示文本的选定文本。
+
+<span class="methodClassName">public void setText(String t)</span>
+	设置显示文本。
+
+<span class="methodClassName">public String getText()</span>
+	返回TextField表示的文本。
+	默认情况下，是一个空字符串。
+
+<span class="methodClassName">public void setEditable(boolean b)</span>
+	设置是否可编辑。
+
+<span class="methodClassName">public boolean isEditable()</span>
+	返回TextField可编辑状态。
+
+<span class="methodClassName">public void selectAll()</span>
+	选择TextField中的所有文本。
+</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	文本域 （TextArea）</h5>
+
+			<pre>
+java.awt;
+
+public class TextArea extends TextComponent {}
+</pre>
+
+			<p>
+				多行文本区域。
+			</p>
+			<p>
+				可以设置为可编辑或只读。
+			</p>
+			<p>
+				下图显示了文本区的外观：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01051/01051002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">字段</span>
+			</p>
+			<pre>
+<span class="methodClassName">public static final int SCROLLBARS_BOTH</span>
+	创建并显示垂直和水平滚动条。
+
+<span class="methodClassName">public static final int SCROLLBARS_HORIZONTAL_ONLY</span>
+	只创建并显示水平滚动条。
+
+<span class="methodClassName">public static final int SCROLLBARS_VERTICAL_ONLY</span>
+	只创建并显示垂直滚动条。
+
+<span class="methodClassName">public static final int SCROLLBARS_NONE</span>
+	不为文本区创建或显示任何滚动条。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public TextArea(int rows, int columns) throws HeadlessException</span>
+	构造一个新文本域，具有指定的行数和列数，内容为空字符串。
+
+<span class="methodClassName">public TextArea(String text, int rows, int columns) throws HeadlessException</span>
+	构造一个新文本域，具有指定文本、行数和列数。
+
+<span class="methodClassName">public TextArea(String text, int rows, int columns, int scrollbars) throws HeadlessException</span>
+	构造一个新文本域，具有指定文本、行数、列数和滚动条可见性。
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public void append(String str)</span>
+	将给定文本追加到文本域。
+
+<span class="methodClassName">public void setColumns(int columns)</span>
+	设置文本域的列数。
+
+<span class="methodClassName">public int getColumns()</span>
+	返回文本域的列数。
+
+<span class="methodClassName">public void setRows(int rows)</span>
+	设置文本域的行数。
+
+<span class="methodClassName">public int getRows()</span>
+	返回文本域的行数。
+
+<span class="methodClassName">public void insert(String str, int pos)</span>
+	在文本域的指定位置插入指定文本。
+
+<span class="methodClassName">public void replaceRange(String str, int start, int end)</span>
+	用指定文本替换开始位置与结束位置之间的文本。
+</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、演示程序</h4>
+
+			<pre>
+public class SmallComponents implements ItemListener, ActionListener {
+
+	<span class="annotation">// 创建主窗体</span>
+	private FrameStart frameStart = new FrameStart(
+			"演示Button、Label、CheckBox、Text等");
+
+	<span class="annotation">// 窗体上的三个区域</span>
+	<span class="annotation">// 摆放姓名、兴趣、籍贯、创建者组件</span>
+	private Panel northPanel = new Panel(new GridLayout(4, 1));
+	<span class="annotation">// 摆放简介组件</span>
+	private Panel centerPanel = new Panel(new FlowLayout(FlowLayout.LEFT));
+	<span class="annotation">// 摆放登陆、注册、举报组件</span>
+	private Panel southPanel = new Panel(new FlowLayout(FlowLayout.CENTER));
+
+	<span class="annotation">// 姓名组件</span>
+	private Label nameLabel = new Label("姓    名：");
+	private TextField nameText = new TextField(30);
+	private Panel namePanel = new Panel(new FlowLayout(FlowLayout.LEFT));
+
+	<span class="annotation">// 兴趣组件</span>
+	<span class="annotation">// 使用复选框实现</span>
+	private Label interestLabel = new Label("兴    趣：");
+	private Checkbox box1 = new Checkbox("编程");
+	private Checkbox box2 = new Checkbox("动画");
+	private Checkbox box3 = new Checkbox("韩剧");
+	private Panel interestPanel = new Panel(new FlowLayout(FlowLayout.LEFT));
+
+	<span class="annotation">// 籍贯组件</span>
+	<span class="annotation">// 使用单选框实现</span>
+	private Label homeLabel = new Label("籍    贯：");
+	private Checkbox box4 = new Checkbox("北京");
+	private Checkbox box5 = new Checkbox("沈阳");
+	private Checkbox box6 = new Checkbox("上海");
+	private Panel homePanel = new Panel(new FlowLayout(FlowLayout.LEFT));
+	private CheckboxGroup group = new CheckboxGroup();
+
+	<span class="annotation">// 创建者组件</span>
+	private Label createrLabel = new Label("创建者：");
+	private TextField createrText = new TextField(10);
+	private Panel createrPanel = new Panel(new FlowLayout(FlowLayout.LEFT));
+
+	<span class="annotation">// 自我描述组件</span>
+	<span class="annotation">// 使用文本域实现</span>
+	private Label descLabel = new Label("简    介：");
+	private TextArea descText = new TextArea(3, 30);
+
+	<span class="annotation">// 登陆组件</span>
+	private Button loginBtn = new Button("登  陆");
+	private Button registBtn = new Button("注  册");
+	private Button jubaoBtn = new Button("举  报");
+
+	<span class="annotation">// 保存一个User对象</span>
+	private User user = new User();
+
+	public SmallComponents() {
+		<span class="annotation">// 设置窗体布局管理器、大小</span>
+		this.frameStart.setLayout(new BorderLayout());
+		this.frameStart.setSize(400, 280);
+
+		this.addUsernameArea();
+		this.addInterestArea();
+		this.addHomeArea();
+		this.addCreaterArea();
+		this.frameStart.add(this.northPanel, BorderLayout.NORTH);
+
+		this.addDescriptionArea();
+		this.frameStart.add(this.centerPanel, BorderLayout.CENTER);
+
+		this.addButtons();
+		this.frameStart.add(this.southPanel, BorderLayout.SOUTH);
+
+		this.frameStart.validate();
+	}
+
+	/**
+	 * <span class="annotation">设置姓名组件</span>
+	 */
+	private void addUsernameArea() {
+		this.namePanel.add(this.nameLabel);
+		this.namePanel.add(this.nameText);
+		this.northPanel.add(this.namePanel);
+	}
+
+	/**
+	 * <span class="annotation">设置兴趣组件</span>
+	 */
+	private void addInterestArea() {
+		<span class="annotation">// 设置选择、取消监听器</span>
+		this.box1.addItemListener(this);
+		this.box2.addItemListener(this);
+		this.box3.addItemListener(this);
+
+		this.interestPanel.add(this.interestLabel);
+		this.interestPanel.add(this.box1);
+		this.interestPanel.add(this.box2);
+		this.interestPanel.add(this.box3);
+
+		this.northPanel.add(this.interestPanel);
+	}
+
+	/**
+	 * <span class="annotation">设置籍贯组件</span>
+	 */
+	private void addHomeArea() {
+		<span class="annotation">// 设置选择、取消监听器</span>
+		this.box4.addItemListener(this);
+		this.box5.addItemListener(this);
+		this.box6.addItemListener(this);
+
+		this.box4.setCheckboxGroup(this.group);
+		this.box5.setCheckboxGroup(this.group);
+		this.box6.setCheckboxGroup(this.group);
+
+		this.homePanel.add(this.homeLabel);
+		this.homePanel.add(this.box4);
+		this.homePanel.add(this.box5);
+		this.homePanel.add(this.box6);
+
+		this.northPanel.add(this.homePanel);
+	}
+
+	/**
+	 * <span class="annotation">设置创建者组件</span>
+	 */
+	private void addCreaterArea() {
+		this.createrText.setText("Admin");
+
+		<span class="annotation">// 设置只读</span>
+		this.createrText.setEditable(false);
+
+		this.createrPanel.add(this.createrLabel);
+		this.createrPanel.add(this.createrText);
+
+		this.northPanel.add(this.createrPanel);
+	}
+
+	/**
+	 * <span class="annotation">设置自我描述组件</span>
+	 */
+	private void addDescriptionArea() {
+		this.centerPanel.add(this.descLabel);
+		this.centerPanel.add(this.descText);
+	}
+
+	/**
+	 * <span class="annotation">设置按钮组件</span>
+	 */
+	private void addButtons() {
+		<span class="annotation">// 设置禁用</span>
+		this.jubaoBtn.setEnabled(false);
+
+		this.loginBtn.addActionListener(this);
+
+		this.southPanel.add(this.loginBtn);
+		this.southPanel.add(this.registBtn);
+		this.southPanel.add(this.jubaoBtn);
+	}
+
+	/**
+	 * <span class="annotation">复选框状态监听器实现方法</span>
+	 */
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		<span class="annotation">// 获取事件源</span>
+		Checkbox box = (Checkbox) e.getSource();
+		<span class="annotation">// 获取文字</span>
+		String l = box.getLabel();
+		<span class="annotation">// 获取复选框对象所属的组</span>
+		CheckboxGroup g = box.getCheckboxGroup();
+
+		if (g == null) {
+			if (e.getStateChange() == ItemEvent.SELECTED)
+				this.user.interests.add(l);
+			else
+				this.user.interests.remove(l);
+		} else {
+			if (e.getStateChange() == ItemEvent.SELECTED)
+				this.user.home = l;
+		}
+	}
+
+	/**
+	 * <span class="annotation">登陆按钮点击方法</span>
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		<span class="annotation">// 获取用户名、自我简介文字</span>
+		String username = this.nameText.getText();
+		String description = this.descText.getText();
+
+		<span class="annotation">// 为USer对象属性赋值</span>
+		this.user.username = username;
+		this.user.description = description;
+
+		System.out.println(this.user);
+	}
+
+	/**
+	 * <span class="annotation">保存用户信息，包括：用户名、兴趣、籍贯、创建者、简介等</span>
+	 * 
+	 * @author soft01
+	 *
+	 */
+	private class User {
+		private String username;
+		private List&lt;String&gt; interests = new ArrayList&lt;String&gt;();
+		private String home;
+		private String creater = "Admin";
+		private String description;
+
+		@Override
+		public String toString() {
+			return "User [username=" + username + ", interests=" + interests
+					+ ", home=" + home + ", creater=" + creater
+					+ ", description=" + description + "]";
+		}
+	}
+
+	public static void main(String[] args) {
+
+		// SmallComponents sm = new SmallComponents();
+		new SmallComponents();
+	}
+}
+</pre>
+
+			<p>
+				运行程序可以显示窗口
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01051/01051003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01050.html" style="font-size:12px;">第五十节&nbsp;&nbsp;&nbsp;&nbsp;Menu （菜单）</a>
+			<br />
+			<a href="java01052.html" style="font-size:12px;">第五十二节&nbsp;&nbsp;&nbsp;&nbsp;事件和监听器</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

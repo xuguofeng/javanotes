@@ -1,0 +1,31 @@
+body{font-family:"微软雅黑";}
+.pic-desc{font-size:12px;}
+img.logo{margin-top:-15px;}
+.container p{text-indent:2em;}
+.container p.not-indent{text-indent:0;}
+.main-container{margin-top:53px;}
+.img-container{text-align:center;}
+a.catalog-2th{margin-left:2em;}
+.list-unstyled li{padding-left:2em;line-height:1.6em;}
+h4.title{width:100%;text-align:center;font-weight:bold;}
+h4.title-1th{font-weight:bold;}
+h5.title-2th{margin-left:2em;margin-top:1.5em;margin-bottom:1.5em;font-weight:bold;}
+.table th{text-align:center;}
+p.phase-title,span.phase-title{font-weight:bold;}
+span.annotation{color:#428bca;}
+span.high-light{background-color:#f00;color:#fff;}
+span.red-bold-font{color:#f00;font-weight:bold;}
+span.important{color:#f00;}
+span.src-introduce{color:#f00;font-style:italic;font-size:10px;font-weight:bold;}
+span.methodClassName{color:#f00;font-weight:bold;}
+@media screen and (max-width: 899px) { /*当屏幕尺寸小于900px时，应用下面的CSS样式*/
+	#CfloatBtn{position:fixed;right:1px;bottom:70px;width:31px;height:31px;background: url(../img/gotop.png) 0 0 no-repeat;background-size:31px;z-index:199;cursor:pointer;}
+	#CfloatBtn:hover{background-position: 0 -31px;}
+}
+@media screen and (min-width: 900px) { /*当屏幕尺寸大于等于900px时，应用下面的CSS样式*/
+	#CfloatBtn{position:fixed;right:1px;bottom:70px;right:5px;width:62px;height:62px;background: url(../img/gotop.png) 0 0 no-repeat;z-index:199;cursor:pointer;}
+	#CfloatBtn:hover{background-position: 0 -62px;}
+}
+#CfloatBtn{display:none;}
+div.footer{width:100%;height:40px;background-color:#F8F8F8;margin-top:20px;border-top:1px solid #E7E7E7;text-align:center;line-height:20px;padding-top:8px;font-size:12px;}
+.fix{position:absolute;bottom:0px;}

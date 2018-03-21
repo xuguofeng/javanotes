@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java语言流程控制</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第七节&nbsp;&nbsp;&nbsp;&nbsp;Java流程控制之分支结构</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、代码块和顺序结构</a></li>
+				<li><a href="#f2">二、分支结构（if语句）</a></li>
+				<li><a href="#f3">三、分支结构（switch语句）</a></li>
+				<li><a href="#f4">四、为 main 方法传递参数</a></li>
+				<li><a href="#f5">五、多分支结构的一个使用场景</a></li>
+				<li><a href="#f6">六、switch 使用场景</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、代码块和顺序结构</h4>
+			<p>
+				代码块就是使用 <code>{}</code> 将一些代码包围起来，可以用来精确控制变量的作用域（定义和释放），在使用中应该注意一下几点：
+			</p>
+			<p>
+				第一点：代码块所在作用域内已定义的变量不可以在代码块内重复定义
+			</p>
+			<pre>
+int a = 1;
+{
+	int a = 2; <span class="annotation">// 编译错误，a变量已经定义</span>
+	System.out.println(a);
+}
+System.out.println(a);
+</pre>
+			<p>
+				变量 a 在代码块之前已经被定义，而且代码块在 a 变量的作用域内，所以无法在代码块内再次定义变量 a
+			</p>
+			<p>
+				把代码 <code>int a = 2</code> 改为 <code>a = 2</code>
+			</p>
+			<pre>
+int a = 1;
+{
+	<span class="high-light">a = 2;</span>
+	System.out.println(a);
+}
+System.out.println(a);
+</pre>
+
+			<p>
+				第二点：代码块执行完成之后，内部定义的变量被释放
+			</p>
+			<pre>
+{
+	int a = 3;
+	System.out.println(a);
+}
+System.out.println(a); <span class="annotation">// 找不到变量 a</span>
+</pre>
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 ConditionControll.java 文件。</span>
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、分支结构（if语句）</h4>
+			<p>
+				<code>if</code> 分支结构主要分为三种格式
+			</p>
+			<pre>
+/*
+	<span class="annotation">第一种格式，单分支结构</span>
+*/
+if(condition) {
+	// 当condition条件表达式为true时，执行代码块
+}
+
+/*
+	<span class="annotation">第二种格式，双分支结构</span>
+*/
+if(condition) {
+	// 当condition条件表达式为true时，执行代码块
+} else {
+	// 当condition条件表达式为false时，执行代码块
+}
+
+/*
+	<span class="annotation">第三种格式，多分支结构</span>
+	<span class="high-light">只要分支中的一个分支判断为true执行了代码块之后，后面的分支即使为true也没有机会执行</span>
+*/
+if(condition) {
+	// 当condition条件表达式为true时，执行代码块
+} else if(condition) {
+	// 当之前的condition条件表达式都为false，
+	// 且此condition条件表达式为true时，执行代码块
+} else {
+	// 当之前的condition条件表达式都为false时，执行代码块
+}
+</pre>
+			<p>
+				<code>if</code> 分支结构在使用过程中需要注意：
+			</p>
+			<p>
+				（1）如果 <code>if</code> 、<code>else</code>、<code>else if</code> 代码块中只有一条语句，<code>{}</code> 可以省略
+			</p>
+			<p>
+				（2）if 分支结构作用域内定义的变量只在该区域有效
+			</p>
+			<p>
+				（3）if 分支结构所在作用域内的变量在其作用域内有效，且不可再被定义
+			</p>
+			<p>
+				多分支结构示例代码
+			</p>
+			<pre>
+int a = 4;
+if (a > 1) {
+	<span class="annotation">// 条件判断true，执行后直接退出if判断流程</span>
+	<span class="annotation">// 后面的分支即使判断为true也不会被执行</span>
+	System.out.println("a大于1");
+} else if (a > 3) {
+	<span class="annotation">// a 大于 3，但是在前一个条件判断代码块已经执行</span>
+	<span class="annotation">// 此代码块就不在执行</span>
+	System.out.println("a大于3");
+} else if (a > 5) {
+	System.out.println("a大于5");
+} else {
+	System.out.println("a小于等于1");
+}
+
+<span class="phase-title">输出：</span>
+
+a大于1
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 ConditionControll.java 文件。</span>
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、分支结构（switch语句）</h4>
+			<p>
+				支持的类型：<code>char</code>、<code>byte</code>、<code>short</code>、<code>int</code>，或这些类型的包装类：<code>Character</code>、<code>Byte</code>、<code>Short</code>、<code>Integer</code>；
+			</p>
+			<p>
+				支持枚举类型；
+			</p>
+			<p>
+				从 java se 7 开始，也支持字符串。
+			</p>
+			<p>
+				语法格式
+			</p>
+			<pre>
+switch ( key ) {
+	case value1:
+		// 执行代码;
+		break;
+	case value2:
+		// 执行代码;
+		break;
+	......
+	default:
+		// 执行代码;
+		break;
+}
+</pre>
+			<p>
+				注意以下几点：
+			</p>
+			<p>
+				（1）break 可以省略；
+			</p>
+			<p>
+				（2）default 分支可以省略，而且不是必须放在最后，可以放在任何位置，但还是首先比较 case 分支的值，case 都不符合时，才执行 default；
+			</p>
+			<p>
+				（3）如果已经匹配了一个 case 或 default 分支，但是该分支没有 break，会从该分支向下、不再进行值判断逐个分支执行，直到遇到带有 break 的分支跳出 switch，或执行到 switch 结尾为止；
+			</p>
+			<p>
+				（4）以上几点比较特别，在实际使用中，不建议这样使用。
+			</p>
+			<br />
+
+			<p>
+				if 和 switch 的应用场景区别：
+			</p>
+			<p>
+				（1）if 语句可以对具体的变量值、变量区间、boolean表达式进行判断；
+			</p>
+			<p>
+				（2）switch 语句对具体变量进行判断，无法对区间进行判断，而且值的个数是固定的；
+			</p>
+			<p>
+				（3）对于固定的判断，switch 语句效率较高。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 SwitchControll.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、为 main 方法传递参数</h4>
+			<p>
+				在介绍多分支结构和 switch 的使用场景之前，我们先了解下如何为 main 方法传递参数
+			</p>
+			<p>
+				从 main 的定义方式 <code>public static void main(String[] args) {}</code> 可以看出，main 方法是可以传递参数的，而且是一个字符串数组，那么怎么传递呢？
+			</p>
+			<p>
+				main 方法是由 JVM 调用的，所以参数也应该是由 JVM 封装为 String[] 后再传递给 main 方法。我们在之前的讲解中了解到，JVM 是由 java 命令启动的，所以我们不妨先看看 java 命令的使用方法。
+			</p>
+			<p>
+				在 cmd 命令行直接键入 java 即可查看该命令的帮助。我们只需要看执行类文件的用法，如下图
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01007/01007002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+C:\Users\XUGF>java
+用法: java [-options] class [args...]
+           (执行类)
+	......
+</pre>
+			<p>
+				在 class 类名后面可以接可选的参数，我们编写一个类验证一下：
+			</p>
+			<pre>
+public class MainMethodArgs {
+	public static void main(String[] args){
+		if (args == null) {
+			System.out.println("String[] args is null");
+		} else if (args.length == 0) {
+			System.out.println("String[] args length is 0");
+		} else {
+			for (int i = 0; i < args.length; i++) {
+				System.out.println("args[" + i + "] = " + args[i]);
+			}
+		}
+	}
+}
+</pre>
+			<p>
+				编译、运行，在类文件后面添加参数
+			</p>
+			<pre>
+D:\tmp\java\quickstart>javac MainMethodArgs.java
+
+D:\tmp\java\quickstart>java MainMethodArgs
+<span class="annotation">String[] args length is 0</span>
+
+D:\tmp\java\quickstart>java MainMethodArgs 1
+<span class="annotation">args[0] = 1</span>
+
+D:\tmp\java\quickstart>java MainMethodArgs 1 xugf abc
+<span class="annotation">args[0] = 1</span>
+<span class="annotation">args[1] = xugf</span>
+<span class="annotation">args[2] = abc</span>
+
+D:\tmp\java\quickstart>
+</pre>
+			<p>
+				从以上的输出我们可以总结出以下结论：在使用 java 命令执行类时，可以在类后面添加参数，以空白符分隔，JVM 会解析命令中的参数并封装为字符串数组，然后传入 main 方法
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 quickstart 中的 MainMethodArgs.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、多分支结构的一个使用场景</h4>
+			<p>
+				在开发 GUI 项目时，通常需要通过键盘操作软件。
+			</p>
+			<p>
+				一般的做法是：为窗口注册键盘监听器，当键盘点击时，JVM 会获取到用户按下的键，并根据所对应的 int 值封装 <code>KeyEvent</code> 对象，然后调用键盘监听器的处理方法进行业务处理。
+			</p>
+			<p>
+				在监听器的处理方法中，开发者可以获取到用户点击的键的 <code>keyCode</code> 值，这时就会使用到分支结构来根据不同的键进行不同的操作。
+			</p>
+			<p>
+				比如开发一个坦克大战的游戏，在用户点击键盘后，程序获取到 <code>keyCode</code> 后执行不同的操作。我们可以使用 java 命令传参的方式模拟用户键盘点击，然后使用分支结构判断用户的操作，最后以控制台输出的方式模拟完成操作。
+			</p>
+			<pre>
+public class MultiCondition {
+
+	<span class="annotation">// 定义常量</span>
+	private static final int KEY_UP    = 38;
+	private static final int KEY_DONW  = 40;
+	private static final int KEY_LEFT  = 37;
+	private static final int KEY_RIGHT = 39;
+	private static final int KEY_ENTER = 10;
+	private static final int KEY_SPACE = 32;
+
+	public static void main(String[] args) {
+		
+		<span class="annotation">// 判断用户传入的参数个数，如果长度为0，直接输出提示信息并结束 main 方法</span>
+		if (args.length == 0) {
+			System.out.println("请输入操作参数");
+			return;
+		}
+
+		<span class="annotation">// 把用户传入的第一个参数（即使用户传递多个参数，也只取第一个）转为 int 型，便于分支判断</span>
+		int arg = Integer.parseInt(args[0]);
+
+		if (arg == KEY_UP) {
+			System.out.println("向上");
+		} else if (arg == KEY_DONW) {
+			System.out.println("向下");
+		} else if (arg == KEY_LEFT) {
+			System.out.println("向左");
+		} else if (arg == KEY_RIGHT) {
+			System.out.println("向右");
+		} else if (arg == KEY_ENTER) {
+			System.out.println("开始");
+		} else if (arg == KEY_SPACE) {
+			System.out.println("暂停");
+		} else {
+			System.out.println("未知操作");
+		}
+	}
+}
+</pre>
+			<p>
+				编译、运行
+			</p>
+			<pre>
+D:\tmp\java\quickstart>javac MultiCondition.java
+
+D:\tmp\java\quickstart>java MultiCondition
+请输入操作参数
+
+D:\tmp\java\quickstart>java MultiCondition 38
+向上
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 MultiCondition.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、switch 使用场景</h4>
+			<p>
+				下面我们使用 <code>switch ... case</code> 结构改写一下上面的代码
+			</p>
+			<pre>
+public class SwitchCondition {
+
+	<span class="annotation">// 定义常量</span>
+	private static final int KEY_UP    = 38;
+	private static final int KEY_DONW  = 40;
+	private static final int KEY_LEFT  = 37;
+	private static final int KEY_RIGHT = 39;
+	private static final int KEY_ENTER = 10;
+	private static final int KEY_SPACE = 32;
+
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.out.println("请输入操作参数");
+			return;
+		}
+		int arg = Integer.parseInt(args[0]);
+		switch (arg){
+			case KEY_UP:
+				System.out.println("向上");
+				break;
+			case KEY_DONW:
+				System.out.println("向下");
+				break;
+			case KEY_LEFT:
+				System.out.println("向左");
+				break;
+			default:
+				System.out.println("未知操作");
+				break;
+			case KEY_RIGHT:
+				System.out.println("向右");
+				break;
+			case KEY_ENTER:
+				System.out.println("开始");
+				break;
+			case KEY_SPACE:
+				System.out.println("暂停");
+				break;
+		}
+	}
+}
+</pre>
+			<p>
+				编译、运行
+			</p>
+			<pre>
+D:\tmp\java\quickstart>javac SwitchCondition.java
+
+D:\tmp\java\quickstart>java SwitchCondition
+请输入操作参数
+
+D:\tmp\java\quickstart>java SwitchCondition 38
+向上
+
+D:\tmp\java\quickstart>java SwitchCondition 39
+向右
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 SwitchCondition.java 文件。</span>
+
+			<br /><br />
+
+			
+			<a href="java01006.html" style="font-size:12px;">第六节&nbsp;&nbsp;&nbsp;&nbsp;Java运算符</a>
+			<br />
+			<a href="java01008.html" style="font-size:12px;">第八节&nbsp;&nbsp;&nbsp;&nbsp;Java流程控制之循环结构</a>
+			
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

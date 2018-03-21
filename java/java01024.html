@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java多线程技术</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十四节&nbsp;&nbsp;&nbsp;&nbsp;线程间通信（下）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、多生产者与多消费者</a></li>
+				<li><a href="#f2">二、JDK1.5 的 Lock 接口</a></li>
+				<li><a href="#f3">三、JDK1.5 的 Condition 接口</a></li>
+				<li><a href="#f4">四、多生产者与多消费者(使用 Lock 和 Condition 实现)</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、多生产者与多消费者</h4>
+
+			<p>
+				如果我们使用多个销售线程和多个供货线程运行上面的程序，会发现单纯的同步方法并无法完全解决线程安全问题。
+			</p>
+
+			<pre>
+public class MallAndFactoryWithThreadState {
+	public static void main(String[] args) {
+		Mall2 mall = new Mall2("Mall-1");
+		mall.setSaleBarCount(2); <span class="annotation">// 2个销售线程</span>
+		mall.sale();
+
+		for (int i = 0; i &lt; 2; i++) {
+			<span class="annotation">// 2个供货线程</span>
+			new Thread(new Factory2("手机工厂 " + (i + 1), mall)).start();
+		}
+	}
+}
+</pre>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01024/01024001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				可以看到销售线程和供货线程都出了问题。
+			</p>
+			<p>
+				首先分析下“柜台 1 正在售出第 0 台手机”的问题。
+			</p>
+			<p>
+				当程序启动时，会创建两个销售线程。
+			</p>
+			<p>
+				假如柜台 1 进入 <code>saleMobile</code> 方法，判断 <code>mobileCount &lt;= 0</code> 为真，会执行 <code>this.notify()</code> 和 <code>this.wait()</code>，此线程放弃执行权，释放对象锁。
+			</p>
+			<p>
+				此时柜台 2 进入 <code>saleMobile</code> 方法，判断 <code>mobileCount &lt;= 0</code> 为真，也会执行 <code>this.notify()</code> 和 <code>this.wait()</code>。问题就出在调用的 notify 方法上，此时会把柜台 1 唤醒。
+			</p>
+			<p>
+				柜台 1 唤醒后，接着执行售出手机、mobileCount--代码，所以就出现了“柜台 1 正在售出第 0 台手机”这个问题。
+			</p>
+			<br />
+			<p>
+				再分析下两个手机工厂连续补充库存的问题。
+			</p>
+			<p>
+				程序创建了两个供货线程。
+			</p>
+			<p>
+				当两个供货线程在剩余 1 台手机时进入 <code>addMobile</code> 方法，都判断 <code>mobileCount &gt; 0</code> 为真，都被冻结，放弃执行权，释放对象锁。
+			</p>
+			<p>
+				然后此时柜台 1 进入 <code>saleMobile</code> 方法，把最后一台手机售出，此时 <code>mobileCount</code>值为 0，然后接着运行出了 <code>saleMobile</code> 方法。
+			</p>
+			<p>
+				当柜台 1 再次进入 <code>saleMobile</code> 方法，判断 <code>mobileCount &lt;= 0</code> 为真，调用 <code>this.notify</code> 方法把手机工厂 2 唤醒，手机工厂 2 不再需要判断 mobileCount 是否 &gt;0 而是直接补充库存，此时 mobileCount 值为 10。
+			</p>
+			<p>
+				手机工厂 2 再补充完库存后，调用 <code>this.notify</code> 方法，如果此时唤醒手机工厂 1，手机工厂 1 也不判断 mobileCount 是否 &gt;0 直接补充库存，此时 mobileCount 值为 20。
+			</p>
+			<br />
+			<p>
+				产生这个问题的原因就是柜台、工厂在被唤醒之后没有再次判断 mobileCount 的值，所以将 saleMobile 方法和 addMobile 方法中的 if 判断修改为 while 判断，让线程唤醒之后再次判断 mobileCount 的值，确保用最新的 mobileCount 来判断条件是否成立。
+			</p>
+			<pre>
+/*
+	<span class="annotation">在库存为0时，增加指定数量的库存</span>
+*/
+public synchronized boolean addMobile(int count, Factory f) {
+	<span class="high-light">while</span> (mobileCount &gt; 0) {
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println("剩余库存：" + mobileCount);
+	mobileCount += count;
+	System.out.println(f.getFactoryName() + " 已经补充库存完毕：" + mobileCount);
+	this.notify(); <span class="annotation">// 唤醒销售线程</span>
+	return true;
+}
+
+/*
+	<span class="annotation">销售一台手机</span>
+*/
+private synchronized void saleMobile(SaleBar bar) {
+	<span class="high-light">while</span> (mobileCount &lt;= 0) {
+		this.notify(); <span class="annotation">// 唤醒供货线程</span>
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println(bar.getBarName() + " 正在售出第 " + mobileCount + " 台手机");
+	mobileCount--;
+}
+</pre>
+
+			<br />
+
+			<p>
+				编译之后运行，发现程序卡住了，出现了死锁问题。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01024/01024002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				假如柜台 2 从 1 处一直处于冻结状态。
+			</p>
+			<p>
+				程序在 2 处柜台 1 售出最后一台手机之后，再次回来后唤醒工厂 1，本线程放弃执行权，释放锁。
+			</p>
+			<p>
+				补充库存，之后工厂 1 调用 <code>this.notify</code> 方法，如果此时唤醒工厂 2，工厂 2 判断 <code>mobileCount &gt;0</code> 为真，再次冻结。
+			</p>
+			<p>
+				此时柜台 1、柜台 2、工厂 2 都是冻结状态。
+			</p>
+			<p>
+				当工厂 1 再次执行 addMobile 方法判断 <code>mobileCount &gt;0</code> 为真，工厂 1 也被冻结。
+			</p>
+			<p>
+				4 个线程全部被冻结，都无法唤醒，出现死锁，程序就无法执行了。
+			</p>
+			<p>
+				解决的办法就是让当前线程唤醒全部冻结线程，而不是随机唤醒线程。
+			</p>
+
+			<pre>
+public final void notifyAll()
+	唤醒在此对象监视器上等待的所有线程。
+</pre>
+			
+			<p>
+				修改 addMobile 和 saleMobile 方法
+			</p>
+
+			<pre>
+public synchronized boolean addMobile(int count, Factory f) {
+	while (mobileCount &gt; 0) {
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println("剩余库存：" + mobileCount);
+	mobileCount += count;
+	System.out.println(f.getFactoryName() + " 已经补充库存完毕：" + mobileCount);
+	this.notifyAll(); <span class="annotation">// 唤醒销售线程</span>
+	return true;
+}
+
+private synchronized void saleMobile(SaleBar bar) {
+	while (mobileCount &lt;= 0) {
+		this.notifyAll(); <span class="annotation">// 唤醒供货线程</span>
+		try {
+			this.wait(); <span class="annotation">// 线程冻结</span>
+		} catch(InterruptedException e) {}
+	}
+	System.out.println(bar.getBarName() + " 正在售出第 " + mobileCount + " 台手机");
+	mobileCount--;
+}
+</pre>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01024/01024003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.thread3 包中的 MultiMallAndFactory.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、JDK1.5 的 Lock 接口</h4>
+
+			<pre>
+java.util.concurrent.locks;
+
+public interface Lock {}
+</pre>
+
+			<p>
+				实现类：ReentrantLock
+			</p>
+
+			<p>
+				使用 Lock 与使用 synchronized 语句相比，可获得更灵活的锁操作，可以支持多个相关的 Condition 对象。
+			</p>
+			<p>
+				锁是控制多个线程对共享资源进行访问的工具，锁提供了对共享资源的独占访问。一次只能有一个线程获得锁，对共享资源的所有访问都需要首先获得锁。
+			</p>
+			<p>
+				synchronized 语句提供了对象锁的隐式访问，但却强制所有的锁获取和释放均要出现在一个块结构中：当获取了多个锁时，它们必须以相反的顺序释放，且必须在与所有锁被获取时相同的词法范围内释放所有锁。
+			</p>
+			<p>
+				Lock 接口的实现允许锁在不同的作用范围内获取和释放，官方支持使用这种技术。
+			</p>
+
+			<p>
+				<span class="high-light">核心 API</span>
+			</p>
+
+			<pre>
+void lock()
+	获取锁。
+
+Condition newCondition()
+	返回绑定到此Lock实例的新Condition实例。
+	在等待条件前，锁必须由当前线程保持。调用Condition.await()将在等待前以原子方式释放锁，并在等待返回前重新获取锁。
+
+void unlock()
+	释放锁。
+</pre>
+
+			<p>
+				在大多数情况下，应该使用以下语句：
+			</p>
+
+			<pre>
+Lock l = ...; 
+l.lock();
+try {
+	// access the resource protected by this lock
+} finally {
+	l.unlock();
+}
+</pre>
+
+			<p>
+				锁定和释放锁出现在不同作用范围中时，必须使用 <code>try-finally</code> 或 <code>try-catch</code> 加以保护，以确保在必要时释放锁。
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、JDK1.5 的 Condition 接口</h4>
+
+			<pre>
+java.util.concurrent.locks;
+
+public interface Condition {}
+</pre>
+
+			<p>
+				Condition 将 Object 锁方法（wait、notify 和 notifyAll）分解成截然不同的对象，以便通过将这些对象与任意 Lock 实现组合使用。
+			</p>
+			<p>
+				其中，Lock 替代了 synchronized 方法和语句的使用，Condition 替代了 Object 锁方法的使用。
+			</p>
+			<p>
+				Condition 实例被绑定到一个锁上。要为特定 Lock 实例获得 Condition 实例，使用其 newCondition() 方法。
+			</p>
+			<p>
+				Condition 实现可以提供不同于 Object 锁方法的行为和语义。
+			</p>
+
+			<p>
+				<span class="high-light">核心 API</span>
+			</p>
+
+			<pre>
+void await() throws InterruptedException
+	当前线程在接到信号或被中断之前一直处于等待状态。
+
+void signal()
+	唤醒一个等待线程。
+	如果所有的线程都在等待，则选择其中的一个唤醒。在从await返回之前，该线程必须重新获取锁。
+
+void signalAll()
+	唤醒所有等待线程。
+	如果所有的线程都在等待，则唤醒所有线程。在从await返回之前，每个线程都必须重新获取锁。
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">下面是一个官方文档的示例代码：</span>
+			</p>
+
+			<pre>
+class BoundedBuffer {
+	<span class="annotation">final Lock lock = new ReentrantLock();</span>
+	<span class="annotation">final Condition notFull  = lock.newCondition();</span>
+	<span class="annotation">final Condition notEmpty = lock.newCondition();</span>
+
+	final Object[] items = new Object[100];
+	int putptr, takeptr, count;
+
+	public void put(Object x) throws InterruptedException {
+		<span class="annotation">lock.lock();</span>
+		try {
+			while (count == items.length)
+				<span class="annotation">notFull.await();</span>
+			items[putptr] = x;
+			if (++putptr == items.length) putptr = 0;
+			++count;
+			<span class="annotation">notEmpty.signal();</span>
+		} finally {
+			<span class="annotation">lock.unlock();</span>
+		}
+	}
+
+	public Object take() throws InterruptedException {
+		<span class="annotation">lock.lock();</span>
+		try {
+			while (count == 0)
+				<span class="annotation">notEmpty.await();</span>
+			Object x = items[takeptr];
+			if (++takeptr == items.length) takeptr = 0;
+			--count;
+			<span class="annotation">notFull.signal();</span>
+			return x;
+		} finally {
+			<span class="annotation">lock.unlock();</span>
+		}
+	}
+}
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、多生产者与多消费者(使用 Lock 和 Condition 实现)</h4>
+
+			<p>
+				下面我们使用 JDK1.5 的 Lock 和 Condition 来改造多生产者和多消费者的例子
+			</p>
+
+			<pre>
+import java.util.concurrent.locks.*; <span class="annotation">// 引入Lock和Condition</span>
+
+class Mall {
+	private String name = "Mall-1"; // 商场名称
+	private int mobileCount = 0; // 库存
+	private int saleBarCount = 1; // 柜台个数
+
+	<span class="annotation">// 锁</span>
+	<span class="annotation">final Lock lock = new ReentrantLock();</span>
+
+	<span class="annotation">// 获取Condition</span>
+	<span class="annotation">final Condition saleCondition  = lock.newCondition();</span>
+	<span class="annotation">final Condition factoryCondition = lock.newCondition();</span>
+
+	public Mall() {}
+	public Mall(String name) {
+		this.name = name;
+	}
+
+	public void setSaleBarCount(int saleBarCount) {
+		this.saleBarCount = saleBarCount;
+	}
+	public int getSaleBarCount() {
+		return this.saleBarCount;
+	}
+
+	/*
+		创建柜台，启动销售线程
+	*/
+	public void sale() {
+		for (int i = 1; i &lt;= saleBarCount; i++) {
+			new SaleBar("柜台 " + i).start();
+		}
+	}
+
+	/*
+		在库存为0时，增加指定数量的库存
+	*/
+	public boolean addMobile(int count, Factory f) {
+		<span class="annotation">lock.lock();</span>
+		try {
+			while (mobileCount &gt; 0) {
+				<span class="annotation">factoryCondition.await(); // 线程冻结</span>
+			}
+			System.out.println("剩余库存：" + mobileCount);
+			mobileCount += count;
+			System.out.println(f.getFactoryName() + " 已经补充库存完毕：" + mobileCount);
+			<span class="annotation">saleCondition.signal(); // 唤醒销售线程</span>
+			return true;
+		} catch(InterruptedException e) {
+			return false;
+		} finally {
+			<span class="annotation">lock.unlock();</span>
+		}
+	}
+
+	/*
+		销售一台手机
+	*/
+	private void saleMobile(SaleBar bar) {
+		<span class="annotation">lock.lock();</span>
+		try {
+			while (mobileCount &lt;= 0) {
+				<span class="annotation">factoryCondition.signal(); // 唤醒供货线程</span>
+				<span class="annotation">saleCondition.await(); // 线程冻结</span>
+			}
+			System.out.println(bar.getBarName() + " 正在售出第 " + mobileCount + " 台手机");
+			mobileCount--;
+		} catch(InterruptedException e) {
+		} finally {
+			<span class="annotation">lock.unlock();</span>
+		}
+	}
+
+	private class SaleBar extends Thread {
+		private String barName;
+		public SaleBar(String barName) {
+			this.barName = barName;
+		}
+
+		public void setBarName(String barName) {
+			this.barName = barName;
+		}
+		public String getBarName() {
+			return this.barName;
+		}
+		public void run() {
+			while(true) {
+				saleMobile(this); // 调用Mall对象的saleMobile方法销售手机
+				try {
+					Thread.sleep(10);
+				} catch(InterruptedException e) {}
+			}
+		}
+	}
+}
+
+class Factory implements Runnable {
+	private String name;
+	private Mall mall;
+	
+	public Factory(Mall mall) {
+		this.mall = mall;
+	}
+	public Factory(String name, Mall mall) {
+		this.name = name;
+		this.mall = mall;
+	}
+
+	public String getFactoryName() {
+		return this.name;
+	}
+
+	public void run() {
+		while (true) {
+			mall.addMobile(10, this); // 调用Mall对象的addMobile方法供货
+			try {
+				Thread.sleep(10);
+			} catch(InterruptedException e) {}
+		}
+	}
+}
+
+public class MultiMallAndFactory {
+	public static void main(String[] args) {
+		Mall mall = new Mall("Mall-1");
+		mall.setSaleBarCount(2);
+		mall.sale();
+
+		for (int i = 0; i &lt; 2; i++) {
+			new Thread(new Factory("手机工厂 " + (i + 1), mall)).start();
+		}
+	}
+}
+</pre>
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.thread4 包中的 MultiMallAndFactory.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01023.html" style="font-size:12px;">第二十三节&nbsp;&nbsp;&nbsp;&nbsp;线程间通信（上）</a>
+			<br />
+			<a href="java01025.html" style="font-size:12px;">第二十五节&nbsp;&nbsp;&nbsp;&nbsp;线程的停止</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

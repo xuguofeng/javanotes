@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java开发环境</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三节&nbsp;&nbsp;&nbsp;&nbsp;Java开发环境搭建（二）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、打开 Windows 命令行</a></li>
+				<li><a href="#f2">二、Windows 常用命令</a></li>
+				<li><a href="#f3">三、使用 java 命令</a></li>
+				<li><a href="#f4">四、配置环境变量</a></li>
+				<li><a href="#f5">五、编写 QuickStart 程序</a></li>
+			</ul>
+			<br />
+			
+			<h4 id="f1" class="title-1th">一、打开 Windows 命令行</h4>
+			<p>
+				第 1 种方法：<code>开始菜单—>附件—>命令提示符</code>可以打开<code>cmd</code>命令行
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				第 2 种方法：使用 <kbd>Win+r</kbd> 快捷键打开运行，输入<code>cmd</code>，可以打开<code>cmd</code>命令行
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				第 3 种方法：<code>开始菜单—>运行</code>，输入<code>cmd</code>，可以打开<code>cmd</code>命令行
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003003.jpg" class="img-responsive" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<hr />
+			
+			<h4 id="f2" class="title-1th">二、Windows 常用命令</h4>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th>命令</th><th>作用</th>
+						</tr>
+						<tr>
+							<td>cd [dirName]</td><td>切换工作目录</td>
+						</tr>
+						<tr>
+							<td>cd ..</td><td>返回上级目录</td>
+						</tr>
+						<tr>
+							<td>cd \</td><td>返回根目录</td>
+						</tr>
+						<tr>
+							<td>dir</td><td>列出当前目录下的文件和目录</td>
+						</tr>
+						<tr>
+							<td>md</td><td>创建目录</td>
+						</tr>
+						<tr>
+							<td>rd</td><td>删除目录</td>
+						</tr>
+						<tr>
+							<td>del</td><td>删除文件</td>
+						</tr>
+						<tr>
+							<td>exit</td><td>退出cmd</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<p>
+				使用<code>help</code>命令可以查看帮助，例如：查看rd命令的使用方式，可以使用<code>help rd</code>即可列出该命令的一些参数。
+			</p>
+			<pre>
+C:\>help rd
+	删除一个目录。
+	
+	RMDIR [/S] [/Q] [drive:]path
+	RD [/S] [/Q] [drive:]path
+	
+    /S      除目录本身外，还将删除指定目录下的所有子目录和
+            文件。用于删除目录树。
+
+    /Q      安静模式，带 /S 删除目录树时不要求确认
+C:\>
+</pre>
+			<p>
+				Windows命令其实很多，比如常用的<code>ping</code>、<code>netstat</code>、<code>telnet</code>等，此处不多做介绍。
+			</p>
+			<hr />
+			
+			<h4 id="f3" class="title-1th">三、使用 java 命令</h4>
+			<p>
+				使用<code>cd</code>命令切换到 jdk 的 bin 目录下，即可使用<code>java</code>、<code>javac</code>等命令。
+			</p>
+			<pre>
+C:\Users\XUGUOFENG>d:
+
+D:\>cd "Program Files\Java6\jdk1.6.0_45"
+
+D:\Program Files\Java6\jdk1.6.0_45>cd\
+
+D:\>cd "Program Files\Java6\jdk1.6.0_45\bin"
+
+D:\Program Files\Java6\jdk1.6.0_45\bin>java -version
+	java version "1.6.0_45"
+	Java(TM) SE Runtime Environment (build 1.6.0_45-b06)
+	Java HotSpot(TM) Client VM (build 20.45-b01, mixed mode, sharing)
+
+D:\Program Files\Java6\jdk1.6.0_45\bin>
+</pre>
+			<p>
+				例如：
+			</p>
+			<p>
+				<code>java -version</code> 用来查看java版本
+			</p>
+			<p>
+				<code>javac</code> 回车列出该命令使用方法
+			</p>
+			<p>
+				在不知道命令参数的情况下，直接输入命令回车可以列出命令使用帮助。
+			</p>
+			<p>
+				但是 java 的工具命令现在只能在切换到 bin 目录下才能使用，在其他目录下就无法使用。为了在任何目录下都可以使用 java 工具，我们需要配置系统环境变量。
+			</p>
+			<hr />
+			
+			<h4 id="f4" class="title-1th">四、配置环境变量</h4>
+			<p>
+				java 的工具命令只能在 bin 目录下才能使用。为了在任何目录下都可以使用 java 工具，我们需要配置系统环境变量。下面我们就讲解一下 Windows 操作系统下配置 java 环境变量的方法：
+			</p>
+			<p>
+				右键“计算机(XP系统是我的电脑)”，选择“属性”，选择“高级系统设置”
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003004.jpg" class="img-responsive" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				新建<code>JAVA_HOME</code>变量，编辑<code>Path</code>变量
+			</p>
+			<pre>
+JAVA_HOME=D:\Program Files\Java6\jdk1.6.0_45
+
+Path=%Path%;%JAVA_HOME%\bin
+</pre>
+			<p>
+				配置环境变量后就可以在任意目录下使用 java 工具命令
+			</p>
+			<hr />
+			
+			<h4 id="f5" class="title-1th">五、编写 QuickStart 程序</h4>
+			<p>
+				首先在 D 盘 tmp 目录下创建 java 目录，并创建 quickstart 项目
+			</p>
+			<pre>
+C:\Users\XUGUOFENG>d:
+
+D:\>cd tmp
+
+D:\tmp>md java
+
+D:\tmp>cd java
+
+D:\tmp\java>md quickstart
+</pre>
+			<p>
+				可以得到如下目录结构<br />
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				使用 <code>cd</code> 命令转到 quickstart 项目下，使用 <code>notepad</code> 命令创建 QuickStart.java 文件
+			</p>
+			<pre>
+D:\tmp\java>cd quickstart
+
+D:\tmp\java\quickstart>notepad QuickStart.java
+</pre>
+			<p>
+				在 QuickStart.java 文件中编写如下代码，并保存
+			</p>
+			<pre>
+public class QuickStart{
+	public static void main(String[] args){
+		System.out.println("你好，Java");
+	}
+}
+</pre>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003007.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				然后使用 <code>javac</code> 命令将 QuickStart.java 文件编译成 .class 字节码文件，使用 <code>java</code> 命令运行，注意不需要加 .class 文件后缀
+			</p>
+			<pre>
+D:\tmp\java\quickstart>javac QuickStart.java
+
+D:\tmp\java\quickstart>java QuickStart
+你好，Java
+</pre>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01003/01003008.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				如果您看到 cmd 命令行正确输出“你好，Java”，那么，恭喜您，您的第一个 java 程序就编写完成了
+			</p>
+			<p>
+				在下一节，我们将详细讲解这个程序的一些细节，并且会为您推荐并配置比记事本更加方便的开发工具：Editplus
+			</p>
+			
+			<br />
+
+			<span class="src-introduce">演示代码在项目 quickstart 中的 QuickStart.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01002.html" style="font-size:12px;">第二节&nbsp;&nbsp;&nbsp;&nbsp;Java开发环境搭建（一）</a>
+			<br />
+			<a href="java01004.html" style="font-size:12px;">第四节&nbsp;&nbsp;&nbsp;&nbsp;Java开发环境搭建（三）</a>
+
+			<br /><br />
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

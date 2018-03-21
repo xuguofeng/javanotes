@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十六节&nbsp;&nbsp;&nbsp;&nbsp;内部类和 Object 类</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、内部类概述</a></li>
+				<li><a href="#f2">二、内部类演示</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、 封装 Mp3 抽象类</a></li>
+						<li><a href="#f2-2">2、 封装 Screen 抽象类</a></li>
+						<li><a href="#f2-3">3、 封装音频接口</a></li>
+						<li><a href="#f2-4">4、 MobilePhone 中定义 MobileMp3</a></li>
+						<li><a href="#f2-5">5、 MobilePhone 中定义 Screen</a></li>
+						<li><a href="#f2-6">6、 MobilePhone 中定义 AudioDriven</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、Object 类</a></li>
+				<li><a href="#f4">四、equals 方法的重写</a></li>
+				<li><a href="#f5">五、toString 和 hashCode 方法</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、内部类</h4>
+			<p>
+				将一个类定义在另一个类内部，就是内部类，内部类有以下特点：
+			</p>
+			<p>
+				（1）内部类可以直接访问外部类的成员，包括私有成员。因为内部类持有外部类的引用，外部类要访问内部类成员必须创建内部类对象。
+			</p>
+			<p>
+				（2）如果内部类是私有的，那么只能在外部类内部使用。
+			</p>
+			<p>
+				（3）如果内部类是公有的，那么可以使用 <code>OuterClass.InnerClass inner = new OuterClass().new InnerClass();</code> 方式创建内部类对象；
+			</p>
+			<p>
+				（4）如果内部类是静态的，那么可以使用 <code>OuterClass.InnerClass inner = new OuterClass.InnerClass();</code> 方式创建内部类对象；
+			</p>
+			<p>
+				（5）如果内部类有静态成员，那么内部类也应该是静态的，而且可以直接使用  <code>OuterClass.InnerClass.成员;</code> 或者 <code>OuterClass.InnerClass.方法;</code> 方式访问内部类成员、方法；
+			</p>
+			<p>
+				（6）内部类可以定义在局部代码块上，局部内部类如果要访问代码块内的变量，该变量需要定义为final的；
+			</p>
+			<p>
+				（7）匿名内部类必须继承一个类或实现一个接口。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、内部类演示</h4>
+			<p>
+				为了演示内部类和匿名内部类，我们需要找到之前 <code>Abstract3</code> 项目的 <code>MobilePhone</code>、<code>ElectronicProduct</code>两个类，为 <code>MobilePhone</code> 类添加一个播放 Mp3 的功能。
+			</p>
+			<h5 id="f2-1" class="title-2th">1、封装 Mp3 抽象类</h5>
+			<p>
+				把 Mp3 功能抽取出来封装抽象类，含有歌曲列表、当前歌曲索引、歌词列表等成员变量，以及上一首、下一首方法和播放抽象方法；
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">封装 Mp3 功能</span>
+*/
+public abstract class Mp3 {
+	protected String[] songList; <span class="annotation">// 歌曲列表</span>
+	protected String[] lyricList; <span class="annotation">// 歌词列表</span>
+	protected int currentSong; <span class="annotation">// 当前播放歌曲的索引</span>
+
+	<span class="annotation">// getter & setter</span>
+
+	<span class="annotation">// 上一首</span>
+	public void next() {
+		currentSong++;
+	}
+	<span class="annotation">// 下一首</span>
+	public void prev() {
+		currentSong--;
+	}
+	<span class="annotation">// 播放功能，需要子类去实现，需要传入一个AudioDriven的实现</span>
+	public abstract void play(AudioDriven audio);
+}</pre>
+
+			<h5 id="f2-2" class="title-2th">2、封装 Screen 抽象类</h5>
+			<p>
+				把手机屏幕 Screen 功能抽取出来封装抽象类，包含屏幕分辨率长、高成员变量，以及三个抽象的 play 方法；
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">封装 Screen 显示功能</span>
+*/
+public abstract class Screen {
+	protected int screenX; <span class="annotation">// 屏幕宽</span>
+	protected int screenY; <span class="annotation">// 屏幕高</span>
+
+	public Screen() {}
+
+	public Screen(int screenX, int screenY) {
+		this.screenX = screenX;
+		this.screenY = screenY;
+	}
+
+	/*
+		<span class="annotation">三个重载的 display 方法</span>
+	*/
+	public abstract void display(String content, int light);
+	public abstract void display(String content);
+	public abstract void display();
+}</pre>
+
+			<h5 id="f2-3" class="title-2th">3、封装音频接口</h5>
+			<p>
+				把音频播放功能抽取出来封装接口，核心功能就是播放声音；
+			</p>
+
+			<pre>
+/*
+	<span class="annotation">封装音频播放功能</span>
+*/
+public interface AudioDriven {
+	public void soundPlay(String sound);
+}</pre>
+
+			<h5 id="f2-4" class="title-2th">4、MobilePhone 中定义 MobileMp3</h5>
+			<p>
+				在 MobilePhone 中使用内部类方式定义 MobileMp3 继承 Mp3，扩展两个 play 方法，使用内部类就是因为 MobilePhone 需要有个 Mp3 功能，但是 MobilePhone 已经继承了 ElectronicProduct，没有办法直接继承 Mp3，所以使用内部类方式扩展功能；
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	// 代码
+
+	<span class="annotation">// 内部MP3类</span>
+	public class MobileMp3 extends Mp3 {
+		public void play(){
+			for (int i = 0; i < songList.length; i++) {
+				currentSong = i;
+				play(audio); <span class="annotation">// 使用外部类的AudioDriven对象播放声音</span>
+				play(screen); <span class="annotation">// 使用外部类的Screen对象显示歌词</span>
+			}
+		}
+		public void play(AudioDriven audio) {
+			audio.soundPlay(songList[currentSong]);
+		}
+		public void play(Screen screen) {
+			screen.display(lyricList[currentSong]);
+		}
+	}
+
+	// 代码
+}</pre>
+
+			<h5 id="f2-5" class="title-2th">5、MobilePhone 中定义 Screen</h5>
+			<p>
+				在 MobilePhone 中使用匿名内部类方式定义 Screen screen，实现屏幕显示功能
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	// 代码
+
+	<span class="annotation">// 屏幕分辨率</span>
+	private int screenX = 640;
+	private int screenY = 1280;
+
+	<span class="annotation">// 一个匿名 Screen 内部类</span>
+	private Screen screen = new Screen(screenX, screenY) {
+		public void display(String content, int light) {
+			System.out.println("自带屏幕显示：" + content + ", 亮度：" + light);
+		}
+		public void display(String content) {
+			System.out.println("自带屏幕显示：" + content);
+		}
+		public void display() {
+			System.out.println("自带屏幕显示");
+		}
+	};
+
+	public void setScreen(Screen screen) {
+		this.screen = screen;
+	}
+	public Screen getScreen() {
+		return this.screen;
+	}
+
+	// 代码
+}</pre>
+
+			<h5 id="f2-6" class="title-2th">6、MobilePhone 中定义 AudioDriven</h5>
+			<p>
+				在 MobilePhone 中使用匿名内部类方式定义 AudioDriven audio，实现声音播放功能
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	// 代码
+
+	<span class="annotation">// 一个匿名AudioDriven内部类</span>
+	private AudioDriven audio = new AudioDriven() {
+		public void soundPlay(String sound) {
+			System.out.println("正在使用自带音频驱动播放：" + sound);
+		}
+	};
+	
+	public void setAudio(AudioDriven audio) {
+		this.audio = audio;
+	}
+	public AudioDriven getAudio() {
+		return this.audio;
+	}
+
+	// 代码
+}</pre>
+
+			<p>
+				测试效果
+			</p>
+
+			<pre>
+public class TestInnerClass {
+	public static void main(String[] args) {
+		MobilePhone mobile = new MobilePhone();
+
+		mobile.setOs("安卓");
+		mobile.setBrand("华为");
+		mobile.setDumpEnergy(0.67d);
+		mobile.setState(ElectronicProduct.USEFUL_STATE);
+
+		mobile.setPhoneNumber("18902120812");
+
+		MobilePhone.MobileMp3 mp3 = mobile.new MobileMp3();
+
+		mp3.songList = new String[]{"当爱已成往事", "飘雪", "千千阙歌"};
+		mp3.lyricList = new String[]{"当爱已成往事-歌词", "飘雪-歌词", "千千阙歌-歌词"};
+		// mp3.currentSong = 0;
+
+		<span class="annotation">// 调用mp3的播放方法</span>
+		mp3.play();
+
+		<span class="annotation">// 过了一段时间，我的音频驱动坏了，换了一个新的</span>
+		<span class="annotation">// 只要是符合AudioDriven接口规范的类</span>
+		<span class="annotation">// 都可以实例化后“安装”到 MobilePhone 上</span>
+		mobile.setAudio(new AudioDriven() {
+			public void soundPlay(String sound) {
+				System.out.println("正在使用新安装的音频驱动播放：" + sound);
+			}
+		});
+		System.out.println("-----------------------------");
+		// 再播放
+		mp3.play();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+正在使用自带音频驱动播放：当爱已成往事
+自带屏幕显示：当爱已成往事-歌词
+正在使用自带音频驱动播放：飘雪
+自带屏幕显示：飘雪-歌词
+正在使用自带音频驱动播放：千千阙歌
+自带屏幕显示：千千阙歌-歌词
+-----------------------------
+正在使用新安装的音频驱动播放：当爱已成往事
+自带屏幕显示：当爱已成往事-歌词
+正在使用新安装的音频驱动播放：飘雪
+自带屏幕显示：飘雪-歌词
+正在使用新安装的音频驱动播放：千千阙歌
+自带屏幕显示：千千阙歌-歌词</pre>
+
+			<span class="src-introduce">演示代码在项目 InnerClass 中。</span>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Object类</h4>
+			<p>
+				<code>Object</code> 类是不断抽取共性内容而来，提供了所有对象共有的功能，Java 中所有的类都直接或间接的继承 <code>Object</code>。
+			</p>
+			<p>
+				如果我们编写的类没有使用 <code>extends</code> 关键字继承某个类，那么它就是继承 <code>Object</code> 的。
+			</p>
+			<p>
+				推荐一个 JDK 在线 API 文档的网站：在线文档-jdk-zh，http://tool.oschina.net/apidocs/apidoc?api=jdk-zh，在这个上面可以查看 JDK6 的 API。
+			</p>
+			<p>
+				使用 <kbd>Ctrl+F</kbd> 搜索 <code>Object</code> 即可快速找到关于这个类的 API。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01016/01016001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+Object()</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">核心方法</span>
+			</p>
+
+			<pre>
+boolean	equals(Object obj)
+	判断其他某个对象是否与此对象“相等”；
+	对于任何非空引用值x和y，当且仅当x和y引用同一个对象（堆内存地址相同）时，此方法才返回true（x == y具有值 true）；
+	一般情况下都会为自定义的类重写equals方法，使类可以用类特有的内容来判断对象是否相同；
+	当此方法被重写时，通常有必要重写hashCode方法。
+
+int hashCode()
+	返回该对象的哈希码值；
+	当equals方法被重写时，通常有必要重写hashCode方法。
+
+Class&lt;?&gt; getClass()
+	返回此Object的运行时类。
+
+String toString()
+	返回该对象的字符串表示。
+	建议所有子类都重写此方法。
+	Object类的toString方法生成规则是这样的：getClass().getName() + '@' + Integer.toHexString(hashCode())
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、equals 方法的重写</h4>
+			<p>
+				Object 的 <code>equals</code> 方法和 “==” 的作用相同，即 <code>x.equals(y)</code> 中的 x 和 y 指向同一个对象时（即指向同一块堆内存），才返回 true。
+			</p>
+
+			<p>
+				下面我们使用代码验证一下
+			</p>
+			<pre>
+<span class="annotation">// 创建一个 MobilePhone</span>
+MobilePhone mobile1 = new MobilePhone();
+
+mobile1.setOs("安卓");
+mobile1.setBrand("华为");
+mobile1.setDumpEnergy(0.67d);
+mobile1.setState(ElectronicProduct.USEFUL_STATE);
+mobile1.setPhoneNumber("18902120812");
+
+<span class="annotation">// 创建一个 MobilePhone，与之前的对象属性一致</span>
+MobilePhone mobile2 = new MobilePhone();
+mobile2.setOs("安卓");
+mobile2.setBrand("华为");
+mobile2.setDumpEnergy(0.67d);
+mobile2.setState(ElectronicProduct.USEFUL_STATE);
+mobile2.setPhoneNumber("18902120812");
+
+System.out.println(mobile1.equals(mobile2));
+System.out.println(mobile1 == mobile2);
+
+<span class="phase-title">输出：</span>
+
+false
+false</pre>
+
+			<p>
+				mobile1 对象和 mobile1 对象的属性信息完全一致，但是在使用 <code>equals</code> 和 <code>==</code> 比较时返回 false，说明 Object 的 equals 方法比较的是堆内存的对象地址。
+			</p>
+			<p>
+				但是在实际开发中，我们需要使用对象的特有属性来确定两个对象是否相等，比如：
+			</p>
+			<p>
+				人需要使用身份证号、学生需要使用学号、手机需要使用产品编号或手机号码等等。
+			</p>
+			<p>
+				下面我们就为 MobilePhone 类添加 <code>productId</code> 属性，并且使用该属性确定两个 MobilePhone 对象是否相等，之前编写的属性和方法省略。
+			</p>
+
+			<pre>
+public class MobilePhone extends ElectronicProduct {
+
+	<span class="annotation">// 产品编码，用于确定 MobilePhone 对象的唯一性</span>
+	private int productId;
+	
+	<span class="annotation">// setter & getter</span>
+
+	/*
+		<span class="annotation">重写 equals 方法，使用 productId 判断两个对象是否相等</span>
+	*/
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		
+		<span class="annotation">// 强制类型转换</span>
+		MobilePhone anotherMobile = (MobilePhone) obj;
+
+		<span class="annotation">// 以 productId 是否相等作为对象相等的判断条件</span>
+		return this.productId == anotherMobile.getProductId();
+	}
+}</pre>
+
+			<p>
+				方法测试
+			</p>
+			<pre>
+<span class="annotation">// 创建一个MobilePhone</span>
+MobilePhone mobile1 = new MobilePhone();
+mobile1.setProductId(10000010);
+
+<span class="annotation">// 创建一个MobilePhone，与之前的对象 productId 属性一致</span>
+MobilePhone mobile2 = new MobilePhone();
+mobile2.setProductId(10000010);
+
+System.out.println(mobile1.equals(mobile2));
+
+<span class="phase-title">输出：</span>
+
+true</pre>
+
+			<br />
+
+			<p>
+				上面的代码只对参数对象做了 null 值判断，并没有判断 obj 是否可以转为 MobilePhone 对象，如果参数是一个非 MobilePhone 对象，会怎么样呢？
+			</p>
+			<pre>
+<span class="annotation">// 创建一个 MobilePhone</span>
+MobilePhone mobile1 = new MobilePhone();
+mobile1.setProductId(10000010);
+
+<span class="annotation">// 创建一个 Computer，与之前的 MobilePhone 对象 productId 属性一致</span>
+Computer computer = new Computer();
+computer.setProductId(10000010);
+
+System.out.println(mobile1.equals(computer));
+
+<span class="phase-title">输出：</span>
+
+Exception in thread "main" java.lang.ClassCastException: Computer cannot be cast to MobilePhone
+	at MobilePhone.equals(MobilePhone.java:48)
+	at TestEquals.main(TestEquals.java:31)
+</pre>
+
+			<p>
+				错误原因很明显，Computer 不能转换为 MobilePhone，所以在 equals 方法中需要做一下参数 obj 的具体类型判断，我们可以使用 <code>instanceof</code> 关键字来实现，当参数不是 MobilePhone 类型时，直接返回 false。
+			</p>
+			<p>
+				MobilePhone 类 equals 方法的代码片段
+			</p>
+
+			<pre>
+public boolean equals(Object obj) {
+	if (obj == null)
+		return false;
+
+	<span class="annotation">// 使用 instanceof 关键字判断参数是否为 MobilePhone 对象</span>
+	<span class="annotation">if (!(obj instanceof MobilePhone))</span>
+		<span class="annotation">return false;</span>
+
+	MobilePhone anotherMobile = (MobilePhone) obj;
+	return this.productId == anotherMobile.getProductId();
+}
+</pre>
+			<p>
+				这样，一个较健壮的 equals 方法就编写好了。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ObjectMethod 中。</span>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、toString 和 hashCode 方法</h4>
+			<p>
+				通过API 介绍我们可以看到，Object 的 <code>toString</code> 方法是这样实现的：
+			</p>
+			<pre>
+getClass().getName() + '@' + Integer.toHexString(hashCode())
+
+即：
+对象所属类的简单类名@转为十六进制的 hashCode 值
+</pre>
+
+			<br />
+			
+			<p>
+				测试默认的 toString 和 hashCode 方法
+			</p>
+			<pre>
+MobilePhone mobile1 = new MobilePhone();
+mobile1.setProductId(100001);
+
+int mobileHash = mobile1.hashCode();
+String hexHashCode = Integer.toHexString(mobileHash);
+System.out.println(mobileHash);
+System.out.println(hexHashCode);
+
+System.out.println("-----------------------------------------");
+
+System.out.println(mobile1);
+System.out.println(mobile1.toString());
+System.out.println(MobilePhone.class.getName() + "@" + hexHashCode);
+
+<span class="phase-title">输出：</span>
+
+28737396
+1b67f74
+--------------------
+Mobile@1b67f74
+Mobile@1b67f74
+Mobile@1b67f74
+</pre>
+
+			<p>
+				直接打印对象默认会调用对象的 toString 方法。
+			</p>
+			<p>
+				因为 Object 的 <code>hashCode</code> 方法调用的是操作系统底层的逻辑，所以每次调用返回的值都是不确定的，所以 JDK 的 API 建议我们在定义类时重写此方法以使用特有的属性来确定 hashCode 值。
+			</p>
+			<p>
+				比如我们想使用 MobilePhone 的 productId 属性来作为对象的 hashCode，就需要重写 hashCode 方法。
+			</p>
+
+			<pre>
+public int hashCode() {
+	return this.productId;
+}
+</pre>
+
+			<p>
+				编译后重新运行，可以看到调用 hashCode 方法返回的就是 mobile1 对象的 productId 了。
+			</p>
+			<p>
+				虽然我们重写了 <code>hashCode</code> 方法，但是 <code>toString</code> 方法的返回值还是不够直观，所以在实际开发中，还需要重写该方法，使用对象特有的数据来打印该对象，比如想打印 MobilePhone 对象的 productId 和手机号码。
+			</p>
+			<p>
+				我们可以这样改写：
+			</p>
+			<pre>
+public String toString() {
+	return "产品编码：" + this.productId + ", 手机号码：" + this.phoneNumber;
+}
+</pre>
+
+			<p>
+				注意：hashCode 方法除了在 toString 方法中使用，在之后讲解的哈希表相关数据结构时也会使用到。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ObjectMethod 中。</span>
+
+			<br /><br />
+
+			<a href="java01015.html" style="font-size:12px;">第十五节&nbsp;&nbsp;&nbsp;&nbsp;接口和多态</a>
+			<br />
+			<a href="java01017.html" style="font-size:12px;">第十七节&nbsp;&nbsp;&nbsp;&nbsp;package 和 import 关键字</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

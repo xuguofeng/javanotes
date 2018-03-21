@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+		<style>
+			td {text-align:left;}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十三节&nbsp;&nbsp;&nbsp;&nbsp;Swing 和简单资源管理器程序简介</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、什么是 Swing</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	概述</a></li>
+						<li><a href="#f1-2">2、	核心组件介绍</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、简单资源管理器程序</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、什么是 Swing</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	概述</h5>
+
+			<p>
+				<code>Swing</code> 是一个用于开发 <code>Java</code> 应用程序用户界面的开发工具包。
+			</p>
+			<p>
+				以抽象窗口工具包（AWT）为基础使跨平台应用程序可以使用任何可插拔的外观风格。<code>Swing</code> 开发人员只用很少的代码就可以利用丰富、灵活的功能和模块化组件来创建优雅的用户界面。工具包中所有的包都是以 <code>swing</code> 作为名称，例如：<code>javax.swing</code>、<code>javax.swing.event</code>
+			</p>
+			<p>
+				接下来的几节就介绍下使用 Swing 组件开发简单的资源管理器程序
+			</p>
+
+
+			<h5 id="f1-2" class="title-2th">2、	核心组件介绍</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<table class="table table-bordered table-striped">
+							<tr>
+								<th>类</th><th>简介</th>
+							</tr>
+							<tr>
+								<td>javax.swing.JFrame</td><td>java.awt.Frame 的扩展版本。<br />与 Frame 不同，当用户试图关闭窗口时，JFrame 知道如何进行响应。用户关闭窗口时，默认的行为只是简单地隐藏 JFrame。要更改默认的行为，可调用方法：<br />setDefaultCloseOperation(int)</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JPanel</td><td>轻量级面板容器</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JDialog</td><td>创建对话框窗口的主要类。可以使用此类创建自定义的对话框，或者调用 JOptionPane 中的多个类方法来创建各种标准对话框</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JScrollPane</td><td>轻量级可滚动的面板容器</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JMenu</td><td>菜单</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JMenuBar</td><td>菜单栏，可以添加到 JFrame 上面</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JMenuItem</td><td>菜单项，需要添加到 Menu 上面</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JButton</td><td>按钮</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JCheckBox</td><td>复选框是一个可以被选定和取消选定的项，它将其状态显示给用户</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JComboBox</td><td>下拉列表</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JLabel</td><td>标签</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JTextField</td><td>JTextField 是一个轻量级组件，允许编辑单行文本</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JPasswordField</td><td>JPasswordField 是一个轻量级组件，允许编辑单行文本，但不显示原始字符</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JTextArea</td><td>JTextArea 是一个显示纯文本的多行区域</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JFileChooser</td><td>为用户选择文件提供了一种简单的机制</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</p>
+			还有一些不常用的组件，比如：
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<table class="table table-bordered table-striped">
+							<tr>
+								<th>类</th><th>简介</th>
+							</tr>
+							<tr>
+								<td>javax.swing.JSplitPane</td><td>JSplitPane 用于分隔两个（只能两个）Component。<br />两个 Component 图形化分隔以外观实现为基础，并且这两个 Component 可以由用户交互式调整大小</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JTree</td><td></td>
+							</tr>
+							<tr>
+								<td>javax.swing.JList</td><td>显示对象列表并且允许用户选择一个或多个项的组件</td>
+							</tr>
+							<tr>
+								<td>javax.swing.JTable</td><td>用来显示和编辑二维表</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、简单资源管理器程序</h4>
+			
+			<p>
+				界面如下：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01053/01053001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				主要分为4个部分：窗口顶部的菜单栏、显示当前位置和回退刷新按钮的面板、中部主面板、底部状态栏面板，即：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01053/01053002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				在接下来的几节我们就从这个资源管理器程序入手，逐步了解 <code>java.swing</code> 工具包的核心 API
+			</p>
+
+			<br />
+
+			<a href="java01052.html" style="font-size:12px;">第五十二节&nbsp;&nbsp;&nbsp;&nbsp;事件和监听器</a>
+			<br />
+			<a href="java01054.html" style="font-size:12px;">第五十四节&nbsp;&nbsp;&nbsp;&nbsp;Swing 开发简单资源管理器程序（开发界面结构）</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

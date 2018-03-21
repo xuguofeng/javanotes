@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>JDK API - 集合框架</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二十八节&nbsp;&nbsp;&nbsp;&nbsp;Collection 接口和 List 接口</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、集合的作用</a></li>
+				<li><a href="#f2">二、Collection 接口</a></li>
+				<li><a href="#f3">三、Collection 方法</a></li>
+				<li><a href="#f4">四、List 接口</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、集合的作用</h4>
+
+			<p>
+				用于存储多个特定数据类型对象的容器。集合有以下特点：
+			</p>
+			<p>
+				a.&nbsp;&nbsp;&nbsp;&nbsp;用于存储对象，不可以存储基本数据类型
+			</p>
+			<p>
+				b.&nbsp;&nbsp;&nbsp;&nbsp;长度可变
+			</p>
+			<p>
+				由于数据结构不同，具体容器也不同，不断向上抽取，形成了集合框架，顶层就是 <code>Collection</code> 接口。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01028/01028001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Collection 接口</h4>
+
+			<pre>
+java.util;
+
+public interface Collection&lt;E&gt; extends Iterable&lt;E&gt; {}
+</pre>
+			<p>
+				集合框架中的根接口。
+			</p>
+			<p>
+				集合中包含一些对象，这些对象称为集合的元素。
+			</p>
+			<p>
+				一些集合实现允许有重复的元素，而另一些则不允许。
+			</p>
+			<p>
+				一些集合实现是有序的，而另一些则是无序的。
+			</p>
+			<p>
+				JDK 不提供此接口的任何直接实现：而是提供更具体的子接口（如 <code>Set</code> 和 <code>List</code>）实现。
+			</p>
+			<p>
+				所有通用的 <code>Collection</code> 实现类应该提供两个“标准”构造方法：一个是无参数构造方法，用于创建空集合；另一个是带有 <code>Collection</code> 类型单参数的构造方法，用于创建一个具有与其参数相同元素新的集合。
+			</p>
+			<p>
+				一些集合实现对它们可能包含的元素有所限制。
+			</p>
+			<p>
+				<code>Collection</code> 接口中的很多方法是根据 <code>equals</code> 方法定义的。例如，<code>contains(Object o)</code> 方法的规范声明：“当且仅当此集合包含至少一个满足 <code>(o==null ? e==null :o.equals(e))</code> 的元素 <code>e</code> 时，返回 true。”
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Collection 方法</h4>
+
+			<pre>
+<span class="methodClassName">boolean add( E e )</span>
+	将e添加到集合，如果添加成功则返回true。（如果此collection不允许有重复元素，并且已经包含了指定的元素，则返回false。）
+	集合实现类可以限制哪些元素能添加到集合中，比如一些集合实现类拒绝添加null元素。
+	如果集合实现类由于某些原因拒绝添加此元素，那么必须抛出一个异常（而不是返回false）。
+
+<span class="methodClassName">boolean addAll( Collection&lt;? extends E&gt; c )</span>
+	将指定集合中的所有元素都添加到此集合中。
+
+<span class="methodClassName">void clear()</span>
+	移除此集合中的所有元素。
+
+<span class="methodClassName">boolean contains( Object o )</span>
+	如果此集合包含指定的元素，则返回true。
+
+<span class="methodClassName">boolean containsAll( Collection&lt;?&gt; c )</span>
+	如果此集合包含指定集合中的所有元素，则返回true。
+
+<span class="methodClassName">boolean isEmpty()</span>
+	如果此集合不包含元素，则返回true。
+
+<span class="methodClassName">Iterator&lt;E&gt; iterator()</span>
+	返回此集合的迭代器。
+
+<span class="methodClassName">boolean remove( Object o )</span>
+	从此集合中移除指定元素，如果存在的话。
+
+<span class="methodClassName">boolean removeAll( Collection&lt;?&gt; c )</span>
+	移除此集合中那些也包含在指定集合中的所有元素。
+
+<span class="methodClassName">boolean retainAll( Collection&lt;?&gt; c )</span>
+	仅保留此集合中那些也包含在指定集合的元素。
+
+<span class="methodClassName">int size()</span>
+	返回此集合的元素数。
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、List 接口</h4>
+
+			<pre>
+java.util;
+
+public interface List&lt;E&gt; extends Collection&lt;E&gt; {}
+</pre>
+
+			<p>
+				有序，用户可以根据元素的整数索引访问元素。
+			</p>
+			<p>
+				允许重复。
+			</p>
+			<p>
+				<code>List</code> 接口提供了特殊的迭代器，称为 <code>ListIterator</code>，该迭代器还允许元素插入和替换，以及双向访问。
+			</p>
+
+			<br />
+
+			<p>
+				<code>List</code> 接口特有的方法
+			</p>
+
+			<pre>
+<span class="methodClassName">void add( int index, E element )</span>
+	在集合的指定位置插入指定元素。
+
+<span class="methodClassName">boolean addAll( int index, Collection&lt;? extends E&gt; c )</span>
+	将指定集合中的所有元素都插入到列表中的指定位置。
+
+<span class="methodClassName">E get( int index )</span>
+	返回指定位置的元素。
+
+<span class="methodClassName">int indexOf( Object o )</span>
+	返回第一次出现指定元素的索引；如果不包含该元素，则返回-1。
+
+<span class="methodClassName">int lastIndexOf( Object o )</span>
+	返回最后出现指定元素的索引；如果不包含此元素，则返回-1。
+
+<span class="methodClassName">ListIterator&lt;E&gt; listIterator()</span>
+	返回迭代器。
+
+<span class="methodClassName">ListIterator&lt;E&gt; listIterator( int index )</span>
+	返回迭代器，从指定位置开始。
+
+<span class="methodClassName">E remove( int index )</span>
+	移除指定位置的元素。
+
+<span class="methodClassName">E set( int index, E element )</span>
+	用指定元素替换指定位置的元素。
+
+<span class="methodClassName">List&lt;E&gt; subList( int fromIndex, int toIndex )</span>
+	返回指定的 fromIndex（包括）和 toIndex（不包括）之间的部分。
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 javanote 的 org.net5ijy.javanote.api.collection 包中的 ArrayListAPI.java 文件。</span>
+
+			<br /><br />
+
+			<a href="java01027.html" style="font-size:12px;">第二十七节&nbsp;&nbsp;&nbsp;&nbsp;基本数据类型包装类</a>
+			<br />
+			<a href="java01029.html" style="font-size:12px;">第二十九节&nbsp;&nbsp;&nbsp;&nbsp;ArrayList 类、队列和栈</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

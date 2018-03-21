@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三节&nbsp;&nbsp;&nbsp;&nbsp;Oracle 的数据类型、建表、建序列</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、常用的数据类型</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	概述</a></li>
+						<li><a href="#f1-2">2、	主要数据类型</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、创建表和序列</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	create table语法</a></li>
+						<li><a href="#f2-2">2、	主键和外键</a></li>
+						<li><a href="#f2-3">3、	非空、唯一索引</a></li>
+						<li><a href="#f2-4">4、	drop table语法</a></li>
+						<li><a href="#f2-5">5、	使用PL/SQL Developer工具创建、删除表</a></li>
+						<li><a href="#f2-6">6、	完整建表语句</a></li>
+						<li><a href="#f2-7">7、	创建序列</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、常用的数据类型</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	概述</h5>
+			<p>
+				关系型数据的核心是二维表，二维表是由行和列构成的，就像 excel 表一样。
+			</p>
+			<p>
+				每一个列是一个数据项，拥有属于自己的数据类型。而每一个行是一条数据记录。一个指定的列和一个指定的行能够确定一个数据值，就像 excel 中的单元格。这个数据值的类型、最大最小长度等由列来确定，具体的值和具体的长度则是由业务逻辑确定。
+			</p>
+
+			<h5 id="f1-2" class="title-2th">2、	主要数据类型</h5>
+			<p>
+				<span class="high-light">number(n, m)</span>
+			</p>
+			<p>
+				保存整数、浮点类型数据。n 为数值的总长度，m 为小数部分长度。如：
+			</p>
+			<pre>
+   number(2, 3)</pre>
+			<p>
+				或者不设置长度
+			</p>
+			<pre>
+   number</pre>
+
+			<p>
+				使用时可以不设置长度以避免业务数据与数据库设置的长度不匹配引发错误。但还是建议根据实际数据来设置长度，毕竟这样更符合开发标准，数据库效率也会高一些。
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">char 和 varchar2</span>
+			</p>
+			<p>
+				保存字符串类型数据，需要设置长度，范围在 1~4000 之间。比如定义一个精确长度的手机号码字段可以这样设置：
+			</p>
+			<pre>
+   varchar2(11)</pre>
+			<p>
+				或者
+			</p>
+			<pre>
+   char(11)</pre>
+
+			<p>
+				建议使用后者，因为char类型是不可变长度的数据，效率更高一些。
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">date</span>
+			</p>
+			<p>
+				保存日期类型数据。比如：办理日期、出生日期、数据创建时间等数据都可以使用date类型
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、创建表和序列</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	create table语法</h5>
+
+			<pre>
+-- 建表
+create table <span class="high-light">TABLE_NAME</span> 
+(
+	<span class="high-light">columnName1</span>	<span class="high-light">dataType(length)</span>  [ not null ]  [ unique ]  [ constraint <span class="high-light">PK_NAME</span> primary key ],	-- 字段1，主键
+	<span class="high-light">columnName2</span>	<span class="high-light">dataType</span>  [ default <span class="high-light">value</span> ],	-- 字段2
+	......
+	......
+	constraint <span class="high-light">FK_NAME</span> foreign key (<span class="high-light">OWNER_COLUMN</span>) references <span class="high-light">REF_TABLE</span> (<span class="high-light">REF_COLUMN</span>)	-- 外键
+);
+-- 以下为添加表注释语法
+comment on table <span class="high-light">TABLE_NAME</span> is '<span class="high-light">COMMENT INFORMATION</span>';
+
+-- 以下为添加列注释语法
+comment on column <span class="high-light">TABLE_NAME.COLUMN_NAME</span> is '<span class="high-light">COMMENT INFORMATION</span>';
+</pre>
+
+			<p>
+				<span class="important">注意：红色背景部分可以自定义</span>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	主键和外键</h5>
+
+			<p>
+				主键：唯一标识一行数据，这个列的值和业务逻辑无关。主键可以使用数据库的主键自增方式生成，如 MySQL；也可以使用序列方式生成，如 Oracle
+			</p>
+			<p>
+				使用以下语法定义主键：
+			</p>
+			<pre>
+columnName1  dataType(length)  constraint PK_NAME primary key</pre>
+
+			<p>
+				外键：这个是关系型数据的核心概念之一。即：在表中使用一个列保存关联表的唯一约束列（主键）的值，一方面减少数据冗余，另一方面让数据库更好维护。
+			</p>
+			<p>
+				使用以下语法定义外键：
+			</p>
+			<pre>
+constraint  FK_NAME  foreign key  (OWNER_COLUMN)  references  REF_TABLE  (REF_COLUMN)</pre>
+
+			<h5 id="f2-3" class="title-2th">3、 非空、唯一索引</h5>
+
+			<p>
+				创建表的时候在定义列数据类型之后使用 <code>not null</code> 和 <code>unique</code> 来声明。
+			</p>
+
+			<h5 id="f2-4" class="title-2th">4、	drop table语法</h5>
+
+			<p>
+				删除表
+			</p>
+			<pre>
+drop  table  <span class="high-light">TABLE_NAME</span>;</pre>
+
+			<h5 id="f2-5" class="title-2th">5、	使用PL/SQL Developer工具创建、删除表</h5>
+
+			<p>
+				我们可以使用 PL/SQL Developer 的图形界面创建、删除表。
+			</p>
+			<p>
+				首先打开新建窗口
+			</p>
+			<p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01003/01003001.jpg" class="img-responsive" />
+				</div>
+			</div>
+			</p>
+			<p>
+				输入表名和表注释
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01003/01003002.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<p>
+				定义列
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01003/01003003.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<p>
+				定义主键、唯一约束、外键
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01003/01003004.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f2-6" class="title-2th">6、	完整建表语句</h5>
+
+			<pre>
+-- Create table
+create table T_ROLE
+(
+	id          NUMBER(3) not null constraint ROLE_PK primary key,
+	role_name   VARCHAR2(50) not null unique,
+	create_time DATE default sysdate not null
+);
+comment on table T_ROLE is 'Role information';
+comment on column T_ROLE.id is 'Primary key';
+
+
+-- Create table
+create table T_USER
+(
+	id          NUMBER(8) not null constraint USER_PK primary key,
+	username    VARCHAR2(50) not null unique,
+	password    CHAR(20) not null,
+	create_time DATE default sysdate not null,
+	role_id     NUMBER(3),
+	constraint USER_ROLE_FK foreign key (ROLE_ID) references T_ROLE (ID)
+);
+comment on table T_USER is 'User information';
+comment on column T_USER.id is 'Primary key';
+
+
+-- Create table
+create table T_PRIVILEGE
+(
+	id             NUMBER(3) not null constraint PRIVILEGE_PK primary key,
+	privilege_name VARCHAR2(50) not null unique,
+	create_time    DATE default sysdate not null
+);
+comment on table T_PRIVILEGE is 'Privilege information';
+
+
+-- Create table
+create table T_ROLE_PRIVILEGE
+(
+	id           NUMBER(4) not null constraint ROLE_PRIVILEGE_PK primary key,
+	role_id      NUMBER(3) not null,
+	privilege_id NUMBER(3) not null,
+	create_time  DATE default sysdate not null,
+	constraint ROLE_FK foreign key (ROLE_ID) references T_ROLE (ID),
+	constraint PRIVILEGE_FK foreign key (PRIVILEGE_ID) references T_PRIVILEGE (ID)
+);
+comment on table T_ROLE_PRIVILEGE is 'Save relation of role and privilege';</pre>
+
+			<h5 id="f2-7" class="title-2th">7、	创建序列</h5>
+
+			<p>
+				因为 Oracle 数据库是使用序列方式生成主键的，所以有必要了解一下序列的创建方式，我们以创建 T_USER 表的序列为例：
+			</p>
+			<pre>
+CREATE SEQUENCE seq_user_id 
+INCREMENT BY 1 --每次加几个
+START WITH 1; --起始值</pre>
+
+			<pre>
+-- Create sequence
+CREATE SEQUENCE seq_user_id INCREMENT BY 1 START WITH 1;
+CREATE SEQUENCE seq_role_id INCREMENT BY 1 START WITH 1;
+CREATE SEQUENCE seq_privilege_id INCREMENT BY 1 START WITH 1;
+CREATE SEQUENCE seq_role_privilege_id INCREMENT BY 1 START WITH 1;</pre>
+
+			<br />
+			<p>
+				<a href="db01002.html" style="font-size:12px;">第二节&nbsp;&nbsp;&nbsp;&nbsp;PLSQL Developer 客户端软件</a>
+			</p>
+			<p>
+				<a href="db01004.html" style="font-size:12px;">第四节&nbsp;&nbsp;&nbsp;&nbsp;SQL 语言基础</a>
+			</p>
+			<br />
+
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

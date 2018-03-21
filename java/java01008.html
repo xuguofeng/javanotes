@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java语言流程控制</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第八节&nbsp;&nbsp;&nbsp;&nbsp;Java流程控制之循环结构</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、为什么需要循环结构</a></li>
+				<li><a href="#f2">二、while 循环结构</a></li>
+				<li><a href="#f3">三、do...while 循环结构</a></li>
+				<li><a href="#f4">四、for 循环结构</a></li>
+				<li><a href="#f5">五、for 循环几个例子</a></li>
+				<li><a href="#f6">六、break 和 continue 关键字</a></li>
+				<li><a href="#f7">七、给循环起“名字”</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、为什么需要循环结构</h4>
+			<p>
+				在控制台打印 5 次“Hello Java”，您最先想到的办法是什么？
+			</p>
+			<pre>
+public static void main(String[] args) {
+	System.out.println("Hello Java");
+	System.out.println("Hello Java");
+	System.out.println("Hello Java");
+	System.out.println("Hello Java");
+	System.out.println("Hello Java");
+}
+</pre>
+			<p>
+				这个确实是一个最简单、最易实现的办法，但是我如果想打印 10 次、20 次、100 次，怎么办？
+			</p>
+			<p>
+				再有，如果我们有一个几万行的 excel 文件，想逐行读取、封装对象进行数据库保存或其他的操作，该怎么办？
+			</p>
+			<p>
+				为了解决上面的两种需求，我们就需要一种可以处理大量相同或者相似操作的语法结构，即循环结构。
+			</p>
+			<hr />
+
+
+			<h4 id="f2" class="title-1th">二、while 循环结构</h4>
+			<pre>
+/*
+	<span class="annotation">判断 condition 条件为 true 时，会进入循环体代码块</span>
+	<span class="annotation">代码块执行之后，会再次执行上面的操作</span>
+	<span class="annotation">如此循环，直到 condition 条件为 false 才结束循环</span>
+*/
+while(condition) {
+	// 当condition条件表达式为true时，执行代码块
+}
+</pre>
+
+			<p>
+				使用 while 循环解决一下上面打印 5 次“Hello Java”的需求
+			</p>
+			<pre>
+public static void main(String[] args) {
+	int times = 0;<span class="annotation"> // 定义一个标识打印次数的变量</span>
+	/*
+		<span class="annotation"> // 次数标识小于 5 时才进入循环体</span>
+	*/
+	while (times < 5) {
+		System.out.println("Hello Java");
+		times++;<span class="annotation"> // 次数标识变量自增</span>
+	}
+}
+</pre>
+			<p>
+				我们对上面的代码做一下简单的说明
+			</p>
+			<pre>
+int times = 0;
+
+第一次循环判断：0 < 5
+	<span class="high-light">打印 Hello Java</span>
+	times自增，times = 1
+第二次循环判断：1 < 5
+	<span class="high-light">打印 Hello Java</span>
+	times自增，times = 2
+第三次循环判断：2 < 5
+	<span class="high-light">打印 Hello Java</span>
+	times自增，times = 3
+第四次循环判断：3 < 5
+	<span class="high-light">打印 Hello Java</span>
+	times自增，times = 4
+第五次循环判断：4 < 5
+	<span class="high-light">打印 Hello Java</span>
+	times自增，times = 5
+第六次循环判断：5 < 5 != true，跳出循环，打印了 5 次 Hello Java
+</pre>
+			<p>
+				在使用 while 循环时需要注意一下两点：
+			</p>
+			<p>
+				（1）循环结构一般都有结束循环的条件；
+			</p>
+			<p>
+				（2）循环所在代码块内、且在循环语句之前定义的变量，在循环体内可以使用，且不可以重复定义；
+			</p>
+			<p>
+				（3）循环体内定义的变量在本次循环执行完毕后释放；
+			</p>
+
+			<p>
+				下面我们来看两个 while 循环的例子
+			</p>
+			<p>
+				例 1：1 + 2 + …… + 100 = ?
+			</p>
+			<pre>
+public static void main(String[] args) {
+	int num = 1;
+	int sum = 0;
+	while ( num &lt;= 100 ) {
+		sum += num;
+		num++;
+	}
+	System.out.println("1 + 2 + ...... + 100 = " + sum);
+}
+
+<span class="phase-title">输出：</span>
+
+1 + 2 + ...... + 100 = 5050
+</pre>
+
+			<p>
+				例 2：1 至 100 中 7 的 倍数有几个？
+			</p>
+			<pre>
+public static void main(String[] args) {
+	int count = 0;
+	int num = 1;
+	while ( num &lt;= 100 ) {
+		if ( num % 7 == 0 ) {
+			count += 1;
+		}
+		num++;
+	}
+	System.out.println("1 至 100 中 7 的 倍数有：" + count);
+}
+
+<span class="phase-title">输出：</span>
+
+1 至 100 中 7 的 倍数有：14
+</pre>
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 WhileControll.java 文件。</span>
+
+			<hr />
+
+
+			<h4 id="f3" class="title-1th">三、do...while 循环结构</h4>
+			<pre>
+do {
+	<span class="high-light">// 循环执行的代码，至少会执行一次</span>
+} while (condition);
+</pre>
+			<p>
+				使用很少，了解为主。有一点需要注意：无论条件怎样，<code>do......while</code> 结构的循环体至少会执行一次。
+			</p>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 DoWhileControll.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、for 循环结构</h4>
+			<p>
+				基本语法
+			</p>
+			<pre>
+for (初始化表达式; 条件判断表达式; 循环后执行表达式) {
+	// 执行代码；
+}
+</pre>
+			<p>
+				具体特点
+			</p>
+			<p>
+				（1）初始化表达式只执行一次，定义的变量在整个循环过程中都有效；
+			</p>
+			<p>
+				（2）条件判断表达式每次循环开始时进行判断，为 true 时进入代码块，为 false 时结束循环；
+			</p>
+			<p>
+				（3）循环后执行的表达式通常用于控制循环条件；
+			</p>
+			<p>
+				（4）循环体内定义的变量在本次循环执行完毕后释放
+			</p>
+
+			<br />
+			<p>
+				使用嵌套 for 循环打印九九乘法表
+			</p>
+			
+			<pre>
+for (int i = 1; i &lt;= 9; i++) {
+	for (int j = 1;j &lt;= i; j++) {
+		System.out.print(i+" x "+j+" = "+(i*j)+"\t");
+	}
+	System.out.println();
+}
+</pre>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01008/01008001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				for 和 while 循环的特点及区别
+			</p>
+			<p>
+				（1）二者可以相互替换；
+			</p>
+			<p>
+				（2）for 循环中初始化表达式定义的变量只在 for 语句内部可以使用，循环结束变量释放；如果使用变量的值来控制 while，这个变量需要在之前定义，while 循环结束后还可以使用；
+			</p>
+
+			<br />
+
+			<p>
+				各种流程控制的结构可以互相嵌套，上面打印乘法表就属于嵌套。
+			</p>
+
+			<p>
+				下面我们把内层循环改造成 while 循环结构
+			</p>
+			<pre>
+for (int i = 1; i &lt; 10; i++ ) {
+
+	int j = 1;
+
+	while (true) {
+		System.out.print(i + " x " + j + " = " + (i * j) + "\t");
+		j++;
+
+		/*
+			<span class="high-light">主要是演示结构嵌套，不要这样使用，而是在 while 中使用 j &lt;= i 表达式来控制循环跳出。</span>
+		*/
+		if (j &gt; i) <span class="high-light">// 这段if代码可以不使用</span>
+			break; <span class="high-light">// break关键字可以跳出循环</span>
+	}
+	System.out.println(); // 打印个换行
+}
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 ForControll.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、for 循环几个例子</h4>
+			<p>
+				例子1
+			</p>
+			<pre>
+for (int i =0; i &lt; 5; i++) {
+	for (int j = 0; j &lt;= i; j++) {
+		System.out.print("*");
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+*
+**
+***
+****
+*****
+</pre>
+			<p>
+				例子2
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 0; j &lt; 5 - i; j++) {
+		System.out.print("*");
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+*****
+****
+***
+**
+*
+</pre>
+			<p>
+				例子3
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 5; j &gt;= 5 - i; j--) {
+		System.out.print(j);
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+5
+54
+543
+5432
+54321
+</pre>
+			<p>
+				例子4
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 0; j &lt; 5 - i; j++) {
+		System.out.print(5-j);
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+54321
+5432
+543
+54
+5
+</pre>
+			<p>
+				例子5
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 0; j &lt;= i; j++) {
+		System.out.print(1+j);
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+1
+12
+123
+1234
+12345
+</pre>
+			<p>
+				例子6
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 0; j &lt; 5 - i; j++) {
+		System.out.print(1+j);
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+12345
+1234
+123
+12
+1
+</pre>
+			<p>
+				例子7
+			</p>
+			<pre>
+for (int i = 0; i &lt; 5; i++) {
+	for (int j = 0; j &lt; i; j++) {
+		System.out.print(" ");
+	}
+	for (int j = 0; j &lt; 5 - i; j++) {
+		System.out.print("* ");
+	}
+	System.out.println();
+}
+
+<span class="phase-title">输出：</span>
+
+* * * * * 
+ * * * * 
+  * * * 
+   * * 
+    *
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 ForControll.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、break 和 continue 关键字</h4>
+			<p>
+				break 关键字：作用是跳出 switch 和循环语句。
+			</p>
+			<p>
+				continue 关键字：作用在循环语句中，用于跳过本次循环。
+			</p>
+			<br />
+
+			<p>
+				一个简单的例子即可说明这个问题。
+			</p>
+			<pre>
+for (int i = 0; i &lt; 10; i++) {
+	if (i % 2 == 0) <span class="annotation"> // i为2的倍数时，跳过本次循环</span>
+		continue;
+	
+	if (i &gt; 5) 
+		break;<span class="annotation"> // i大于5时，结束循环</span>
+	
+	System.out.println(i);
+}
+
+<span class="phase-title">输出：</span>
+
+1
+3
+5
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 ProcessControll 中的 ContinueAndBreak.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f7" class="title-1th">七、给循环起“名字”</h4>
+			<p>
+				break 和 continue 关键字可以结束循环和跳过本次循环，但操作的是关键字所在的循环语句，无法操作嵌套在此循环外面的循环。
+			</p>
+			<p>
+				我们可以给循环命名，然后在循环内部使用“<code>break 循环名字</code>”、“<code>continue 循环名字</code>”方式解决上面的问题，格式是这样的：
+			</p>
+			<pre>
+<span class="high-light">LoopName1</span>:for(表达式1; 表达式2; 表达式3) {
+	// 循环体;
+	
+	<span class="high-light">LoopName2</span>:while(condition) {
+		// 循环体;
+
+		if (condition) {
+			continue LoopName2;<span class="annotation"> // 跳过本次内层循环</span>
+		}
+
+		if (condition) {
+			break LoopName1;<span class="annotation"> // 结束外层循环</span>
+		}
+	}
+}
+</pre>
+		<br />
+
+		<a href="java01007.html" style="font-size:12px;">第七节&nbsp;&nbsp;&nbsp;&nbsp;Java流程控制之分支结构</a>
+		<br />
+		<a href="java01009.html" style="font-size:12px;">第九节&nbsp;&nbsp;&nbsp;&nbsp;方法</a>
+
+		<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

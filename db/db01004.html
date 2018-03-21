@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四节&nbsp;&nbsp;&nbsp;&nbsp;SQL 语言基础</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、数据的增删改</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	insert 语法</a></li>
+						<li><a href="#f2-2">2、	delete 语法</a></li>
+						<li><a href="#f2-3">3、	update 语法</a></li>
+						<li><a href="#f2-4">4、	添加测试数据</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、select 语法</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	基础查询</a></li>
+						<li><a href="#f3-2">2、	where 子句</a></li>
+						<li><a href="#f3-3">3、	and 和 or</a></li>
+						<li><a href="#f3-4">4、	order by 子句</a></li>
+						<li><a href="#f3-5">5、	group by 和 having</a></li>
+						<li><a href="#f3-6">6、	in 和 not in</a></li>
+						<li><a href="#f3-7">7、	like 和 not like</a></li>
+						<li><a href="#f3-8">8、	distinct</a></li>
+						<li><a href="#f3-9">9、	空值及数值比较</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+
+			<p>
+				<code>SQL</code> 全称 <code>Structured Query Language</code> 即结构化查询语言，是对数据进行增删改查操作的数据库语言，脚本文件以 <code>.sql</code> 后缀方式命名。<code>SQL</code> 语句可以嵌套，再配合使用函数，使其功能非常强大，且具有极大的灵活性。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、数据的增删改</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	insert 语法</h5>
+
+			<p>
+				把数据添加到数据表
+			</p>
+			<p>
+				语法如下：
+			</p>
+<pre>insert into 表名 (列名1, 列名2, ……) values (值1, 值2, ……);</pre>
+
+			<h5 id="f2-2" class="title-2th">2、	delete 语法</h5>
+
+			<p>
+				删除一条或多条数据
+			</p>
+			<p>
+				语法如下：
+			</p>
+<pre>delete  from  表名 [where 条件]</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	update 语法</h5>
+
+			<p>
+				修改一条或多条数据
+			</p>
+			<p>
+				语法如下：
+			</p>
+<pre>update 表名 set 列名1=新值1 [, 列名2=新值2, ……]  [where 条件]</pre>
+
+			<h5 id="f2-4" class="title-2th">4、	添加测试数据</h5>
+
+<pre>
+insert into t_role (id, role_name) values (seq_role_id.nextval, '超级管理员');
+insert into t_role (id, role_name) values (seq_role_id.nextval, '角色管理员');
+insert into t_role (id, role_name) values (seq_role_id.nextval, '权限管理员');
+insert into t_role (id, role_name) values (seq_role_id.nextval, '用户管理员');
+
+------------------------------------------------------------------------
+
+insert into t_user (id, username, password, create_time, role_id) values (seq_user_id.nextval, 'admin01', '123456', to_date('2018-02-26 12:56:00','yyyy-mm-dd hh24:mi:ss'), 1);
+insert into t_user (id, username, password, create_time, role_id) values (seq_user_id.nextval, 'admin02', '123456', to_date('2018-01-25 14:46:00','yyyy-mm-dd hh24:mi:ss'), 3);
+insert into t_user (id, username, password, create_time, role_id) values (seq_user_id.nextval, 'admin03', '123456', to_date('2018-01-21 08:50:00','yyyy-mm-dd hh24:mi:ss'), 3);
+insert into t_user (id, username, password, create_time, role_id) values (seq_user_id.nextval, 'admin04', '123456', to_date('2018-03-01 10:09:00','yyyy-mm-dd hh24:mi:ss'), 4);
+--......</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、select 语法</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	基础查询</h5>
+
+			<p>
+				点击“新建”，选择“SQL窗口”
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004001.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				最基础的查询语句需要包含：select 子句、from 子句
+			</p>
+			<p>
+				查询全部列、全部数据
+			</p>
+<pre>select* from t_user;</pre>
+
+			<p>
+				也可以使用对该表拥有查询权限的用户来引用表，用户名.表名
+			</p>
+<pre>select * from test01.t_user;</pre>
+
+			<p>
+				查询指定列、全部数据
+			</p>
+<pre>select id, username, password, create_time from test01.t_user;</pre>
+
+			<p>
+				注意使用英文的标点符号
+			</p>
+
+			<p>
+				<span class="high-light">别名</span>
+			</p>
+			<p>
+				给查询的表起别名
+			</p>
+			<p>
+				为 t_user 定义别名为 a，在 select 中使用 a.* 来引用表的所有列
+			</p>
+<pre>select a.* from test01.t_user a;</pre>
+
+			<p>
+				给查询字段起别名
+			</p>
+			<p>
+				一方面便于识别
+			</p>
+			<p>
+				另一方面在导出 excel 或者 csv 数据时可以生成对应格式的表头
+			</p>
+<pre>select 
+id 编号, 
+username 用户名, 
+password 密码, 
+create_time 创建时间 
+from test01.t_user;</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004002.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-2" class="title-2th">2、	where 子句</h5>
+
+			<p>
+				设置查询筛选条件
+			</p>
+
+			<p>
+				查找用户名为 admin01 的数据
+			</p>
+<pre>select a.* from t_user a where 
+a.username = 'admin01'</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004003.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+
+			<p>
+				查找 id 在 22 和 25 之间的数据（包含22、25）
+			</p>
+<pre>select a.* from t_user a where 
+a.id >= 22 and 
+a.id <= 25</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004004.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-3" class="title-2th">3、	and 和 or</h5>
+
+			<p>
+				查找创建时间在 2018-03-01 到 2018-03-21 之间的数据
+			</p>
+<pre>select a.* from t_user a where 
+a.create_time >= to_date('2018-03-01','yyyy-mm-dd') and 
+a.create_time <= to_date('2018-03-21','yyyy-mm-dd')</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004005.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+
+			<p>
+				使用 or 查找以下条件的数据：
+			</p>
+			<p>
+				role_id 为 3
+			</p>
+			<p>
+				创建时间在 2018-03-01 之前或 2018-03-21 之后的数据
+			</p>
+
+			<p>
+				注意
+			</p>
+			<p>
+				这里面涉及到一个 and 和 or 运算优先级的问题，and 的优先级高于 or 运算，所以需要把  加上括号让这部分优先运算。
+			</p>
+<pre>select a.* from t_user a where 
+a.role_id = 3 and 
+(a.create_time < to_date('2018-03-01','yyyy-mm-dd') or a.create_time > to_date('2018-03-21','yyyy-mm-dd'))
+</pre>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004006.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-4" class="title-2th">4、	order by 子句</h5>
+
+			<p>
+				使用某个字段对数据进行排序，格式如下：
+			</p>
+			<pre>order by 字段名 [asc|desc]</pre>
+			<p>
+				asc	升序，默认，所以升序排序时可以不写asc
+			</p>
+			<p>
+				desc	降序
+			</p>
+			<br />
+			<p>
+				查找以下条件的数据：
+			</p>
+			<p>
+				role_id 为 3
+			</p>
+			<p>
+				创建时间在 2018-03-01 之前或 2018-03-21 之后的数据
+			</p>
+			<p>
+				以创建时间升序排序
+			</p>
+			<pre>select a.* from t_user a where 
+a.role_id = 3 and 
+(a.create_time < to_date('2018-03-01','yyyy-mm-dd') or a.create_time > to_date('2018-03-21','yyyy-mm-dd'))
+order by create_time asc</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004007.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-5" class="title-2th">5、	group by 和 having</h5>
+
+			<p>
+				group by: 按照某些字段把数据分组，之后输出每个组的数据信息。
+			</p>
+			<p>
+				注意
+			</p>
+			<p>
+				使用 group by 把数据分组之后，就只能输出分组所使用的字段，以及使用聚集函数计算出来的数值。
+			</p>
+			<p>
+				查询以下条件的数据：
+			</p>
+			<p>
+				输出每个角色的用户数量，角色暂时使用 role_id 代替。介绍关联查询之后，再补充角色名称
+			</p>
+			<pre>select a.role_id, count(*) from t_user a 
+group by a.role_id</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004008.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<br />
+
+			<p>
+				having 子句放在 group by 子句后面，用于对聚合出来的结果数据进行筛选
+			</p>
+			<p>
+				多用于查找重复数据
+			</p>
+			<p>
+				查询以下条件的数据：
+			</p>
+			<p>
+				查找最少有两个用户的角色的 id
+			</p>
+			<pre>select a.role_id, count(*) from t_user a 
+group by a.role_id 
+having count(*) >= 2</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004009.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-6" class="title-2th">6、	in 和 not in</h5>
+
+			<p>
+				in 子句为一个字段设置多个可选的值，而 not in 子句作用相反
+			</p>
+			<p>
+				查找角色 id 为 1、4 的用户数据
+			</p>
+			<pre>select a.* from t_user a where 
+a.role_id in (1, 4)</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004010.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-7" class="title-2th">7、	like 和 not like</h5>
+
+			<p>
+				字符串模糊查询
+			</p>
+			<p>
+				语法：
+			</p>
+			<pre>like '%字符串%'		-- 字符串前后为模糊
+like '字符串%'		-- 字符串后面为模糊
+like '%字符串'		-- 字符串前面为模糊</pre>
+			<p>
+				查找用户名中含有 admin0 的用户数据
+			</p>
+			<pre>select a.* from t_user a where a.username like '%admin0%'</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004011.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-8" class="title-2th">8、	distinct</h5>
+
+			<p>
+				去除重复
+			</p>
+			<p>
+				查找已经被使用的角色 id
+			</p>
+			<pre>select distinct a.role_id from t_user a where a.role_id is not null</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01004/01004012.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<h5 id="f3-9" class="title-2th">9、	空值及数值比较</h5>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th>运算符</th><th>作用</th>
+						</tr>
+						<tr>
+							<td>is null</td><td>数据值为空</td>
+						</tr>
+						<tr>
+							<td>is not null</td><td>数据值不为空</td>
+						</tr>
+						<tr>
+							<td>&gt;</td><td>大于</td>
+						</tr>
+						<tr>
+							<td>&gt;=</td><td>大于等于</td>
+						</tr>
+						<tr>
+							<td>&lt;</td><td>小于</td>
+						</tr>
+						<tr>
+							<td>&lt;=</td><td>小于等于</td>
+						</tr>
+						<tr>
+							<td>!=</td><td>不等于</td>
+						</tr>
+						<tr>
+							<td>&lt;&gt;</td><td>不等于</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<br />
+			<p>
+				<a href="db01003.html" style="font-size:12px;">第三节&nbsp;&nbsp;&nbsp;&nbsp;Oracle 的数据类型、建表、建序列</a>
+			</p>
+			<br />
+
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

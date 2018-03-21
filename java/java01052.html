@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十二节&nbsp;&nbsp;&nbsp;&nbsp;事件和监听器</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、事件处理机制概述</a></li>
+				<li><a href="#f2">二、窗口事件监听</a></li>
+				<li><a href="#f3">三、操作事件监听</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	ActionListener 接口</a></li>
+						<li><a href="#f3-2">2、	ActionEvent 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、鼠标事件监听</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	MouseListener 接口</a></li>
+						<li><a href="#f4-2">2、	MouseEvent 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、键盘事件监听</a>
+					<ul class="list-unstyled">
+						<li><a href="#f5-1">1、	KeyListener 接口</a></li>
+						<li><a href="#f5-2">2、	KeyEvent 类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f6">六、焦点事件监听</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、事件处理机制概述</h4>
+
+			<p>
+				Java事件处理采用“委派事件”机制，即预先为组件注册事件监听器，当事件发生时，把事件相关信息（事件源对象、操作信息等）传递给事件监听器，由监听器的方法来进行相应的程序处理。
+			</p>
+			<p>
+				主要包括以下几种事件：窗口事件、操作事件、鼠标事件、键盘事件、焦点事件。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01052/01052001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、窗口事件监听</h4>
+
+			<pre>
+java.awt.event;
+
+public interface WindowListener extends EventListener {}
+</pre>
+			<p>
+				用于接收窗口事件的监听器接口。
+			</p>
+			<p>
+				需要处理窗口事件的类要么实现此接口（及其包含的所有方法），要么扩展抽象类WindowAdapter（仅重写所需的方法）。
+			</p>
+			<p>
+				然后使用窗口的addWindowListener方法将从该类所创建的监听器对象向该Window注册。
+			</p>
+			<p>
+				当通过打开、关闭、激活或停用、图标化或取消图标化而改变了窗口状态时，将调用该监听器对象中的相关方法，并将WindowEvent传递给该方法。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">void windowOpened(WindowEvent e)</span>
+	窗口首次变为可见时调用
+
+<span class="methodClassName">void windowClosing(WindowEvent e)</span>
+	用户试图从窗口的系统菜单中关闭窗口时调用
+
+<span class="methodClassName">void windowClosed(WindowEvent e)</span>
+	因对窗口调用dispose而将其关闭时调用
+
+<span class="methodClassName">void windowIconified(WindowEvent e)</span>
+	窗口从正常状态变为最小化状态时调用
+
+<span class="methodClassName">void windowDeiconified(WindowEvent e)</span>
+	窗口从最小化状态变为正常状态时调用
+
+<span class="methodClassName">void windowActivated(WindowEvent e)</span>
+	将Window设置为活动Window时调用
+
+<span class="methodClassName">void windowDeactivated(WindowEvent e)</span>
+	当Window不再是活动Window时调用
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">Frame窗口关闭时程序退出</span>
+			</p>
+			<pre>
+Frame.addWindowListener(new WindowAdapter() {
+	<span class="annotation">// 这是一个匿名内部类</span>
+	@Override
+	public void windowClosing(WindowEvent e) {
+		System.exit(0);<span class="annotation">// 程序退出</span>
+	}
+});
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、操作事件监听</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	ActionListener 接口</h5>
+
+			<pre>
+java.awt.event;
+
+public interface ActionListener extends EventListener {}
+</pre>
+
+			<p>
+				用于接收操作事件的监听器接口。
+			</p>
+			<p>
+				需要处理操作事件的类可以实现此接口，使用该类创建的监听器对象可使用组件的addActionListener方法进行注册。
+			</p>
+			<p>
+				在发生操作事件时，调用该对象的actionPerformed方法。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">void actionPerformed(ActionEvent e)</span>
+	发生操作时调用
+</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	ActionEvent 类</h5>
+
+			<pre>
+java.awt.event;
+
+public class ActionEvent extends AWTEvent {}
+</pre>
+
+			<p>
+				<span class="high-light">字段</span>
+			</p>
+			<pre>
+<span class="methodClassName">public static final int ALT_MASK</span>
+	指示alt键在发生事件期间是否被按下
+
+<span class="methodClassName">public static final int CTRL_MASK</span>
+	指示Ctrl键在发生事件期间是否被按下
+
+<span class="methodClassName">public static final int SHIFT_MASK</span>
+	指示shift键在发生事件期间是否被按下
+</pre>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public String getActionCommand()</span>
+	返回与此动作相关的命令字符串
+
+<span class="methodClassName">public int getModifiers()</span>
+	返回发生此动作事件期间按下的修改键
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">按钮点击时触发事件</span>
+			</p>
+			<pre>
+Button b = new Button("点击");
+b.addActionListener(new ActionListener() {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		<span class="annotation">// 代码</span>
+	}
+});
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、鼠标事件监听</h4>
+
+			<h5 id="f4-1" class="title-2th">1、	MouseListener 接口</h5>
+
+			<pre>
+java.awt.event;
+
+public interface MouseListener extends EventListener {}
+</pre>
+
+			<p>
+				鼠标事件（按下、释放、单击、进入或离开）的监听器接口。
+			</p>
+			<p>
+				需要处理鼠标事件的类要么实现此接口（及其包含的所有方法），要么扩展抽象类MouseAdapter（仅重写所需的方法）。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">void mouseClicked(MouseEvent e)</span>
+	鼠标按键在组件上单击（按下并释放）时调用
+
+<span class="methodClassName">void mousePressed(MouseEvent e)</span>
+	鼠标按键在组件上按下时调用
+
+<span class="methodClassName">void mouseReleased(MouseEvent e)</span>
+	鼠标按键在组件上释放时调用
+
+<span class="methodClassName">void mouseEntered(MouseEvent e)</span>
+	鼠标进入到组件上时调用
+
+<span class="methodClassName">void mouseExited(MouseEvent e)</span>
+	鼠标离开组件时调用
+</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	MouseEvent 类</h5>
+
+			<pre>
+java.awt.event;
+
+public class MouseEvent extends InputEvent {}
+</pre>
+
+			<p>
+				组件中发生鼠标动作的事件。
+			</p>
+			<p>
+				MouseEvent对象会把事件的具体信息如：按钮、点击次数、坐标位置等，在监听器MouseListener的方法中可以获取到事件信息，进行相应的处理。
+			</p>
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public int getButton()</span>
+	返回更改了状态的鼠标按键（如果有）
+
+<span class="methodClassName">public int getClickCount()</span>
+	返回与此事件关联的鼠标单击次数
+
+<span class="methodClassName">public Point getPoint()</span>
+	返回事件相对于源组件的x, y坐标
+
+<span class="methodClassName">public int getX()</span>
+	返回事件相对于源组件的水平x坐标
+
+<span class="methodClassName">public int getY()</span>
+	返回事件相对于源组件的垂直y坐标
+
+<span class="methodClassName">public Point getLocationOnScreen()</span>
+	返回事件在屏幕上的绝对x, y坐标
+
+<span class="methodClassName">public int getXOnScreen()</span>
+	返回事件在屏幕上的绝对水平x坐标
+
+<span class="methodClassName">public int getYOnScreen()</span>
+	返回事件在屏幕上的绝对垂直y坐标
+</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、键盘事件监听</h4>
+
+			<h5 id="f5-1" class="title-2th">1、	KeyListener 接口</h5>
+
+			<pre>
+java.awt.event;
+
+public interface KeyListener extends EventListener {}
+</pre>
+
+			<p>
+				用于接收键盘事件（击键）的监听器接口。
+			</p>
+			<p>
+				需要处理键盘事件的类要么实现此接口（及其包含的所有方法），要么扩展抽象 <code>KeyAdapter</code> 类（仅重写有用的方法）。
+			</p>
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">void keyTyped(KeyEvent e)</span>
+	键入某个键时调用此方法
+
+<span class="methodClassName">void keyPressed(KeyEvent e)</span>
+	按下某个键时调用此方法
+
+<span class="methodClassName">void keyReleased(KeyEvent e)</span>
+	释放某个键时调用此方法
+</pre>
+
+			<h5 id="f5-2" class="title-2th">2、	KeyEvent 类</h5>
+
+			<pre>
+java.awt.event;
+
+public class KeyEvent extends InputEvent {}
+</pre>
+
+			<p>
+				该类定义了键盘上每一个键所对应的Code常量值，可以使用 <code>getKeyCode()</code> 方法获取按下键的Code值。
+			</p>
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">public int getKeyCode()</span>
+	返回与此事件中的键关联的整数keyCode
+</pre>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、焦点事件监听</h4>
+
+			<pre>
+java.awt.event;
+
+public interface FocusListener extends EventListener {}
+</pre>
+
+			<p>
+				用于接收组件上的键盘焦点事件的监听器接口。
+			</p>
+			<p>
+				需要处理焦点事件的类要么实现此接口（以及它包含的所有方法），要么扩展抽象FocusAdapter类（只重写需要的方法）。然后，使用组件的addFocusListener方法把此监听器对象注册到组件上。
+			</p>
+			<p>
+				当组件获得或失去键盘焦点时，可调用监听器对象中的相关方法，并将FocusEvent传递给它。
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+			<pre>
+<span class="methodClassName">void focusGained(FocusEvent e)</span>
+	组件获得键盘焦点时调用
+
+<span class="methodClassName">void focusLost(FocusEvent e)</span>
+	组件失去键盘焦点时调用
+</pre>
+
+			<br />
+
+			<a href="java01051.html" style="font-size:12px;">第五十一节&nbsp;&nbsp;&nbsp;&nbsp;Button （按钮）、Label （标签）、Checkbox （复选框） 和 文本域组件</a>
+			<br />
+			<a href="java01053.html" style="font-size:12px;">第五十三节&nbsp;&nbsp;&nbsp;&nbsp;Swing 和简单资源管理器程序简介</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

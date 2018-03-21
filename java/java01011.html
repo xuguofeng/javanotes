@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java面向对象编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第十一节&nbsp;&nbsp;&nbsp;&nbsp;面向对象思想、类和对象</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、面向对象思想</a></li>
+				<li><a href="#f2">二、类和对象的关系</a></li>
+				<li><a href="#f3">三、类和对象举例</a></li>
+				<li><a href="#f4">四、成员变量和局部变量</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、面向对象思想</h4>
+			<p>
+				面向对象编程是当今主流的程序设计思想，已经取代了过程化程序开发技术，java 是完全面向对象编程语言，必须熟悉面向对象才能够编写 java 程序。
+			</p>
+			<p>
+				面向对象的程序是由对象组成的，每个对象包含着对用户公开的特定功能和隐藏的实现部分。程序中的很多对象来自标准库，还有一些需要自定义。
+			</p>
+			<p>
+				从根本上说，只要对象能够实现业务功能，其具体的实现细节不必特别关心。
+			</p>
+			<p>
+				面向对象有以下特点：
+			</p>
+			<p>
+				（1）面向对象是一种常见的思想，比较符合人们的思考习惯；
+			</p>
+			<p>
+				（2）面向对象可以将复杂的业务逻辑简单化；
+			</p>
+			<p>
+				（3）面向对象具有抽象、封装、继承、多态等特性。
+			</p>
+			<p>
+				面向对象的编程语言主要有：C++、Java、C#等。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、类和对象的关系</h4>
+			<p class="phase-title">
+				类：
+			</p>
+			<p>
+				对某类事物的普遍一致性特征、功能的抽象、描述和封装，是构造对象的模版或蓝图，用 java 编写的代码都会在某些类的内部。类之间的关系主要有：依赖、聚合、继承。
+			</p>
+
+			<br />
+
+			<p class="phase-title">
+				对象：
+			</p>
+			<p>
+				使用 new 关键字创建的类的实例。同一个类的所有对象，都具有相似的数据和行为，但是每个对象都保存着自己独特的状态，对象状态会随着程序的运行而发生改变，需要注意状态的变化必须通过调用方法来改变，这就是封装的基本原则。
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、类和对象举例</h4>
+			<p>
+				每个人都有手机，我们就使用手机来举例。
+			</p>
+			<p>
+				手机有<span class="high-light">操作系统、手机号、品牌、电量</span>等重要属性，有<span class="high-light">发短信、充电</span>等功能。我们就使用 java 代码编写一个手机类。
+			</p>
+			<pre>
+public class MobilePhone1 {
+	
+	<span class="annotation">// 操作系统</span>
+	String os;
+
+	<span class="annotation">// 手机号码</span>
+	String phoneNumber;
+
+	<span class="annotation">// 手机品牌</span>
+	String brand;
+
+	<span class="annotation">// 剩余电量</span>
+	double dumpEnergy;
+
+	<span class="annotation">// 发短信的方法</span>
+	void sendMessage(String message, String targetPhoneNumber){
+		System.out.println("发给" + targetPhoneNumber + ", 内容是：" + message);
+	}
+
+	<span class="annotation">// 充电方法</span>
+	double charge(){
+		System.out.println("正在充电, 剩余电量：" + dumpEnergy * 100 + "%");
+		return dumpEnergy;
+	}
+
+	public static void main(String[] args) {
+
+		<span class="annotation">// 使用new关键字调用MobilePhone的默认构造方法创建实例</span>
+		MobilePhone1 mobile = new MobilePhone1();
+
+		<span class="annotation">// 给mobile对象成员变量赋值</span>
+		mobile.os = "Andriod";
+		mobile.phoneNumber = "12345678901";
+		mobile.brand = "红米2";
+		mobile.dumpEnergy = 0.87d;
+
+		<span class="annotation">// 调用mobile对象的方法</span>
+		mobile.sendMessage("你好，我是***，这是一个测试短信，打扰了", "12345678902");
+		double de = mobile.charge(); <span class="annotation">// 因为方法有返回值，所以可以使用double类型变量接收</span>
+
+		<span class="annotation">// 演示匿名对象</span>
+		new MobilePhone1().charge();
+	}
+}
+
+<span class="phase-title">输出：</span>
+
+发给12345678902, 内容是：你好，我是***，这是一个测试短信，打扰了
+正在充电, 剩余电量：87.0%
+正在充电, 剩余电量：0.0%
+</pre>
+			<p>
+				有以下几点需要注意：
+			</p>
+			<p>
+				（1）使用 <code>class</code> 关键字定义类
+			</p>
+			<p>
+				（2）类名可以是字母、数字、$_的组合，不可以数字开始，首字母大写
+			</p>
+			<p>
+				（3）.java 源代码文件中 <code>public</code> 的类名称需要和文件名一致
+			</p>
+			<p>
+				（4）定义类实际上就是定义成员变量和功能方法
+			</p>
+			<p>
+				（5）成员变量和函数通常使用 <code>public</code>, <code>protect</code>, <code>private</code> 等访问权限关键字进行描述
+			</p>
+			<p>
+				（6）成员变量在整个类中都有效
+			</p>
+			<p>
+				（7）使用 new 关键字创建类的实例对象时，会在 JVM 堆内存中开辟空间存储对象
+			</p>
+			<p>
+				（8）使用赋值运算符 <code>=</code> 可以让变量指向实例对象的存储位置，也就是说变量实际上只保存对象在堆内存的地址值，这就是引用数据类型的本质
+			</p>
+			<p>
+				（9）匿名对象，没有变量引用的对象。比如下面这段代码：
+			</p>
+			<pre>
+<span class="annotation">// 匿名对象</span>
+<span class="annotation">// 因为成员变量dumpEnergy没有赋值，所以使用初始化值0.0</span>
+new MobilePhone().charge();
+
+<span class="phase-title">输出：</span>
+
+正在充电, 剩余电量：0.0%
+</pre>
+
+			<br />
+
+			<span class="src-introduce">演示代码在项目 oop 中的 MobilePhone1.java 文件。</span>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、成员变量和局部变量</h4>
+			<p>
+				（1）成员变量定义在类中，整个类都可以访问此变量，有初始化值，存在于堆内存中，随着对象的创建而创建，随着对象的释放而释放。
+			</p>
+			<p>
+				（2）局部变量定义在某个代码块中，只在所在代码块有效，没有初始化值，存在于栈内存中，生命周期是所在代码块。
+			</p>
+			<p>
+				（3）如果某个代码块中的局部变量和成员变量同名，在此代码块访问此变量获取到的是局部变量，如果想获取到成员变量，可以使用 <code>this</code> 关键字来访问对象的成员变量。
+			</p>
+
+			<br />
+
+			<a href="java01010.html" style="font-size:12px;">第十节&nbsp;&nbsp;&nbsp;&nbsp;数组</a>
+			<br />
+			<a href="java01012.html" style="font-size:12px;">第十二节&nbsp;&nbsp;&nbsp;&nbsp;封装</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

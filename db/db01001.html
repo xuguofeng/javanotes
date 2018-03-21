@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第一节&nbsp;&nbsp;&nbsp;&nbsp;Oracle数据库安装</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、下载OracleEX11g</a></li>
+				<li><a href="#f2">二、环境准备</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	数据库版本</a></li>
+						<li><a href="#f2-2">2、	操作系统版本</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、Oracle安装</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	创建安装目录</a></li>
+						<li><a href="#f3-2">2、	启动安装程序</a></li>
+						<li><a href="#f3-3">3、	选择安装目录</a></li>
+						<li><a href="#f3-4">4、	设置管理员用户密码</a></li>
+						<li><a href="#f3-5">5、	安装完成</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、数据库服务</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、下载OracleEX11g</h4>
+			<p>
+				到 Oracle 官网下载： <a target="_blank" href="http://www.oracle.com/">http://www.oracle.com/</a>
+			</p>
+			<p>
+				在首页菜单找到 “Oracle Database”
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到 “Oracle Database 11g Express Edition”
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到合适的版本下载即可
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				下载时会弹出登录页面，如果没有Oracle帐号，可以注册一个
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、环境准备</h4>
+			<h5 id="f2-1" class="title-2th">1、	数据库版本</h5>
+			<p>
+				OracleXE112_Win64
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	操作系统版本</h5>
+			<p>
+				Windows_7_home_basic_x86
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、Oracle安装</h4>
+			<h5 id="f3-1" class="title-2th">1、	创建安装目录</h5>
+
+			<br />
+			<p>
+				在C盘下创建soft01\oracle目录
+			</p>
+			<br />
+
+			<h5 id="f3-2" class="title-2th">2、	启动安装程序</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001007.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001008.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<h5 id="f3-3" class="title-2th">3、	选择安装目录</h5>
+			<p>
+				目标文件夹：C:\soft01\oracle\
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001009.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f3-4" class="title-2th">4、	设置管理员用户密码</h5>
+			<p>
+				为管理员用户sys和system创建密码：Sysmanager1
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001010.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001011.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001012.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f3-5" class="title-2th">5、	安装完成</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001013.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、数据库服务</h4>
+
+			<p>
+				打开“任务管理器”，打开“服务”选项卡，打开服务管理
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001014.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				找到OracleServiceXE服务
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001015.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				设置属性，将启动类型由“自动”改为“手动”
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001016.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001017.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/db/01001/01001018.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br /><br />
+			<p>
+				<a href="db01002.html" style="font-size:12px;">第二节&nbsp;&nbsp;&nbsp;&nbsp;PLSQL Developer 客户端软件</a>
+			</p>
+			<br />
+
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+		
+	</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java GUI编程</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li class="dropdown active">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五十节&nbsp;&nbsp;&nbsp;&nbsp;Menu （菜单）</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、MenuBar （菜单栏）</a></li>
+				<li><a href="#f2">二、Menu （菜单）</a></li>
+				<li><a href="#f3">三、MenuItem （菜单项）</a></li>
+				<li><a href="#f4">四、演示</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、MenuBar （菜单栏）</h4>
+
+			<pre>
+java.awt;
+
+public class MenuBar extends MenuComponent implements MenuContainer, Accessible {}
+</pre>
+			<p>
+				将菜单栏与 <code>Frame</code> 对象关联，可以调用 <code>Frame</code> 的 <code>setMenuBar</code> 方法。
+
+			</p>
+			<p>
+				下面是菜单栏的外观：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01050/01050001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Menu add(Menu m)</span>
+	将指定菜单添加到菜单栏
+
+<span class="methodClassName">public Menu getMenu(int i)</span>
+	获取指定菜单
+
+<span class="methodClassName">public int getMenuCount()</span>
+	获取菜单栏上的菜单数
+
+<span class="methodClassName">public void remove(int index)</span>
+	从菜单栏移除指定索引处的菜单
+
+<span class="methodClassName">public void remove(MenuComponent m)</span>
+	从菜单栏移除指定的菜单组件
+
+<span class="methodClassName">public void setFont(Font f)</span>
+	设置字体
+
+<span class="methodClassName">public Font getFont()</span>
+	获取菜单组件的字体
+</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Menu （菜单）</h4>
+
+			<pre>
+java.awt;
+
+public class Menu extends MenuItem implements MenuContainer, Accessible {}
+</pre>
+
+			<p>
+				菜单栏的下拉式菜单组件
+
+			</p>
+			<p>
+				菜单中的每一项都必须属于 <code>MenuItem</code> 类。可以是 <code>MenuItem</code> 的一个实例、子菜单（<code>Menu</code> 的一个实例）、或复选框（<code>CheckboxMenuItem</code> 的一个实例）
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public Menu(String label) throws HeadlessException</span>
+	创建具有指定标签的新菜单
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public MenuItem add(MenuItem mi)</span>
+	将指定的菜单项添加到此菜单
+	如果该菜单项为另一个菜单的一部分，则从该菜单移除它
+
+<span class="methodClassName">public void addSeparator()</span>
+	将一个分隔线或连字符添加到菜单的当前位置
+
+<span class="methodClassName">public MenuItem getItem(int index)</span>
+	获取菜单的指定索引处的菜单项
+
+<span class="methodClassName">public int getItemCount()</span>
+	获取菜单中菜单项的数数量
+
+<span class="methodClassName">public void remove(int index)</span>
+	从菜单移除指定索引处的菜单项
+
+<span class="methodClassName">public void remove(MenuComponent item)</span>
+	从菜单移除指定菜单项
+
+<span class="methodClassName">public void removeAll()</span>
+	从菜单移除所有菜单项
+</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、MenuItem （菜单项）</h4>
+
+			<pre>
+java.awt;
+
+public class MenuItem extends MenuComponent implements Accessible {}
+</pre>
+
+			<p>
+				菜单中的所有项必须属于 <code>MenuItem</code> 类或其子类
+			</p>
+			<p>
+				默认的 <code>MenuItem</code> 对象包含一个简单的有标签的菜单项
+			</p>
+			<p>
+				此菜单栏的图像显示五个菜单项：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01050/01050002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<p>
+				前两项是较简单的菜单项，有标签 <code>Basic</code> 和 <code>imple</code>
+			</p>
+			<p>
+				后面是一个分隔符
+			</p>
+			<p>
+				接下来是有 <code>Check</code> 标签的 <code>CheckboxMenuItem</code> 的实例
+			</p>
+			<p>
+				最后一个菜单项是有 <code>More Examples</code> 标签的子菜单，是 <code>Menu</code> 的一个实例
+			</p>
+
+			<br />
+
+			<p>
+				<span class="high-light">构造方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public MenuItem(String label) throws HeadlessException</span>
+	创建具有指定标签、没有键盘快捷方式的新菜单项
+</pre>
+
+			<br />
+
+			<p>
+				<span class="high-light">主要方法</span>
+			</p>
+
+			<pre>
+<span class="methodClassName">public void addActionListener(ActionListener l)</span>
+	添加指定动作侦听器，从此菜单项接收动作事件
+
+<span class="methodClassName">public void removeActionListener(ActionListener l)</span>
+	移除指定动作侦听器，不再从此菜单项中接收动作事件
+
+<span class="methodClassName">public void setActionCommand(String command)</span>
+	设置菜单项引发的动作事件的命令名
+
+<span class="methodClassName">public void setEnabled(boolean b)</span>
+	设置是否可以选择此菜单项
+
+<span class="methodClassName">public void setLabel(String label)</span>
+	设置标签
+</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、演示</h4>
+
+			<pre>
+/**
+ * <span class="annotation">演示菜单</span>
+ *
+ * <span class="annotation">窗口使用的是演示Frame时编写的FrameStart类</span>
+ *
+ * <span class="annotation">主要演示了MenuBar、Menu、MenuItem</span>
+*/
+public class MenuStart {
+
+	private static final String EXIT_COMMAND = "EXIT";
+
+	public static void main(String[] args) {
+
+		<span class="annotation">// 创建frameStart</span>
+		FrameStart frameStart = new FrameStart("演示MenuBar、Menu、MenuItem");
+
+		<span class="annotation">// 菜单栏</span>
+		MenuBar menuBar = new MenuBar();
+
+		<span class="annotation">// 创建文件菜单</span>
+		Menu fileMenu = new Menu("文件", true);
+
+		<span class="annotation">// 创建文件菜单下面的菜单项</span>
+		MenuItem openFileMenu = new MenuItem("打开");
+		MenuItem saveFileMenu = new MenuItem("保存", new MenuShortcut(
+				KeyEvent.VK_S, true));
+		<span class="annotation">// 为退出菜单添加String命令</span>
+		MenuItem exitMenu = new MenuItem("退出", new MenuShortcut(KeyEvent.VK_Q));
+		exitMenu.setActionCommand(MenuStart.EXIT_COMMAND);
+		<span class="annotation">// 为退出菜单项添加事件监听</span>
+		exitMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String command = e.getActionCommand();
+				<span class="annotation">// 判断事件源</span>
+				if (MenuStart.EXIT_COMMAND.equals(command)) {
+					<span class="annotation">// 程序退出</span>
+					System.exit(0);
+				}
+			}
+		});
+
+		<span class="annotation">// 填充文件菜单</span>
+		fileMenu.add(openFileMenu);
+		fileMenu.add(saveFileMenu);
+		fileMenu.addSeparator();// 添加一个分隔线</span>
+		fileMenu.add(exitMenu);
+
+		<span class="annotation">// 把文件菜单填充到菜单栏</span>
+		menuBar.add(fileMenu);
+
+		<span class="annotation">// 创建编辑菜单</span>
+		Menu editMenu = new Menu("编辑");
+
+		<span class="annotation">// 创建编辑菜单下面的菜单项</span>
+		MenuItem viewMenu = new MenuItem("视图");
+		MenuItem copyMenu = new MenuItem("复制", new MenuShortcut(KeyEvent.VK_C));
+		MenuItem cutMenu = new MenuItem("剪切", new MenuShortcut(KeyEvent.VK_X));
+		MenuItem pasteMenu = new MenuItem("粘贴", new MenuShortcut(KeyEvent.VK_V));
+
+		<span class="annotation">// 填充编辑菜单</span>
+		editMenu.add(viewMenu);
+		editMenu.addSeparator();
+		editMenu.add(copyMenu);
+		editMenu.add(cutMenu);
+		editMenu.addSeparator();
+		editMenu.add(pasteMenu);
+
+		<span class="annotation">// 把编辑菜单填充到菜单栏</span>
+		menuBar.add(editMenu);
+
+		<span class="annotation">// 为窗口设置菜单栏</span>
+		frameStart.setMenuBar(menuBar);
+
+		frameStart.validate();
+	}
+}
+</pre>
+			<p>
+				运行程序可以显示窗口
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/java/01050/01050003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<br />
+
+			<a href="java01049.html" style="font-size:12px;">第四十九节&nbsp;&nbsp;&nbsp;&nbsp;Panel （面板）</a>
+			<br />
+			<a href="java01051.html" style="font-size:12px;">第五十一节&nbsp;&nbsp;&nbsp;&nbsp;Button （按钮）、Label （标签）、Checkbox （复选框） 和 文本域组件</a>
+
+			<br /><br />
+
+			加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+
+		</div>
+		
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
