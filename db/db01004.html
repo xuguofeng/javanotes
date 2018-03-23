@@ -173,7 +173,7 @@ insert into t_user (id, username, password, create_time, role_id) values (seq_us
 				给查询的表起别名
 			</p>
 			<p>
-				为 t_user 定义别名为 a，在 select 中使用 a.* 来引用表的所有列
+				为 <code>t_user</code> 定义别名为 <code>a</code>，在 <code>select</code> 中使用 <code>a.*</code> 来引用表的所有列
 			</p>
 <pre>select a.* from test01.t_user a;</pre>
 
@@ -206,7 +206,7 @@ from test01.t_user;</pre>
 			</p>
 
 			<p>
-				查找用户名为 admin01 的数据
+				查找用户名为 <code>admin01</code> 的数据
 			</p>
 <pre>select a.* from t_user a where 
 a.username = 'admin01'</pre>
@@ -234,7 +234,7 @@ a.id <= 25</pre>
 			<h5 id="f3-3" class="title-2th">3、	and 和 or</h5>
 
 			<p>
-				查找创建时间在 2018-03-01 到 2018-03-21 之间的数据
+				查找创建时间在 <code>2018-03-01</code> 到 <code>2018-03-21</code> 之间的数据
 			</p>
 <pre>select a.* from t_user a where 
 a.create_time >= to_date('2018-03-01','yyyy-mm-dd') and 
@@ -251,10 +251,10 @@ a.create_time <= to_date('2018-03-21','yyyy-mm-dd')</pre>
 				使用 or 查找以下条件的数据：
 			</p>
 			<p>
-				role_id 为 3
+				<code>role_id</code> 为 3
 			</p>
 			<p>
-				创建时间在 2018-03-01 之前或 2018-03-21 之后的数据
+				创建时间在 <code>2018-03-01</code> 之前或 <code>2018-03-21</code> 之后的数据
 			</p>
 
 			<p>
@@ -280,20 +280,20 @@ a.role_id = 3 and
 			</p>
 			<pre>order by 字段名 [asc|desc]</pre>
 			<p>
-				asc	升序，默认，所以升序排序时可以不写asc
+				<code>asc</code>	升序，默认，所以升序排序时可以不写asc
 			</p>
 			<p>
-				desc	降序
+				<code>desc</code>	降序
 			</p>
 			<br />
 			<p>
 				查找以下条件的数据：
 			</p>
 			<p>
-				role_id 为 3
+				<code>role_id</code> 为 3
 			</p>
 			<p>
-				创建时间在 2018-03-01 之前或 2018-03-21 之后的数据
+				创建时间在 <code>2018-03-01</code> 之前或 <code>2018-03-21</code> 之后的数据
 			</p>
 			<p>
 				以创建时间升序排序
@@ -318,13 +318,13 @@ order by create_time asc</pre>
 				注意
 			</p>
 			<p>
-				使用 group by 把数据分组之后，就只能输出分组所使用的字段，以及使用聚集函数计算出来的数值。
+				使用 <code>group by</code> 把数据分组之后，就只能输出分组所使用的字段，以及使用聚集函数计算出来的数值。
 			</p>
 			<p>
 				查询以下条件的数据：
 			</p>
 			<p>
-				输出每个角色的用户数量，角色暂时使用 role_id 代替。介绍关联查询之后，再补充角色名称
+				输出每个角色的用户数量，角色暂时使用 <code>role_id</code> 代替。介绍关联查询之后，再补充角色名称
 			</p>
 			<pre>select a.role_id, count(*) from t_user a 
 group by a.role_id</pre>
@@ -338,7 +338,7 @@ group by a.role_id</pre>
 			<br />
 
 			<p>
-				having 子句放在 group by 子句后面，用于对聚合出来的结果数据进行筛选
+				<code>having</code> 子句放在 <code>group by</code> 子句后面，用于对聚合出来的结果数据进行筛选
 			</p>
 			<p>
 				多用于查找重复数据
@@ -362,7 +362,7 @@ having count(*) >= 2</pre>
 			<h5 id="f3-6" class="title-2th">6、	in 和 not in</h5>
 
 			<p>
-				in 子句为一个字段设置多个可选的值，而 not in 子句作用相反
+				<code>in</code> 子句为一个字段设置多个可选的值，而 <code>not in</code> 子句作用相反
 			</p>
 			<p>
 				查找角色 id 为 1、4 的用户数据
@@ -388,7 +388,7 @@ a.role_id in (1, 4)</pre>
 like '字符串%'		-- 字符串后面为模糊
 like '%字符串'		-- 字符串前面为模糊</pre>
 			<p>
-				查找用户名中含有 admin0 的用户数据
+				查找用户名中含有 <code>admin0</code> 的用户数据
 			</p>
 			<pre>select a.* from t_user a where a.username like '%admin0%'</pre>
 
@@ -453,6 +453,9 @@ like '%字符串'		-- 字符串前面为模糊</pre>
 			<br />
 			<p>
 				<a href="db01003.html" style="font-size:12px;">第三节&nbsp;&nbsp;&nbsp;&nbsp;Oracle 的数据类型、建表、建序列</a>
+			</p>
+			<p>
+				<a href="db01005.html" style="font-size:12px;">第五节&nbsp;&nbsp;&nbsp;&nbsp;关联查询</a>
 			</p>
 			<br />
 
