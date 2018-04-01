@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第六节&nbsp;&nbsp;&nbsp;&nbsp;MySQL安装（Windows 7）</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、环境概述</a></li>
+				<li><a href="#f2">二、MySQL 下载</a></li>
+				<li><a href="#f3">三、MySQL 安装</a></li>
+				<li><a href="#f4">四、MySQL 系统服务</a></li>
+				<li><a href="#f5">五、命令行连接 MySQL</a></li>
+				<li><a href="#f6">六、mysql-gui-tools 客户端下载(安装步骤省略)</a></li>
+				<li><a href="#f7">七、mysql-gui-tools使用</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、环境概述</h4>
+
+			<p>
+				操作系统：64 位 Windows 7 操作系统
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006001.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<br />
+
+			<p>
+				MySQL 版本：mysql-5.5.59-winx64.msi
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006002.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、MySQL 下载</h4>
+
+			<p>
+				百度搜索 <code>“mysql下载”</code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006003.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				找到 <code>“社区版本” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006004.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006005.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“MySQL Community Server 5.5” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006006.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“Windows(x86, 64-bit), MSI Installer” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006007.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、MySQL 安装</h4>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006008.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006009.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“Custom” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006010.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				这步可以选择安装目录
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006011.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006012.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006013.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006014.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				打开 <code>“配置向导” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006015.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“Detailed Configuration” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006016.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“Developer Machine” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006017.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“Multifunctional Database” </code>
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006018.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006019.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006020.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				可以看到MySQL服务监听3306端口，勾选防火墙放行
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006021.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择 <code>“utf8” </code> 编码
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006022.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				选择系统服务名
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006023.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				设置root用户密码，禁用root用户远程连接
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006024.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006025.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006026.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、MySQL 系统服务</h4>
+
+			<p>
+				我们首先打开 <code>cmd </code> 命令行，看一下 <code>MySQL </code> 是否启动。
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006027.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				可以看到服务已经启动了。
+			</p>
+			<p>
+				<code>MySQL</code> 在安装时，默认注册系统服务，而且也是开机自动启动的。我们可以根据自己的需要修改服务为手动启动。
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006028.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>
+				我们可以在 “服务” 管理中对 MySQL 进行启动、关闭操作。
+			</p>
+			<p>
+				我们还可以自己编写 <code>.bat</code> 脚本对 <code>MySQL</code> 进行启动、关闭操作。
+			</p>
+			<p>
+				启动脚本：MySQLStart.bat
+			</p>
+			<pre>net start MySQL
+pause</pre>
+
+			<p>
+				关闭脚本：MySQLStop.bat
+			</p>
+			<pre>net stop MySQL
+pause</pre>
+
+			<p>
+				使用管理员权限执行脚本即可。
+			</p>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、命令行连接 MySQL</h4>
+
+			<p>
+				首先需要确认 <code>path</code> 环境变量有 <code>mysql</code> 命令的路径，如果没有需要配置
+			</p>
+			<p>
+				计算机—>属性—>高级系统设置—>环境变量
+			</p>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006029.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+
+			<p>
+				打开cmd命令行
+			</p>
+			<pre>C:\Users\XU&gt;mysql -uroot -p123456
+</pre>
+
+			<p>
+				查看下当前的用户信息
+			</p>
+			<pre>mysql&gt; use mysql;
+Database changed
+mysql&gt; select user, host, password from mysql.user;
++------+-----------+------------------------------------+
+| user | host      | password                                  |
++------+-----------+------------------------------------+
+| root | localhost | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9|
++------+-----------+-------------------------------------+
+1 row in set (0.00 sec)</pre>
+
+			<p>
+				我们使用局域网的另外一台服务器（192.168.0.10）连接 <code>mysql</code> 服务，发现连接被拒绝
+			</p>
+			<pre>C:\Users\XGF&gt;mysql -uroot -p123456 -h 192.168.0.102
+ERROR 1130 (HY000): Host 'TEST-PC' is not allowed to connect to this MySQL server</pre>
+
+			<p>
+				这是因为在安装 MySQL 时禁止了 root 用户的远程连接，所以我们先创建一个用户用于局域网连接管理
+			</p>
+			<pre>mysql&gt; grant all on *.* to 'system'@'localhost' identified by '123456';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; grant all on *.* to 'system'@'192.168.0.%' identified by '123456';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)</pre>
+
+			<p>
+				现在，再回到 <code>192.168.0.10</code> 上来，使用 <code>system</code> 用户连接
+			</p>
+			<pre>C:\Users\XGF&gt;mysql -usystem -p123456 -h 192.168.0.102</pre>
+
+			<p>
+				至于 mysql 相关命令的使用在此就不做过多的介绍了，mysql 有非常详细的官方文档可以参考。
+			</p>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、mysql-gui-tools 客户端下载(安装步骤省略)</h4>
+
+			<br />
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006030.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br /><br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006031.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f7" class="title-1th">七、mysql-gui-tools使用</h4>
+
+			<p>打开 <code>“MySQL Administrator”</code> </p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006032.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<br />
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006033.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+
+			<p>服务器管理界面，因为服务器管理比较复杂，详细的功能在此就不做过多的介绍了</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006034.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>找到 <code>“MySQL Query Browser”</code></p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006035.jpg" class="img-responsive" />
+				</div>
+			</div>
+			<br />
+			<p>我们可以在这里管理数据库、表和数据</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<img src="../img/db/01006/01006036.jpg" class="img-responsive" />
+				</div>
+			</div>
+
+			<br />
+			<p>
+				<a href="db01005.html" style="font-size:12px;">第五节&nbsp;&nbsp;&nbsp;&nbsp;关联查询</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
