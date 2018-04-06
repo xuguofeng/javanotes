@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>数据库学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第七节&nbsp;&nbsp;&nbsp;&nbsp;MySQL 安装后的初始优化</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、删除 test 库</a></li>
+				<li><a href="#f3">三、删除不使用的用户</a></li>
+				<li><a href="#f4">四、添加局域网管理用户</a></li>
+				<li><a href="#f5">五、mysql 命令主要选项</a></li>
+				<li><a href="#f6">六、help 命令</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+
+			<p>
+				mysql 数据库在安装之后，有一些内置的库（test库）、用户（如root@localhost.localdomain）是不需要的，而且在 Linux 系统上，yum 安装的 mysql 是默认无 root 密码的，这些都给数据库服务器的安全带来了隐患。
+			</p>
+			<p>
+				这篇文章主要介绍如何进行初始优化，把这些隐患消除掉，以及在 root 用户被禁止远程登陆的情况下创建普通用户用于局域网管理。
+			</p>
+			<p>
+				我们的操作环境是 64 位 windows 7 系统上面安装的 mysql 5.5
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、删除 test 库</h4>
+
+			<pre>
+C:\Users\Administrator&gt;mysql -uroot -p123456
+
+
+mysql&gt; show databases;
+
+mysql&gt; drop database test;</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、删除不使用的用户</h4>
+
+			<p>
+				在 Linux 系统上 yum 安装 mysql 时，直接使用 mysql 命令即可连接到 mysql，这是因为 mysql 的内置用户（用户名为空而且也没有密码）导致的。甚至 root 用户也没有密码，即使 root 用户不能进行远程连接，这也是不安全的。
+			</p>
+
+			<pre>
+mysql&gt; select user, host, password from mysql.user;
++------+-----------------------+----------+
+| user | host                  | password |
++------+-----------------------+----------+
+| root | localhost             |          |
+| root | localhost.localdomain |          |
+| root | 127.0.0.1             |          |
+|      | localhost             |          |
+|      | localhost.localdomain |          |
++------+-----------------------+----------+
+5 rows in set (0.00 sec)</pre>
+
+
+			<p>
+				首先，把用户名为空的用户删除
+			</p>
+			<pre>
+mysql&gt; delete from mysql.user where user = '';</pre>
+
+			<p>
+				然后，把 root@localhost.localdomain 用户删除
+			</p>
+			<pre>
+mysql&gt; delete from mysql.user where host = 'localhost.localdomain';</pre>
+
+			<p>
+				然后，为 root 用户设置密码
+			</p>
+			<pre>
+mysql&gt; update mysql.user set password = password('123456');</pre>
+
+			<p>
+				也可以在命令行使用 mysqladmin 命令设置密码：mysqladmin -u root password '123456'
+			</p>
+			<p>
+				查看一下
+			</p>
+
+			<pre>
+mysql&gt; select user, host, password from mysql.user;
++------+-----------+-------------------------------------------+
+| user | host      | password                                  |
++------+-----------+-------------------------------------------+
+| root | localhost | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| root | 127.0.0.1 | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
++------+-----------+-------------------------------------------+
+2 rows in set (0.00 sec)</pre>
+ 
+			<p>
+				最后，刷新一下权限
+			</p>
+			<pre>
+mysql&gt; flush privileges;</pre>
+
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、添加局域网管理用户</h4>
+
+			<p>
+				因为 root 已经被禁止了远程连接，即使是局域网主机，也不能连接。但是我们有需要从远程连接到mysql服务器进行管理。此时可以：
+			</p>
+			<p>
+				创建用户，允许从局域网主机连接，可以授予所有库、所有表的所有权限，也可以只授予某些库、某些表的某些权限。
+			</p>
+			<p>
+				我们通常的解决方案是：一个拥有所有权限的管理员用户（用户名密码只能几个核心管理者拥有，甚至可以把 host 设置在很小的范围内），管理不同库的多个普通用户（不同系统的管理者拥有，彼此尽量无交集）
+			</p>
+			<p>
+				下面我们看一下创建用户的语法：创建 system 用户，授予所有库、所有表的所有权限，允许局域网 192.168.0 网段主机连接，密码是 123456
+			</p>
+
+			<pre>
+mysql&gt; GRANT ALL ON *.* TO 'system'@'192.168.0.%' IDENTIFIED BY '123456';
+mysql&gt; GRANT ALL ON *.* TO 'system'@'localhost' IDENTIFIED BY '123456';
+mysql&gt; GRANT ALL ON *.* TO 'system'@'127.0.0.1' IDENTIFIED BY '123456';
+
+mysql&gt; select user, host, password from mysql.user;
++--------+--------------+-------------------------------------------+
+| user   | host         | password                                  |
++--------+--------------+-------------------------------------------+
+| root   | localhost    | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| root   | 127.0.0.1    | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| system | 192.168.0.%  | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| system | localhost    | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| system | 127.0.0.1    | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
++--------+--------------+-------------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql&gt; flush privileges;</pre>
+
+			<p>
+				从 192.168.0.10 主机进行远程连接
+			</p>
+ 
+			<pre>
+C:\Users\Administrator&gt;mysql -usystem -p123456 -h 192.168.0.105</pre>
+
+			<p>
+				可以成功连接了
+			</p>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、mysql 命令主要选项</h4>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th>选项</th><th>作用</th>
+						</tr>
+						<tr>
+							<td>-?, --help</td><td>显示帮助</td>
+						</tr>
+						<tr>
+							<td>-D, --database=name</td><td>指定使用的数据库</td>
+						</tr>
+						<tr>
+							<td>--default-character-set=name</td><td>设置客户端连接编码<br />mysql -uroot -p123456 --default-character-set=gbk</td>
+						</tr>
+						<tr>
+							<td>-e, --execute=name</td><td>执行语句后退出，这个选项在编写shell脚本时很有用<br />mysql -uroot -p123456 --default-character-set=gbk -e "select * from test.t_user;"</td>
+						</tr>
+						<tr>
+							<td>-h, --host=name</td><td>连接主机名。默认loadlhost。在连接远程数据库时使用</td>
+						</tr>
+						<tr>
+							<td>-p, --password[=name]</td><td>密码，如果未指定这个选项，会在mysql命令行提示输入</td>
+						</tr>
+						<tr>
+							<td>-P, --port=#</td><td>服务端口，默认3306</td>
+						</tr>
+						<tr>
+							<td>-S, --socket=name</td><td>连接使用的socket文件</td>
+						</tr>
+						<tr>
+							<td>-u, --user=name</td><td>连接使用的用户</td>
+						</tr>
+						<tr>
+							<td>-V, --version</td><td>输出版本信息</td>
+						</tr>
+						<tr>
+							<td>--connect-timeout=#</td><td>连接超时时长，单位为秒</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、help 命令</h4>
+
+			<p>
+				MySQL 的官方文档非常全面，即使您没有 MySQL 相关经验，只要有一定的 SQL、DOS/Linux 命令行基础，就可以根据官方文档学习 MySQL 的核心命令和 SQL 语法了。
+			</p>
+			<p>
+				在 mysql 控制台里面，可以使用 help 来查看帮助，如：查看 create 的帮助可以使用 help create 语句、查看删除表的帮助可以使用 help drop table 语句......
+			</p>
+ 
+			<br />
+			<p>
+				<a href="db01006.html" style="font-size:12px;">第六节&nbsp;&nbsp;&nbsp;&nbsp;MySQL安装（Windows 7）</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
