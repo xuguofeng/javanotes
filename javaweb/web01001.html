@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第一节&nbsp;&nbsp;&nbsp;&nbsp;JDBC 概述</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、第一个 demo</a></li>
+				<li><a href="#f3">三、API</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	Connection 的核心方法</a></li>
+						<li><a href="#f3-2">2、	Statement 的核心方法</a></li>
+						<li><a href="#f3-3">3、	ResultSet 的核心方法</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、编写 DBUtil 连接工具类</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	jdbc.properties 配置文件</a></li>
+						<li><a href="#f4-2">2、	DBUtil 类</a></li>
+						<li><a href="#f4-3">3、	JdbcDemo2 测试类</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、字符串拼接方式执行动态查询</a></li>
+				<li><a href="#f6">六、示例代码</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+
+			<p>
+				<code>JDBC（Java DataBase Connectivity）</code> 是 <code>Java</code> 提供的用于执行 <code>SQL</code> 语句一套 <code>API</code>，可以为多种关系型数据库提供统一访问，由一套用 <code>Java</code> 语言编写的类和接口组成。
+			</p>
+			<p>
+				有了这套接口之后，开发者就不必为每一种数据库编写不同的访问逻辑，只需要在项目中加入数据库厂商提供的 <code>JDBC</code> 驱动，然后面向这套 <code>Java API</code> 接口开发自己的程序即可。
+			</p>
+			<p>
+				也就是说，在没有使用某个数据库特有语法、函数的情况下，开发者只要替换数据库驱动包、修改连接配置文件即可在应用层实现数据库的替换。
+			</p>
+			<p>
+				这就是我们之前多次提起的面向接口编程得到优势所在。
+			</p>
+			<br />
+			<p>
+				JDBC最核心的几个接口
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">Connection</td><td style="text-align:left;">与特定数据库的连接，SQL语句在这个连接上执行并返回结果</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Statement</td><td style="text-align:left;">静态SQL语句对象</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">PreparedStatement</td><td style="text-align:left;">预编译的SQL语句对象</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ResultSet</td><td style="text-align:left;">表示数据库结果集的数据表，通常通过执行查询数据库的语句生成</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、第一个 demo</h4>
+
+			<p>
+				环境：<code>JDK 1.6 + mysql 5.5</code>
+			</p>
+			<p>
+				首先创建一个 <code>java</code> 项目 <code>jdbc_demo</code>
+			</p>
+			<p>
+				导入 <code>mysql-connector-java-5.1.26-bin.jar</code>，这个数据库驱动可以到 <a href="http://mvnrepository.com" target="_blank">http://mvnrepository.com</a> 下载，关于 eclipse 的导包可以参考 <a href="http://5ijy01.duapp.com/it/java/java01046.html#f2-7" target="_blank">http://5ijy01.duapp.com/it/java/java01046.html#f2-7</a>
+			</p>
+			<p>
+				创建 <code>package</code> 和测试类，如下：
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01001/01001001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				编写代码连接本地 <code>MySQL</code> 查询 <code>test</code> 下 <code>t_user</code> 表的数据
+			</p>
+			<pre>
+String driver = "com.mysql.jdbc.Driver";
+String url = "jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false";
+String username = "root";
+String password = "123456";
+
+Class.forName(driver);
+
+Connection conn = null;
+Statement stmt = null;
+ResultSet rs = null;
+
+try {
+	conn = DriverManager.getConnection(url, username, password);
+
+	stmt = conn.createStatement();
+	rs = stmt.executeQuery("select id, username, role_id from t_user");
+
+	while (rs.next()) {
+		int id = rs.getInt(1);
+		String uname = rs.getString("username");
+		int roleId = rs.getInt(3);
+		System.out.println("用户信息: id=" + id + ", username=" + uname + ", role_id=" + roleId);
+	}
+} catch (SQLException e) {
+	e.printStackTrace();
+} finally {
+	try {
+		if (conn != null)
+			conn.close();
+		if (stmt != null)
+			stmt.close();
+		if (rs != null)
+			rs.close();
+	} catch (SQLException e) {
+	}
+}
+</pre>
+
+			<p>
+				<span class="high-light">代码解读</span>
+			</p>
+			<p>
+				<code>url</code> 是数据库连接地址，它告诉数据库驱动数据库服务器的 IP地址、服务监听端口、使用的数据库以及连接配置参数，这个 <code>url</code> 的配置方式通常在数据库文档中可以找到
+			</p>
+			<p>
+				<code>Class.forName(driver)</code> 这行代码的作用是加载数据库驱动类
+			</p>
+			<p>
+				下面的代码就比较简单了：使用 <code>DriverManager</code> 获取一个数据库连接 <code>Connection</code> 对象、从连接创建 <code>Statement</code> 对象，然后执行语句获取 <code>ResultSet</code> 结果集，最后迭代结果集获取数据
+			</p>
+			<p>
+				需要注意的是：我们使用 <code>finally</code> 代码块关闭数据库连接资源，因为不论 <code>try</code> 代码块是否捕获到异常， <code>finally</code> 代码块都会执行
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、API</h4>
+			<h5 id="f3-1" class="title-2th">1、	Connection 的核心方法</h5>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">void close()</td><td style="text-align:left;">释放Connection对象的数据库和JDBC资源</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void commit()</td><td style="text-align:left;">提交所有更改，并释放Connection对象当前持有的所有数据库锁</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Statement createStatement()</td><td style="text-align:left;">创建一个Statement对象来将SQL语句发送到数据库</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">PreparedStatement prepareStatement(String sql)</td><td style="text-align:left;">创建一个PreparedStatement对象来将参数化的SQL语句发送到数据库</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void rollback()</td><td style="text-align:left;">取消当前事务中进行的所有更改，并释放Connection对象当前持有的所有数据库锁</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setAutoCommit(boolean autoCommit)</td><td style="text-align:left;">设置是否自动提交</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setReadOnly(boolean readOnly)</td><td style="text-align:left;">设置为只读模式，作为驱动程序启用数据库优化的提示</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setTransactionIsolation(int level)</td><td style="text-align:left;">试图将此Connection对象的事务隔离级别更改为给定的级别</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<br />
+
+			<h5 id="f3-2" class="title-2th">2、	Statement 的核心方法</h5>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">void addBatch(String sql)</td><td style="text-align:left;">将给定的SQL命令添加到Statement对象的当前命令列表中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void close()</td><td style="text-align:left;">释放Statement对象的数据库和JDBC资源，而不是等待该对象自动关闭时发生此操作</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">boolean execute(String sql)</td><td style="text-align:left;">执行给定的SQL语句，该语句可能返回多个结果</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">int[] executeBatch()</td><td style="text-align:left;">将一批命令提交给数据库来执行，如果全部命令执行成功，则返回更新计数组成的数组</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ResultSet executeQuery(String sql)</td><td style="text-align:left;">执行给定的SQL语句，该语句返回单个ResultSet对象</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">int executeUpdate(String sql)</td><td style="text-align:left;">执行给定SQL语句，该语句可能为INSERT、UPDATE或DELETE语句，或者不返回任何内容的SQL语句（如DDL语句）</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<br />
+
+			<h5 id="f3-3" class="title-2th">3、	ResultSet 的核心方法</h5>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">void close()</td><td style="text-align:left;">释放ResultSet对象的数据库和JDBC资源</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">BigDecimal getBigDecimal(int columnIndex)</td><td style="text-align:left;">以具有全精度的java.math.BigDecimal的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">BigDecimal getBigDecimal(String columnLabel)</td><td style="text-align:left;">以具有全精度的java.math.BigDecimal的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Date getDate(int columnIndex)</td><td style="text-align:left;">以java.sql.Date对象的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Date getDate(String columnLabel)</td><td style="text-align:left;">以java.sql.Date对象的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">double getDouble(int columnIndex)</td><td style="text-align:left;">以double的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">double getDouble(String columnLabel)</td><td style="text-align:left;">以double的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">int getInt(int columnIndex)</td><td style="text-align:left;">以int的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">int getInt(String columnLabel)</td><td style="text-align:left;">以int的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ResultSetMetaData getMetaData()</td><td style="text-align:left;">获取此ResultSet对象的列的编号、类型和属性</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Object getObject(int columnIndex)</td><td style="text-align:left;">以Object的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Object getObject(String columnLabel)</td><td style="text-align:left;">以Object的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">String getString(int columnIndex)</td><td style="text-align:left;">以String的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">String getString(String columnLabel)</td><td style="text-align:left;">以String的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Timestamp getTimestamp(int columnIndex)</td><td style="text-align:left;">以java.sql.Timestamp对象的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Timestamp getTimestamp(String columnLabel)</td><td style="text-align:left;">以java.sql.Timestamp对象的形式获取此ResultSet对象的当前行中指定列的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">boolean next()</td><td style="text-align:left;">将光标从当前位置向前移一行</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、编写 DBUtil 连接工具类</h4>
+
+			<p>
+				在一个项目里面，会有很多的业务需要访问数据库，如果每次都使用上面的方式获取连接，代码写起来会很麻烦，而且不便于维护
+			</p>
+			<p>
+				所以我们可以把加载驱动、获取连接的代码提取出来，单独封装成一个工具类，对外只提供一个 <code>getConnection()</code> 的方法来获取连接
+			</p>
+
+			<h5 id="f4-1" class="title-2th">1、	jdbc.properties 配置文件</h5>
+
+			<p>
+				首先，在 <code>src</code> 下添加 <code>jdbc.properties</code> 配置文件，主要配置 <code>driver</code>、<code>url</code>、<code>username</code>、<code>password</code> 等连接参数
+			</p>
+			<pre>
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+username=root
+password=123456</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	DBUtil 类</h5>
+
+			<p>
+				然后，编写 <code>DBUtil</code> 类
+			</p>
+			<pre>
+public class DBUtil {
+
+	private static String driver;
+	private static String url;
+	private static String username;
+	private static String password;
+
+	private static Properties prop = new Properties();
+
+	static {
+		try {
+			prop.load(DBUtil.class.getClassLoader().getResourceAsStream(
+					"jdbc.properties"));
+
+			driver = prop.getProperty("driver");
+			url = prop.getProperty("url");
+			username = prop.getProperty("username");
+			password = prop.getProperty("password");
+
+			Class.forName(driver);
+
+		} catch (IOException e) {
+			throw new RuntimeException("加载JDBC配置失败", e);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("加载JDBC配置失败", e);
+		}
+	}
+
+	public static Connection getConnection() throws SQLException {
+		return DriverManager.getConnection(url, username, password);
+	}
+}</pre>
+
+			<h5 id="f4-3" class="title-2th">3、	JdbcDemo2 测试类</h5>
+
+			<p>
+				最后，编写 <code>JdbcDemo2</code> 测试类
+			</p>
+			<pre>
+Connection conn = null;
+Statement stmt = null;
+ResultSet rs = null;
+
+try {
+	// 获取连接
+	conn = DBUtil.getConnection();
+
+	stmt = conn.createStatement();
+	// 执行查询并获取结果集
+	rs = stmt.executeQuery("select id, username, role_id from t_user");
+
+	// 遍历结果集
+	while (rs.next()) {
+		int id = rs.getInt(1);
+		String uname = rs.getString("username");
+		int roleId = rs.getInt(3);
+		System.out.println("用户信息: id=" + id + ", username=" + uname + ", role_id=" + roleId);
+	}
+
+} catch (SQLException e) {
+	e.printStackTrace();
+} finally {
+	// 关闭连接，释放资源
+	// 略
+}</pre>
+			<p>
+				项目结构如下：
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01001/01001002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、字符串拼接方式执行动态查询</h4>
+
+			<p>
+				创建一个 <code>UserDao</code> 类，用上面的方式编写一个使用id查询用户的方法
+			</p>
+			<pre>
+public class UserDao {
+
+	public Map&lt;String, Object&gt; getUserInfoById(int id) throws SQLException {
+
+		// 拼接sql字符串
+		String sql = "select id, username, role_id from t_user where id = "+ id;
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			// 获取连接
+			conn = DBUtil.getConnection();
+
+			stmt = conn.createStatement();
+			// 执行查询并获取结果集
+			rs = stmt.executeQuery(sql);
+
+			Map&lt;String, Object&gt; user = new HashMap&lt;String, Object&gt;();
+
+			// 遍历结果集，封装数据并返回
+			if (rs.next()) {
+				String uname = rs.getString("username");
+				int roleId = rs.getInt(3);
+				user.put("id", id);
+				user.put("username", uname);
+				user.put("role_id", roleId);
+			}
+			return user;
+
+		} catch (SQLException e) {
+			// 可以把异常抛给业务层的调用者
+			throw e;
+		} finally {
+			// 关闭连接，释放资源
+			// 略
+		}
+	}
+
+	public static void main(String[] args) {
+		UserDao uDao = new UserDao();
+		try {
+			Map&lt;String, Object&gt; user = uDao.getUserInfoById(1);
+			System.out.println(user);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}</pre>
+
+			<p>
+				这个方法很简单，也符合我们正常的编码习惯，但是 PreparedStatement 相比，执行效率较低，而且也有 SQL 的风险
+			</p>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、示例代码</h4>
+
+			<p>
+				<a href="../attachment/jdbc_demo1.zip">下载</a>
+			</p>
+
+			<br /><br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

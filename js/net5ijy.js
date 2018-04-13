@@ -28,6 +28,11 @@ $(function(){
 		.append($("<li></li>")
 			.append($("<a></a>").attr("href", "http://5ijy01.duapp.com/jq-ui/index.html").html("jQuery插件开发")));
 
+	// 添加"JAVA Web"菜单
+	$("<li></li>")
+		.append($("<a></a>").attr("href", "http://5ijy01.duapp.com/it/javaweb/index.html").html("JAVA WEB"))
+		.insertAfter($("#navbar-nav .navbar-nav .dropdown").eq(0).find("ul.dropdown-menu").find("li").eq(1));
+
 	$("body").append($("<script>window._bd_share_config={\"common\":{\"bdSnsKey\":{},\"bdText\":\"\",\"bdMini\":\"2\",\"bdMiniList\":false,\"bdPic\":\"\",\"bdStyle\":\"0\",\"bdSize\":\"16\"},\"slide\":{\"type\":\"slide\",\"bdImg\":\"5\",\"bdPos\":\"right\",\"bdTop\":\"100\"},\"image\":{\"viewList\":[\"qzone\",\"tsina\",\"tqq\",\"renren\",\"weixin\"],\"viewText\":\"分享到：\",\"viewSize\":\"16\"},\"selectShare\":{\"bdContainerClass\":null,\"bdSelectMiniList\":[\"qzone\",\"tsina\",\"tqq\",\"renren\",\"weixin\"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>"));
 
 /*
