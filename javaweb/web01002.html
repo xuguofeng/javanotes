@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第二节&nbsp;&nbsp;&nbsp;&nbsp;PreparedStatement</h4>
+			<br />
+			
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、概述</a></li>
+				<li><a href="#f2">二、核心方法</a></li>
+				<li><a href="#f3">三、SQL 注入</a></li>
+				<li><a href="#f4">四、优化的 UserDao</a></li>
+				<li><a href="#f5">五、批处理</a></li>
+				<li><a href="#f6">六、示例代码</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+
+			<p>
+				<code>PreparedStatement</code> 接口继承了 <code>Statement</code>，并与之在两方面有所不同，它表示预编译的 <code>SQL</code> 语句对象。
+			</p>
+			<p>
+				首先，数据库会对预编译语句提供性能优化。因为预编译语句有可能被重复调用，所以语句被数据库编译后的执行代码被缓存下来，那么下次调用时只要是相同的预编译语句就不需要编译，只要将参数直接传入编译过的语句执行代码中就会得到执行。这并不是说只有一个 <code>Connection</code> 中多次执行的预编译语句被缓存，而是对于整个数据库，只要预编译的语句语法和缓存中匹配，在任何时候都可以不需要再次编译而直接执行。而  <code>statement</code> 的语句即使是相同一操作，而由于每次操作的数据不同所以使整个语句相匹配的机会极小，几乎不太可能匹配。
+			</p>
+			<p>
+				其次，<code>PreparedStatement</code> 对象中的 <code>SQL</code> 语句可具有一个或多个 <code>IN 参数</code>。<code>IN 参数</code>的值在 <code>PreparedStatement</code> 创建时未被指定，而是为每个<code>IN参数</code>保留一个问号（“？”）作为占位符。设置<code>IN参数</code>值的设置方法（setInt、setString等等）必须指定与输入参数的已定义 <code>SQL</code> 类型兼容的类型。如果IN参数具有 <code>SQL</code> 类型  <code>INTEGER</code>，那么应该使用 <code>setInt</code> 方法。
+			</p>
+			<p>
+				如果需要任意参数类型转换，使用 <code>setObject</code> 方法时应该将目标 <code>SQL</code> 类型作为其参数。
+			</p>
+			<br />
+			<p>
+				设置参数：
+			</p>
+			<pre>
+PreparedStatement pstmt = con.prepareStatement("UPDATE EMPLOYEESSET SALARY = ? WHERE ID = ?");
+pstmt.setBigDecimal(1, 153833.00);
+pstmt.setInt(2, 110592);</pre>
+
+			<p>
+				再次，<code>PreparedStatement</code> 可以防止 <code>SQL</code> 注入。由于 <code>SQL</code> 预先在数据库中编译成了类似“函数”的可执行程序，而为占位符赋值相当于为函数传参，这个过程中就避免了字符串拼接的问题，从而可以防止 <code>SQL</code> 注入。
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、核心方法</h4>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">void addBatch()</td><td style="text-align:left;">将一组SQL添加到此PreparedStatement对象的批处理命令中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">boolean execute()</td><td style="text-align:left;">在此PreparedStatement对象中执行SQL语句，该语句可以是任何种类的SQL语句</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ResultSet executeQuery()</td><td style="text-align:left;">在此PreparedStatement对象中执行SQL查询，并返回该查询生成的ResultSet对象</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">int executeUpdate()</td><td style="text-align:left;">在此PreparedStatement对象中执行SQL语句，该语句必须是一个SQL数据操作语言（Data Manipulation Language，DML）语句，比如INSERT、UPDATE或DELETE语句；或者是无返回内容的SQL语句，比如DDL语句</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setDate(int parameterIndex, Date x)</td><td style="text-align:left;">使用默认时区将指定参数设置为给定java.sql.Date值。parameterIndex - 第一个参数是1，第二个参数是2，……</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setDouble(int parameterIndex, double x)</td><td style="text-align:left;">将指定参数设置为给定Java double值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setInt(int parameterIndex, int x)</td><td style="text-align:left;">将指定参数设置为给定Java int值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setLong(int parameterIndex, long x)</td><td style="text-align:left;">将指定参数设置为给定Java long值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setObject(int parameterIndex, Object x)</td><td style="text-align:left;">使用给定对象设置指定参数的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setString(int parameterIndex, String x)</td><td style="text-align:left;">将指定参数设置为给定Java String值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">void setTimestamp(int parameterIndex, Timestamp x)</td><td style="text-align:left;">将指定参数设置为给定java.sql.Timestamp值</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、SQL 注入</h4>
+
+			<p>
+				就是攻击者恶意的利用字符串拼接和 <code>SQL</code> 逻辑运算的特点对数据库数据、服务器配置的试探性的攻击。
+			</p>
+			<p>
+				这种攻击使用网站页面的输入框，或者使用程序发起 http 请求即可实现，这种方式不能被服务器的防火墙拦截，在分析服务器日志的时候才有可能发现，需要进行客户端 IP 限制才有可能在一定程度上防止。
+			</p>
+			<p>
+				下面看几个简单的 <code>SQL</code> 注入攻击的例子。
+			</p>
+			<p>
+				首先，为 <code>UserDao</code> 类加一个方法 <code>getUsersInfoByName</code> 根据用户名模糊查询用户信息
+			</p>
+			<pre>
+public List&lt;Map&lt;String, Object&gt;&gt; getUsersInfoByName(String name) throws SQLException {
+
+	// 拼接sql字符串
+	String sql = "select id, username, role_id from t_user where username like '%" + name + "%'";
+
+	System.out.println(sql); // 打印一下SQL
+
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+
+	try {
+		// 获取连接
+		conn = DBUtil.getConnection();
+
+		stmt = conn.createStatement();
+		// 执行查询并获取结果集
+		rs = stmt.executeQuery(sql);
+
+		List&lt;Map&lt;String, Object&gt;&gt; users = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+
+		// 遍历结果集，封装数据并返回
+		while (rs.next()) {
+			Map&lt;String, Object&gt; user = new HashMap&lt;String, Object&gt;();
+			user.put("id", rs.getInt(1));
+			user.put("username", rs.getString("username"));
+			user.put("role_id", rs.getInt(3));
+
+			users.add(user);
+		}
+		return users;
+	} catch (SQLException e) {
+		// 可以把异常抛给业务层的调用者
+		throw e;
+	} finally {
+		// 关闭连接，释放资源
+		// 略
+	}
+}</pre>
+
+			<br />
+			<p>
+				在演示之前，我们再分析一下上面这段代码的运行环境。
+			</p>
+			<p>
+				1）页面上的用户信息展示，可以使用用户名进行搜索
+			</p>
+			<p>
+				2）使用者输入用户名后进行查询，WEB 服务器找到控制层获取到参数用户名，再调用业务层，业务层再调用上面的这个 DAO 方法进行数据查询
+			</p>
+			<p>
+				3）查询到的数据层层返回，最后返回给浏览器进行展示
+			</p>
+			<p>
+				为了方便，我们使用 main 方法模仿业务层调用 DAO 方法
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">示例1：获取登陆用户</span>
+			</p>
+			<p>
+				场景就是攻击者输入<span class="high-light">!@#$%^%' or user() like '%root</span>
+			</p>
+			<p>
+				拼接成的 SQL 字符串就是这样的：
+			</p>
+			<pre>
+select id, username, role_id from t_user where username like '%!@#$%^%' or user() like '%root%'</pre>
+
+			<p>
+				而返回的数据是全部用户信息，这样攻击者就可以确定服务器使用的是 MySQL 数据库，而且是 root 用户连接
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">示例2：获取库</span>
+			</p>
+			<p>
+				场景就是攻击者输入<span class="high-light">!@#$%^%' or database() like '%test</span>
+			</p>
+			<p>
+				拼接成的 SQL 字符串就是这样的：
+			</p>
+			<pre>
+select id, username, role_id from t_user where username like '%!@#$%^%' or database() like '%test%'</pre>
+
+			<p>
+				攻击者就可以确定服务器使用的是 test 库
+			</p>
+
+			<br />
+			<p>
+				<span class="high-light">示例3：获取 MySQL 版本</span>
+			</p>
+			<p>
+				场景就是攻击者输入<span class="high-light">!@#$%^%' or version() like '%5.5</span>
+			</p>
+			<p>
+				拼接成的 SQL 字符串就是这样的：
+			</p>
+			<pre>
+select id, username, role_id from t_user where username like '%!@#$%^%' or version() like '%5.5%'</pre>
+
+			<p>
+				攻击者就可以确定数据库版本是5.5
+			</p>
+
+			<br />
+			<p>
+				我们的例子比较简单，真实的场景更加复杂、曲折，后果也更加惊心动魄
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、优化的 UserDao</h4>
+
+			<pre>
+public Map&lt;String, Object&gt; getUserInfoById(int id) throws SQLException {
+
+	// sql字符串
+	String sql = "select id, username, role_id from t_user where id = ?";
+
+	Connection conn = null;
+	PreparedStatement prep = null;
+	ResultSet rs = null;
+
+	try {
+		// 获取连接
+		conn = DBUtil.getConnection();
+
+		// 获取PreparedStatement
+		prep = conn.prepareStatement(sql);
+		// 设置参数
+		prep.setInt(1, id);
+
+		// 执行查询并获取结果集
+		rs = prep.executeQuery();
+
+		Map&lt;String, Object&gt; user = new HashMap&lt;String, Object&gt;();
+
+		// 遍历结果集，封装数据并返回
+		if (rs.next()) {
+			user.put("id", id);
+			user.put("username", rs.getString("username"));
+			user.put("role_id", rs.getInt(3));
+		}
+		return user;
+	} catch (SQLException e) {
+		// 可以把异常抛给业务层的调用者
+		throw e;
+	} finally {
+		// 关闭连接，释放资源
+		// 略
+	}
+}
+
+public List&lt;Map&lt;String, Object&gt;&gt; getUsersInfoByName(String name) throws SQLException {
+
+	// sql字符串
+	String sql = "select id, username, role_id from t_user where username like ?";
+
+	Connection conn = null;
+	PreparedStatement prep = null;
+	ResultSet rs = null;
+
+	try {
+		// 获取连接
+		conn = DBUtil.getConnection();
+
+		// 获取PreparedStatement
+		prep = conn.prepareStatement(sql);
+
+		// 设置参数
+		prep.setString(1, "%" + name + "%");
+
+		// 执行查询并获取结果集
+		rs = prep.executeQuery();
+
+		List&lt;Map&lt;String, Object&gt;&gt; users = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+
+		// 遍历结果集，封装数据并返回
+		while (rs.next()) {
+			Map&lt;String, Object&gt; user = new HashMap&lt;String, Object&gt;();
+			user.put("id", rs.getInt(1));
+			user.put("username", rs.getString("username"));
+			user.put("role_id", rs.getInt(3));
+
+			users.add(user);
+		}
+		return users;
+	} catch (SQLException e) {
+		// 可以把异常抛给业务层的调用者
+		throw e;
+	} finally {
+		// 关闭连接，释放资源
+		// 略
+	}
+}</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、批处理</h4>
+
+			<pre>
+String sql = "insert into t_user (username) values (?)";
+
+Connection conn = null;
+PreparedStatement prep = null;
+ResultSet rs = null;
+
+try {
+	// 获取连接
+	conn = DBUtil.getConnection();
+	// 设置手动提交
+	conn.setAutoCommit(false);
+	// 获取PreparedStatement
+	prep = conn.prepareStatement(sql);
+
+	for (int i = 1; i &lt;= 1000000; i++) {
+		prep.setString(1, String.format("%s%05d", "admin", i));
+		prep.addBatch();
+	}
+	// 执行批量插入操作
+	prep.executeBatch();
+	// 提交事务
+	conn.commit();
+
+} catch (SQLException e) {
+	// 可以把异常抛给业务层的调用者
+	throw e;
+} finally {
+	// 关闭连接，释放资源
+	// 略
+}</pre>
+
+			<hr />
+
+			<h4 id="f6" class="title-1th">六、示例代码</h4>
+
+			<p>
+				<a href="../attachment/jdbc_preparedstatement.zip">下载</a>
+			</p>
+
+			<br />
+			<p>
+				<a href="web01001.html" style="font-size:12px;">第一节&nbsp;&nbsp;&nbsp;&nbsp;JDBC 概述</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
