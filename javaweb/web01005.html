@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第五节&nbsp;&nbsp;&nbsp;&nbsp;ServletAPI 概述</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、什么是 ServletAPI</a></li>
+				<li><a href="#f2">二、Servlet 和开发环境</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	Servlet 概述</a></li>
+						<li><a href="#f2-2">2、	Servlet 生命周期</a></li>
+						<li><a href="#f2-3">3、	Eclipse + Tomcat 开发环境</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、第一个 Servlet</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	添加 Dynamic Web Project</a></li>
+						<li><a href="#f3-2">2、	编写 Servlet 类</a></li>
+						<li><a href="#f3-3">3、	注册 Servlet</a></li>
+						<li><a href="#f3-4">4、	添加应用并启动服务器</a></li>
+						<li><a href="#f3-5">5、	访问</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、什么是 ServletAPI</h4>
+			<p>
+				<code>ServletAPI</code> 是 <code>Java Web</code> 后台程序开发的规范，由一套接口组成，主要包括 <code>Servlet</code>、<code>Listener</code>、<code>Filter</code> 等。
+			</p>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">ServletContext</td><td style="text-align:left;">代表一个 Web 应用对象</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Servlet</td><td style="text-align:left;">处理浏览器请求，并返回浏览器需要的资源</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ServletRequest</td><td style="text-align:left;" rowspan="2">ServletRequest 由 Web 容器来管理，当客户请求到来时，容器创建一个 ServletRequest 对象，封装请求数据，同时创建一个 ServletResponse 对象，封装响应数据。这两个对象将被容器作为 service() 方法的参数传递给 Servlet，Servlet 利用 ServletRequest 对象获取客户端发来的请求数据，利用 ServletResponse 对象发送响应数据</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ServletResponse</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">HttpSession</td><td style="text-align:left;">是 JavaWeb 对浏览器会话机制的实现规范，存储在服务器内存中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Filter</td><td style="text-align:left;">过滤器接口，在 Servlet 之前调用，可以用来进行权限验证、字符编码设置等</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ServletContextListener</td><td style="text-align:left;">监听 ServletContext 的初始化和销毁</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ServletRequestListener</td><td style="text-align:left;">监听 ServletRequest 的初始化和销毁</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">HttpSessionListener</td><td style="text-align:left;">监听 HttpSession 的初始化和销毁</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<p>
+				这套 <code>API</code> 是 <code>Java Web</code> 开发的基础，<code>Web</code> 服务器软件和 <code>Web</code> 应用都要围绕这套规范进行开发。
+			</p>
+			<p>
+				<code>Struts</code>、<code>Spring</code>、<code>SpringMVC</code> 等框架也是以这些接口为基础的，如：<code>Struts1</code> 的入口是 <code>Servlet</code>、<code>Struts2</code> 的入口是 <code>Filter</code>、<code>Spring</code> 的初始化类是一个 <code>ServletContextListener</code>
+			</p>
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、Servlet 和开发环境</h4>
+			<h5 id="f2-1" class="title-2th">1、	Servlet 概述</h5>
+			<p>
+				1)	<code>Servlet</code> 是实现了 <code>javax.servlet.Servlet</code> 接口的类，实际开发时是继承 <code>javax.servlet.http.HttpServlet</code> 类；
+			</p>
+			<p>
+				2)	该接口规定了特定的方法来处理 <code>HTTP</code> 请求；
+			</p>
+			<p>
+				3)	开发者需要自己开发 <code>Servlet</code> 实现 <code>Servlet</code> 接口，编写 <code>doGet</code>（处理 <code>GET</code> 请求）和 <code>doPost</code>（处理 <code>POST</code> 请求）方法作为业务处理方法；
+			</p>
+			<br />
+			<p>
+				<code>Servlet</code> 的工作流程
+			</p>
+			<p>
+				1)	浏览器提交 <code>HTTP</code> 协议请求；
+			</p>
+			<p>
+				2)	<code>Tomcat</code> 接收到请求，解析封装成 <code>HttpServletRequest</code> 类型的 <code>request</code> 对象，所有的 <code>HTTP</code> 头数据和请求参数都可以通过 <code>request</code> 对象获取；
+			</p>
+			<p>
+				3)	<code>Tomcat</code> 同时把输出流封装为 <code>HttpServletResponse</code> 类型的 <code>response</code> 对象；
+			</p>
+			<p>
+				4)	<code>Tomcat</code> 把 <code>request</code>、<code>response</code> 对象作为参数，调用 <code>Servlet</code> 的方法进行业务处理；
+			</p>
+			<p>
+				5)	使用 <code>response</code> 对象把数据返回；
+			</p>
+			<br />
+			<p>
+				对于开发者来说，主要要做的就是编写 <code>Servlet</code> 的 <code>doGet</code>、<code>doPost</code> 方法
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	Servlet 生命周期</h5>
+			<p>
+				在传统 <code>CGI</code> 中，每收到一个请求，服务器都会开启一个进程来处理请求，之后销毁进程。效率低下，资源占用较高。
+			</p>
+			<p>
+				<code>servlet</code> 在服务器启动或第一次收到请求时实例化对象，始终使用这个对象处理请求，直到 <code>Web</code> 应用或服务器关闭。这种机制增加了服务器维护 <code>servlet</code> 的复杂程度，却提高了效率。
+			</p>
+			<p>
+				<code>init()</code> 方法在创建 <code>servlet</code> 对象时调用，多用于初始化资源，如数据库连接、缓存读取等，另外，还可以在 <code>init</code> 方法里面获取 <code>init-param</code> 配置的初始化参数。
+			</p>
+			<p>
+				<code>destory()</code> 方法在销毁 <code>servlet</code> 对象时调用，多用于销毁资源
+			</p>
+			<p>
+				<code>service()</code>、<code>doGet()</code>、<code>doPost()</code> 方法用于处理业务
+			</p>
+
+			<h5 id="f2-3" class="title-2th">3、	Eclipse + Tomcat 开发环境</h5>
+			<p>
+				<code>tomcat</code> 安装在 <code>D:\Program Files</code> 目录下
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<code>Window—&gt;Show Views</code> 选择 <code>Servers</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				添加 <code>Server</code> 选择 <code>Tomcat v6.0 Server</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				添加 <code>D:\Program Files\tomcat-6.0.35</code> 并选择 <code>jre</code> 版本
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				点击 <code>Start</code> 按钮即可启动服务器
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005005.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005006.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、第一个 Servlet</h4>
+			<h5 id="f3-1" class="title-2th">1、	添加 Dynamic Web Project</h5>
+			<p>
+				<code>File—&gt;New—&gt;Dynamic Web Project</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005007.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<code>Finish</code> 即可
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005008.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<h5 id="f3-2" class="title-2th">2、	编写 Servlet 类</h5>
+			<p>
+				创建包 <code>org.net5ijy.first.servlet</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005009.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				创建类 <code></code> 继承 <code>javax.servlet.http.HttpServlet</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005010.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				使用 <kbd>Alt+Shift+S</kbd> 打开菜单选择 <code>Override/Implement Methods</code> 项，覆盖 <code>doGet</code> 和 <code>doPost</code> 方法
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005011.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<span class="high-light">代码</span>
+			</p>
+			<pre>
+public class FirstServlet extends HttpServlet {
+
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doPost(req, resp);
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		// 设置使用UTF-8编码解析请求数据
+		req.setCharacterEncoding("UTF-8");
+
+		// 设置响应的Content-Type
+		resp.setContentType("text/html; charset=UTF-8");
+
+		// 获取响应输出流
+		PrintWriter out = resp.getWriter();
+
+		// 输出响应
+		out.println("我是第一个Servlet的响应信息");
+	}
+}</pre>
+
+			<h5 id="f3-3" class="title-2th">3、	注册 Servlet</h5>
+
+			<p>
+				编辑 <code>web.xml</code> 文件
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005012.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<pre>
+&lt;servlet&gt;
+	&lt;servlet-name&gt;firstServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.first.servlet.FirstServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;firstServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/firstServlet.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+			<p>
+				<code>servlet-mapping</code> 的作用是把 <code>/firstServlet.do</code> 映射到 <code>firstServlet</code> 这个 <code>servlet</code> 来处理
+			</p>
+
+			<h5 id="f3-4" class="title-2th">4、	添加应用并启动服务器</h5>
+
+			<p>
+				<code>右键—&gt;选择 Add and Remove...</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005013.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				选择项目点击 <code>Add</code> 部署到服务器
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005014.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005015.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				启动服务器
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005016.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<h5 id="f3-5" class="title-2th">5、	访问</h5>
+			<p>
+				打开浏览器，访问 <code>http://localhost:8080/FirstSerlet/firstServlet.do</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01005/01005017.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<a href="web01004.html" style="font-size:12px;">第四节&nbsp;&nbsp;&nbsp;&nbsp;Web 服务运行环境</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

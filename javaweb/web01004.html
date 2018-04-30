@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第四节&nbsp;&nbsp;&nbsp;&nbsp;Web 服务运行环境</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、什么是 Web 服务器</a></li>
+				<li><a href="#f2">二、tomcat 服务器</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	下载</a></li>
+						<li><a href="#f2-2">2、	安装</a></li>
+						<li><a href="#f2-3">3、	目录结构</a></li>
+						<li><a href="#f2-4">4、	Linux 下 JDK 安装</a></li>
+						<li><a href="#f2-5">5、	启动和停止</a></li>
+						<li><a href="#f2-6">6、	Linux 下启动和停止</a></li>
+						<li><a href="#f2-7">7、	防火墙放行</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、JavaWeb 程序部署</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	Web 应用目录结构</a></li>
+						<li><a href="#f3-2">2、	应用部署</a></li>
+						<li><a href="#f3-3">3、	war 包部署</a></li>
+					</ul>
+				</li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、什么是 Web 服务器</h4>
+
+			<p>
+				在服务器端，Socket 通信、请求数据解析、响应数据输出由 web 服务器软件负责，这些服务器软件由第三方软件厂家提供。
+			</p>
+			<p>
+				开发者只需要把服务器程序部署到 <code>web</code> 服务器中，客户端（浏览器）即可访问。
+			</p>
+			<p>
+				部署静态资源的服务器有 <code>Apache</code>、<code>Nginx</code>、<code>IIS</code> 等，这类服务器软件只能提供静态资源服务，如 <code>html</code>、<code>css</code>、<code>js</code> 和一些图片、文档资源，不可以解析 <code>jsp</code>、<code>php</code> 这类动态资源。
+			</p>
+			<p>
+				部署 <code>Java</code> 应用的服务器有 <code>tomcat</code>、<code>jboss</code>、<code>resin</code>、<code>weblogic</code> 等，这类服务器作为 <code>Java</code> 容器使用，负责 <code>servlet</code> 类的加载、卸载和执行。
+			</p>
+			<p>
+				之后的笔记就使用 <code>tomcat</code> 部署、开发 <code>Java Web</code> 应用程序
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、tomcat 服务器</h4>
+			<h5 id="f2-1" class="title-2th">1、	下载</h5>
+
+			<p>
+				官网 <a target="_blank" href="http://tomcat.apache.org/">http://tomcat.apache.org/</a>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01004/01004001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				选择 <code>tomcat-6 —&gt; v6.0.35 —&gt; bin —&gt; apache-tomcat-6.0.35.zip</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01004/01004002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	安装</h5>
+
+			<p>
+				解压到 <code>D:\Program Files</code>
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01004/01004003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				重命名 <code>tomcat-6.0.35</code>
+			</p>
+
+			<h5 id="f2-3" class="title-2th">3、	目录结构</h5>
+
+			<pre>
+tomcat-6.0.35
+	--bin/
+	--conf/
+	--lib/
+	--logs/
+	--temp/
+	--webapps/
+	--work/</pre>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">bin 目录</td><td style="text-align:left;">存放执行文件，如启动、关闭脚本</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">conf 目录</td><td style="text-align:left;">配置文件，如 server.xml、tomcat-users.xml、web.xml</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">lib 目录</td><td style="text-align:left;">存放 jar 文件</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">logs 目录</td><td style="text-align:left;">存放日志文件</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">temp 目录</td><td style="text-align:left;">存放临时文件</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">webapps 目录</td><td style="text-align:left;">应用部署目录</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">work 目录</td><td style="text-align:left;">存放解析的 JSP 文件、编译后的 JSP 类文件</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<h5 id="f2-4" class="title-2th">4、	Linux 下 JDK 安装</h5>
+
+			<p>
+				到 <code>Oracle</code> 官网下载 <code>jdk-6u45-linux-x64.bin</code>
+			</p>
+			<p>
+				下载方式可以参考 <a target="_blank" href="http://5ijy01.duapp.com/it/java/java01002.html">http://5ijy01.duapp.com/it/java/java01002.html</a>
+			</p>
+			<p>
+				把安装包传到 <code>Linux</code> 上
+			</p>
+			<p>
+				安装：
+			</p>
+			<pre>
+mv jdk-6u45-linux-x64.bin /app/.
+cd /app/
+chmod u+x jdk-6u45-linux-x64.bin
+./jdk-6u45-linux-x64.bin
+
+ln -s /app/jdk1.6.0_45/ /app/jdk</pre>
+			<p>
+				配置环境变量，可以参考 <a target="_blank" href="http://www.cnblogs.com/xugf/p/7685021.html">http://www.cnblogs.com/xugf/p/7685021.html</a>
+			</p>
+			<p>
+				编辑 <code>/etc/profile</code> 文件，加入 <code>JAVA_HOME</code> 和 <code>PATH</code> 配置
+			</p>
+			<pre>
+echo '' >> /etc/profile
+echo '# Java ENV Config' >> /etc/profile
+echo 'JAVA_HOME=/app/jdk1.6.0_45' >> /etc/profile
+echo 'PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile
+echo 'export JAVA_HOME PATH' >> /etc/profile
+source /etc/profile</pre>
+
+			<h5 id="f2-5" class="title-2th">5、	启动和停止</h5>
+
+			<p>
+				需要安装 <code>java</code> 运行环境 <a href="http://5ijy01.duapp.com/it/java/java01002.html" target="_blank">http://5ijy01.duapp.com/it/java/java01002.html</a>
+			</p>
+			<p>
+				启动：在 <code>bin</code> 目录下找到 <code>startup.bat</code> 文件（<code>Linux</code> 下使用 <code>startup.sh</code>）运行即可
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01004/01004004.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				使用浏览器访问 <code>http://localhost:8080/</code> 即可看到 <code>tomcat</code> 的欢迎页
+			</p>
+			<p>
+				关闭：在 <code>bin</code> 目录下找到 <code>shutdown.bat</code> 文件（<code>Linux</code> 下使用 <code>shutdown.sh</code>），运行即可关闭 <code>tomcat</code>
+			</p>
+
+			<h5 id="f2-6" class="title-2th">6、	Linux 下启动和停止</h5>
+
+			<p>
+				解压安装
+			</p>
+			<pre>
+mv apache-tomcat-6.0.35.zip /app/apache-tomcat-6.0.35.zip
+cd /app
+unzip apache-tomcat-6.0.35.zip</pre>
+
+			<p>
+				创建软连接
+			</p>
+			<pre>
+ln -s /app/apache-tomcat-6.0.35/ /app/tomcat</pre>
+
+			<p>
+				进入 bin 目录
+			</p>
+			<pre>
+cd tomcat/bin</pre>
+
+			<p>
+				给 bin 目录下的 .sh 文件添加执行权限
+			</p>
+			<pre>
+chmod u+x *.sh</pre>
+
+			<p>
+				启动
+			</p>
+			<pre>
+./startup.sh</pre>
+
+			<p>
+				关闭
+			</p>
+			<pre>
+./shutdown.sh</pre>
+
+			<h5 id="f2-7" class="title-2th">7、	防火墙放行</h5>
+
+			<p>
+				如果需要局域网测试，就需要配置防火墙端口放行，或者直接关闭防火墙。关于 <code>iptables</code> 的端口放行方式我们暂时不做过多介绍，此处把它直接关掉就可以了
+			</p>
+			<p>
+				<code>Linux</code> 系统关闭防火墙
+			</p>
+			<pre>
+/etc/init.d/iptables stop
+chkconfig iptables off</pre>
+
+			<p>
+				<code>Windows</code> 系统略
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、JavaWeb 程序部署</h4>
+			<h5 id="f3-1" class="title-2th">1、	Web 应用目录结构</h5>
+
+			<pre>
+PROJECT-ROOT/
+	--css/
+	--img/
+	--js/
+	--META-INF/
+	--WEB-INF/
+		--lib/
+		--classes/
+		--web.xml
+	--index.html
+	--index.jsp
+</pre>
+
+			<p>
+				如果是一个动态 <code>web</code> 项目且需要后台 <code>servlet</code> 的支持，那么 <code>WEB-INF</code> 目录就是必需的，<code>lib</code> 子目录存放程序运行需要的第三方库，<code>classes</code> 子目录存放自己编写的程序的 <code>.class</code> 文件，<code>web.xml</code> 文件配置 <code>URL—Servlet</code> 映射、监听器、过滤器、应用参数等
+			</p>
+			<p>
+				<code>WEB-INF</code> 下面的资源不可以使用浏览器访问，属于后台系统内部资源
+			</p>
+			<p>
+				<code>index.html</code> 和 <code>index.jsp</code> 是应用的入口页面，因为应用入口页名称可以在 <code>web.xml</code> 文件配置，所以这两个文件名也不是固定的，而且也不是必需的
+			</p>
+			<p>
+				<code>js</code>、<code>css</code>、<code>img</code> 目录存放页面所需的静态资源，可以任意命名，也可以没有
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	应用部署</h5>
+			<p>
+				把项目目录拷贝到 <code>$tomcat-home/webapps/</code> 下面就可以了
+			</p>
+
+			<h5 id="f3-3" class="title-2th">3、	war 包部署</h5>
+
+			<p>
+				比如项目在 <code>d:\test</code> 下面
+			</p>
+			<p>
+				使用 <code>jar</code> 命令打包
+			</p>
+			<pre>
+cd d:\
+jar -cvf test.war -C test/ .</pre>
+			<p>
+				把生成的 <code>.war</code> 文件拷贝到 <code>$tomcat-home/webapps/</code> 下面就可以了
+			</p>
+
+			<br />
+			<p>
+				<a href="web01003.html" style="font-size:12px;">第三节&nbsp;&nbsp;&nbsp;&nbsp;Java Web概述</a>
+			</p>
+			<p>
+				<a href="web01005.html" style="font-size:12px;">第五节&nbsp;&nbsp;&nbsp;&nbsp;ServletAPI 概述</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

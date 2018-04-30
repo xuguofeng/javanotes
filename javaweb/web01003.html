@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="container main-container">
+			<h4 class="title">第三节&nbsp;&nbsp;&nbsp;&nbsp;Java Web概述</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、什么是 web 服务</a></li>
+				<li><a href="#f2">二、HTTP 协议</a></li>
+				<li><a href="#f3">三、常用请求头</a></li>
+				<li><a href="#f4">四、常用响应头</a></li>
+				<li><a href="#f5">五、静态和动态 web 服务的区别</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、什么是 web 服务</h4>
+
+			<p>
+				<code>web</code> 服务是基于互联网、<code>HTTP</code>协议、利用浏览器和服务器之间的请求响应为用户提供信息的网络服务。
+			</p>
+			<p>
+				浏览器与服务器之间的通信过程如下
+			</p>
+			<p>
+				1）用户打开浏览器，输入网址；
+			</p>
+			<p>
+				2）浏览器依次查找 <code>DNS</code> 缓存、本地 <code>host</code>、网络 <code>DNS</code> 服务器获取网站的 IP；
+			</p>
+			<p>
+				3）封装并发送 <code>HTTP</code> 请求；
+			</p>
+			<p>
+				4）<code>Web</code> 服务器接收请求进行处理，返回用户需要的资源（可以是静态的 <code>html</code>、<code>css</code>、<code>js</code>、图片等资源，也可以是动态的 <code>jsp</code>、<code>php</code> 等资源）；
+			</p>
+			<p>
+				5）浏览器接收到响应在页面进行展示或执行。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01003/01003001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				与 <code>C/S</code> 架构相比，<code>B/S</code> 架构不需要用户安装除了浏览器之外的其他客户端软件，系统升级的时候只做服务器升级即可
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、HTTP 协议</h4>
+
+			<p>
+				超文本传输协议，属于应用层协议，基于 <code>TCP/IP</code> 协议。有 4 个步骤：建立 socket 连接、发送请求、发送响应、关闭连接
+			</p>
+			<p>
+				对于我们开发者来说，主要关注的就是发送请求和发送响应这两个阶段
+			</p>
+			<br />
+			<p>
+				请求在浏览器封装，包括请求首行、请求头、请求正文：
+			</p>
+			<p>
+				请求首行包括请求方法（常用的请求方法 <code>post</code> 和 <code>get</code>）、请求资源和协议版本
+			</p>
+			<p>
+				请求头包含许多有关的客户端环境的信息。例如，请求头可以声明浏览器所用的语言，请求正文的长度等
+			</p>
+			<p>
+				请求头和请求正文之间是一个空行，它表示请求头已经结束，接下来的是请求正文。请求正文中可以包含客户提交的参数信息
+			</p>
+			<br />
+			<p>
+				响应在服务器进行封装，包括响应首行、响应头、响应正文：
+			</p>
+			<p>
+				响应首行包括协议版本、响应状态码（常见的状态码有 200、301、302、403、404、500 等）
+			</p>
+			<p>
+				响应头会包含媒体类型、响应长度、时间和缓存配置等信息
+			</p>
+			<p>
+				响应头和响应正文之间是一个空行，它表示响应头已经结束，接下来的是响应正文。响应正文可以是 HTML 文档、CCS 文件或者图片等
+			</p>
+			<br />
+			<p>
+				例如
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01003/01003002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、常用请求头</h4>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">Accept</td><td style="text-align:left;">浏览器可接受的 MIME 类型</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Accept-Charset</td><td style="text-align:left;">浏览器可接受的字符集</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Accept-Encoding</td><td style="text-align:left;">浏览器能够进行解码的数据编码方式，比如 gzip</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Accept-Language</td><td style="text-align:left;">浏览器所希望的语言种类，当服务器能够提供一种以上的语言版本时要用到</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Connection</td><td style="text-align:left;">表示是否需要持久连接</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Content-Length</td><td style="text-align:left;">表示请求消息正文的长度</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Cookie</td><td style="text-align:left;"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Host</td><td style="text-align:left;">主机和端口</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">If-Modified-Since</td><td style="text-align:left;">只有当所请求的内容在该日期之后又经过修改才返回，否则返回 304 “Not Modified”</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Referer</td><td style="text-align:left;">包含一个 URL，用户从该 URL 代表的页面出发访问当前请求的页面</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">User-Agent</td><td style="text-align:left;">浏览器类型。如果服务器返回的内容与浏览器类型有关则该值非常有用</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、常用响应头</h4>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td style="text-align:left;">Allow</td><td style="text-align:left;">服务器支持哪些请求方法（如 GET、POST 等）</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Content-Encoding</td><td style="text-align:left;">文档的编码（Encode）方法</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Content-Length</td><td style="text-align:left;">表示内容长度</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Content-Type</td><td style="text-align:left;">表示文档的 MIME 类型。Servlet 默认为 text/plain，但通常需要显式地指定为 text/html。由于经常要设置 Content-Type，因此 HttpServletResponse 提供了一个专用的方法 setContentType </td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Date</td><td style="text-align:left;">当前的 GMT 时间。你可以用 setDateHeader 来设置这个头以避免转换时间格式的麻烦</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Expires</td><td style="text-align:left;">在什么时候认为文档已经过期，从而不再缓存它</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Last-Modified</td><td style="text-align:left;">文档的最后改动时间。客户可以通过 If-Modified-Since 请求头提供一个日期，只有改动时间迟于指定时间的文档才会返回，否则返回一个 304（Not Modified）状态。Last-Modified 也可用 setDateHeader 方法来设置</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Location</td><td style="text-align:left;">表示客户应当到哪里去提取文档。Location 通常不是直接设置的，而是通过 HttpServletResponse 的 sendRedirect 方法，该方法同时设置状态代码为 302</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Refresh</td><td style="text-align:left;">表示浏览器应该在多少时间之后刷新文档，以秒计</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Server</td><td style="text-align:left;">服务器名字。由 Web 服务器设置</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Set-Cookie</td><td style="text-align:left;">设置和页面关联的 Cookie。Servlet 应使用 HttpServletResponse 提供的专用方法 addCookie 方法设置 cookie</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、静态和动态 web 服务的区别</h4>
+
+			<p>
+				静态 <code>web</code> 服务只能提供静态资源服务，如 <code>html</code>、<code>css</code>、<code>js</code> 和一些图片、文档资源，页面展示内容不变。
+			</p>
+			<p>
+				更新数据时只能去修改页面代码或发布新的页面代码，不利于系统扩展：
+			</p>
+			<p>
+				a.	<code>URL</code> 固定，通常没有参数
+			</p>
+			<p>
+				b.	一旦编写完成，显示效果就很难动态改变都是保存在服务器上的文件
+			</p>
+			<p>
+				c.	比较容易被搜索引擎收录
+			</p>
+			<p>
+				d.	没有动态程序、数据库支持，交互性差。网页制作和维护工作量大
+			</p>
+			<p>
+				e.	服务器压力小，因为静态页面是在浏览器端解析的
+			</p>
+			<p>
+				f.	常见语言有 <code>html</code>、<code>js</code>、<code>css</code>、<code>xml</code>、<code>shtml</code> 等
+			</p>
+			<br />
+			<p>
+				动态 <code>web</code> 服务使用 <code>Java</code>、<code>PHP</code> 等编程语言在服务器端实现，通常需要数据库的支持。
+			</p>
+			<p>
+				一方面可以根据访问者的不同返回不同的信息，确保了 <code>web</code> 服务的多样性；一方面可以使用后台发布、管理系统页面程序，便于系统扩展和维护。
+			</p>
+			<p>
+				a.	动态资源后缀不再是 <code>html</code>、<code>js</code>、<code>css</code> 等静态资源扩展名，而是 <code>asp</code>、<code>php</code>、<code>jsp</code> 等后缀，需要动态程序和数据库支持，是动态编程语言到数据库获取数据展示出来的
+			</p>
+			<p>
+				b.	可以根据不同的用户展示不同的页面效果
+			</p>
+			<p>
+				c.	因为服务器需要运行程序来解析执行，比如 <code>Java</code>、<code>php</code>，所以消耗的 CPU、内存资源较大，响应速度也较慢，并发能力较差
+			</p>
+			<p>
+				d.	不利于搜索引擎收录
+			</p>
+			<p>
+				e.	通常需要缓存数据或是页面静态化
+			</p>
+
+			<br />
+			<p>
+				<a href="web01002.html" style="font-size:12px;">第二节&nbsp;&nbsp;&nbsp;&nbsp;PreparedStatement</a>
+			</p>
+			<p>
+				<a href="web01004.html" style="font-size:12px;">第四节&nbsp;&nbsp;&nbsp;&nbsp;Web 服务运行环境</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
