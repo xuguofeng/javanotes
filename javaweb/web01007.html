@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container main-container">
+			<h4 class="title">第七节&nbsp;&nbsp;&nbsp;&nbsp;案例说明及静态页面搭建</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、案例功能概述</a></li>
+				<li><a href="#f2">二、项目概述</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	静态页面目录结构</a></li>
+						<li><a href="#f2-2">2、	员工管理</a></li>
+						<li><a href="#f2-3">3、	部门管理</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、代码下载</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、概述</h4>
+
+			<p>
+				本案例主要有员工、部门的增删改查功能。
+			</p>
+			<p>
+				员工主要包含姓名、性别、薪水、手机、邮箱、生日、入职日期、部门、自我描述等信息
+			</p>
+			<p>
+				部门主要包含部门名称、上级部门、部门描述等信息
+			</p>
+			<p>
+				通过这个案例，我们将更加深入地理解 <code>Servlet</code>、<code>JSP</code>、<code>JDBC</code>开发技术，以及如何使用<code>EL表达式</code>、<code>JSP标签</code>技术让JSP代码可读性更好，在这个过程中，我们还会初步接触到<code>HTML</code>、<code>Javascript</code>和<code>css</code>技术
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、项目概述</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	静态页面目录结构</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007001.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+			<p>
+				<code>css</code>目录存放框架样式文件、框架图标以及本系统的样式文件
+			</p>
+			<p>
+				<code>img</code>目录存放系统需要使用的图片文件
+			</p>
+			<p>
+				<code>js</code>目录存放框架脚本文件以及本系统的脚本文件
+			</p>
+			<p>
+				<code>views</code>目录存放系统<code>JSP</code>文件
+			</p>
+			<p>
+				<code>index.jsp</code>文件是系统首页
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	员工管理</h5>
+
+			<p>
+				<span class="high-light">查看</span>
+			</p>
+			<p>
+				1）	表格显示员工数据
+			</p>
+			<p>
+				2）	提供分页功能
+			</p>
+			<p>
+				3）	修改和删除的按钮
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007002.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">添加</span>
+			</p>
+			<p>
+				1）	点击“员工添加”进入添加页面
+			</p>
+			<p>
+				2）	生日和入职日期字段只读，使用时间插件选择日期
+			</p>
+			<p>
+				3）	部门使用下拉框方式选择
+			</p>
+			<p>
+				4）	点击“添加”按钮提交表单
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007003.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">修改</span>
+			</p>
+			<p>
+				1）	点击“员工管理”页面的修改按钮进入该页面
+			</p>
+			<p>
+				2）	页面需要显示之前的旧版数据
+			</p>
+			<p>
+				3）	点击“修改”按钮提交表单
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007004.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">删除</span>
+			</p>
+			<p>
+				1）	点击“删除”按钮弹出确认框
+			</p>
+			<p>
+				2）	用户在点击确认后才进行删除操作
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007005.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<h5 id="f2-3" class="title-2th">3、	部门管理</h5>
+
+			<p>
+				<span class="high-light">查看</span>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007006.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">添加</span>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007007.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">修改</span>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007008.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<p>
+				<span class="high-light">删除</span>
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01007/01007009.png" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<br />
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、代码下载</h4>
+
+			<p>
+				<a href="../attachment/javaweb_7_oa_jsp.zip">下载</a>
+			</p>
+
+			<br />
+			<p>
+				<a href="web01006.html" style="font-size:12px;">第六节&nbsp;&nbsp;&nbsp;&nbsp;JSP 概述</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>

@@ -15,14 +15,6 @@ $(function(){
 			this.target = "_blank";
 	});
 
-	// 页面高度自适应
-	var h = document.documentElement.clientHeight;
-	// var docHeight = document.body.clientHeight;
-	var mainHeight = $(".main-container")[0].offsetHeight;
-	if (mainHeight + 118 < h) {
-		$(".main-container").height(h - 118);
-	}
-
 	// 添加"jQuery插件开发"菜单
 	$("#navbar-nav .navbar-nav .dropdown").eq(0).find("ul.dropdown-menu")
 		.append($("<li></li>")
@@ -35,4 +27,15 @@ $(function(){
 
 	// 添加分享
 	$("body").append($("<script>window._bd_share_config={\"common\":{\"bdSnsKey\":{},\"bdText\":\"\",\"bdMini\":\"2\",\"bdMiniList\":false,\"bdPic\":\"\",\"bdStyle\":\"0\",\"bdSize\":\"16\"},\"slide\":{\"type\":\"slide\",\"bdImg\":\"5\",\"bdPos\":\"right\",\"bdTop\":\"100\"},\"image\":{\"viewList\":[\"qzone\",\"tsina\",\"tqq\",\"renren\",\"weixin\"],\"viewText\":\"分享到：\",\"viewSize\":\"16\"},\"selectShare\":{\"bdContainerClass\":null,\"bdSelectMiniList\":[\"qzone\",\"tsina\",\"tqq\",\"renren\",\"weixin\"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>"));
+
+	// 页面高度自适应
+	setTimeout(function() {
+		// 页面高度自适应
+		var h = document.documentElement.clientHeight;
+		// var docHeight = document.body.clientHeight;
+		var mainHeight = $(".main-container")[0].offsetHeight;
+		if (mainHeight + 118 < h) {
+			$(".main-container").height(h - 118);
+		}
+	}, 10);
 });
