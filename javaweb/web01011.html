@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container main-container">
+			<h4 class="title">第十一节&nbsp;&nbsp;&nbsp;&nbsp;案例部门查看、修改、删除功能</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、部门查看</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	具体流程</a></li>
+						<li><a href="#f1-2">2、	DepartmentListServlet 类</a></li>
+						<li><a href="#f1-3">3、	department_list.jsp</a></li>
+						<li><a href="#f1-4">4、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、部门修改</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	修改链接</a></li>
+						<li><a href="#f2-2">2、	部门修改页面</a></li>
+						<li><a href="#f2-3">3、	部门修改 Servlet</a></li>
+						<li><a href="#f2-4">4、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、部门删除</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	删除链接</a></li>
+						<li><a href="#f3-2">2、	部门删除 Servlet</a></li>
+						<li><a href="#f3-3">3、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、代码下载</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、部门查看</h4>
+
+			<h5 id="f1-1" class="title-2th">1、	具体流程</h5>
+
+			<p>
+				1)	浏览器访问<code>/oa/departmentList.do</code>这个<code>servlet</code>地址，携带两个参数用于分页查询：<code>pageNum</code>和<code>pageSize</code>
+			</p>
+			<p>
+				2)	<code>DepartmentListServlet</code>获取到参数进行类型转换，<code>pageNum</code>默认1、<code>pageSize</code>默认10
+			</p>
+			<p>
+				3)	调用业务层查询数据，然后绑定到<code>request</code>域
+			</p>
+			<p>
+				4)	转发到<code>department_list.jsp</code>
+			</p>
+			<p>
+				5)	在<code>department_list.jsp</code>中获取到数据后在页面循环显示，在此需要注意分页的编写方式
+			</p>
+
+			<h5 id="f1-2" class="title-2th">2、	DepartmentListServlet 类</h5>
+
+			<pre>
+<span class="annotation">// 设置编码</span>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+<span class="annotation">// 获取请求参数</span>
+String pageNumStr = request.getParameter("pageNum");
+String pageSizeStr = request.getParameter("pageSize");
+<span class="annotation">// 默认第1页、每页显示10条数据</span>
+int pageNum = 1;
+int pageSize = 10;
+
+if (pageNumStr != null && pageNumStr.length() &gt; 0) {
+	pageNum = Integer.parseInt(pageNumStr);
+}
+if (pageSizeStr != null && pageSizeStr.length() &gt; 0) {
+	pageSize = Integer.parseInt(pageSizeStr);
+}
+
+<span class="annotation">// 分页查询部门数据</span>
+DepartmentService departmentService = new DepartmentServiceImpl();
+List&lt;Department&gt; depts = departmentService.getDepartments(pageNum, pageSize);
+int count = departmentService.count();
+
+<span class="annotation">// 把数据绑定到request域</span>
+request.setAttribute("depts", depts);
+request.setAttribute("count", count);
+request.setAttribute("pageNum", pageNum);
+request.setAttribute("pageSize", pageSize);
+
+<span class="annotation">// 请求转发</span>
+request.getRequestDispatcher("/views/department/department_list.jsp").forward(request, response);</pre>
+
+			<h5 id="f1-3" class="title-2th">3、	department_list.jsp</h5>
+
+			<p>
+				<span class="high-light">获取总页数</span>
+			</p>
+			<pre>
+int count = (Integer) request.getAttribute("count");
+int pageNum = (Integer) request.getAttribute("pageNum");
+int pageSize = (Integer) request.getAttribute("pageSize");
+
+int totalPage = count%pageSize == 0 ? count/pageSize : count/pageSize+1;</pre>
+
+			<p>
+				<span class="high-light">分页代码</span>
+			</p>
+			<pre>
+&lt;div class="page"&gt;
+	第 &lt;%=pageNum %&gt; / &lt;%=totalPage %&gt; 页
+	 | 
+	&lt;a href="&lt;%=pageNum==1 ? "javascript:;" : request.getContextPath() + "/departmentList.do?pageNum=1&pageSize="+pageSize %&gt;"&gt;首页&lt;/a&gt;
+	 | 
+	&lt;a href="&lt;%=pageNum==1 ? "javascript:;" : request.getContextPath() + "/departmentList.do?pageNum="+(pageNum-1)+"&pageSize="+pageSize %&gt;"&gt;上一页&lt;/a&gt;
+	 | 
+	&lt;a href="&lt;%=pageNum==totalPage ? "javascript:;" : request.getContextPath() + "/departmentList.do?pageNum="+(pageNum+1)+"&pageSize="+pageSize %&gt;"&gt;下一页&lt;/a&gt;
+	 | 
+	&lt;a href="&lt;%=pageNum==totalPage ? "javascript:;" : request.getContextPath() + "/departmentList.do?pageNum="+totalPage+"&pageSize="+pageSize %&gt;"&gt;尾页&lt;/a&gt;
+&lt;/div&gt;</pre>
+
+			<h5 id="f1-4" class="title-2th">4、	web.xml配置</h5>
+
+			<pre>
+&lt;!-- 部门列表页面 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;DepartmentListServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.DepartmentListServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;DepartmentListServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/departmentList.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、部门修改</h4>
+
+			<h5 id="f2-1" class="title-2th">1、	修改链接</h5>
+
+			<p>
+				在部门管理页面的“操作”单元格添加“修改”按钮，链接为加载修改部门数据的Servlet，需要一个id参数用于获取待修改的部门数据。
+			</p>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01011/01011001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	部门修改页面</h5>
+
+			<p>
+				<code>DepartmentUpdateUIServlet</code>这个类接收部门<code>id</code>参数，调用<code>service</code>方法获取待修改的部门和全部部门集合，绑定到<code>request</code>域，然后转发到<code>/views/department/department_upd.jsp</code>
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");</pre>
+
+			<pre>
+<span class="annotation">// 获取id参数</span>
+Integer id = Integer.parseInt(request.getParameter("id"));
+<span class="annotation">// 获取数据</span>
+DepartmentService departmentService = new DepartmentServiceImpl();
+List&lt;Department&gt; depts = departmentService.getDepartments(1, Integer.MAX_VALUE);
+Department dept = departmentService.getDepartment(id);
+<span class="annotation">// 绑定数据到request域</span>
+request.setAttribute("departments", depts);
+request.setAttribute("dept", dept);
+<span class="annotation">// 转发</span>
+request.getRequestDispatcher("/views/department/department_upd.jsp").forward(request, response);</pre>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01011/01011002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<p>
+				除了数据回显之外，还需要把部门id放到一个隐藏域中，以及设置上级部门下拉框的选择状态
+			</p>
+
+			<h5 id="f2-3" class="title-2th">3、	部门修改Servlet</h5>
+
+			<p>
+				这个<code>servlet</code>和添加部门时使用的<code>servlet</code>类似，首先把部门数据获取到创建部门对象，然后调用<code>service</code>层方法进行更新操作，最后转发到部门管理页面即可。
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+<span class="annotation">// 获取表单数据</span>
+int id = Integer.parseInt(request.getParameter("id"));
+String name = request.getParameter("name");
+String desc = request.getParameter("description");
+int parentId = Integer.parseInt(request.getParameter("parentId"));
+
+<span class="annotation">// 创建部门对象</span>
+Department dept = new Department();
+dept.setCreateTime(new Date());
+dept.setDescription(desc);
+dept.setName(name);
+dept.setId(id);
+
+<span class="annotation">// 设置上级部门</span>
+if (parentId &gt; 0) {
+	Department p = new Department();
+	p.setId(parentId);
+	dept.setParentDepartment(p);
+}
+
+<span class="annotation">// 更新</span>
+DepartmentService departmentService = new DepartmentServiceImpl();
+departmentService.updateDepartment(dept);
+
+<span class="annotation">// 转发到部门管理页面</span>
+response.sendRedirect(request.getContextPath() + "/departmentList.do");</pre>
+
+			<h5 id="f2-4" class="title-2th">4、	web.xml配置</h5>
+
+			<pre>
+&lt;!-- 部门修改页面 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;DepartmentUpdateUIServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.DepartmentUpdateUIServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;DepartmentUpdateUIServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/departmentUpdateUI.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;!-- 部门修改功能 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;DepartmentUpdateServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.DepartmentUpdateServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;DepartmentUpdateServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/departmentUpdate.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、部门删除</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	删除链接</h5>
+
+			<p>
+				在部门管理页面的“操作”单元格添加“删除”链接，点击链接首先弹出确认框让用户确认删除，然后传递id参数删除部门数据。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01011/01011003.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+<span class="annotation">// 删除部门确认函数</span>
+function deleteDept(name, id) {
+	if(confirm("确认删除部门 " + name + " ?")) {
+		location.href = "departmentDelete.do?id=" + id;
+	}
+}</pre>
+
+			<h5 id="f3-2" class="title-2th">2、	部门删除 Servlet</h5>
+
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+int id = Integer.parseInt(request.getParameter("id"));
+
+DepartmentService departmentService = new DepartmentServiceImpl();
+
+try {
+	departmentService.deleteDepartment(id);
+	response.sendRedirect(request.getContextPath() + "/departmentList.do");
+} catch (Exception e) {
+	request.setAttribute("error", e);
+	request.getRequestDispatcher("/views/error/error.jsp").forward(request, response);
+}</pre>
+
+			<h5 id="f3-3" class="title-2th">3、	web.xml 配置</h5>
+
+			<pre>
+&lt;!-- 部门删除功能 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;DepartmentDeleteServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.DepartmentDeleteServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;DepartmentDeleteServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/departmentDelete.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、代码下载</h4>
+
+			<p>
+				<a href="../attachment/javaweb_9_10.zip">下载</a>
+			</p>
+
+			<br />
+			<p>
+				<a href="web01010.html" style="font-size:12px;">第十节&nbsp;&nbsp;&nbsp;&nbsp;案例部门添加功能</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
