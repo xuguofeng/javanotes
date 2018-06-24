@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container main-container">
+			<h4 class="title">第十二节&nbsp;&nbsp;&nbsp;&nbsp;案例员工增删改查功能</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、员工添加</a>
+					<ul class="list-unstyled">
+						<li><a href="#f1-1">1、	具体流程</a></li>
+						<li><a href="#f1-2">2、	servlet 编写</a></li>
+						<li><a href="#f1-3">3、	页面代码</a></li>
+						<li><a href="#f1-4">4、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f2">二、员工浏览</a>
+					<ul class="list-unstyled">
+						<li><a href="#f2-1">1、	具体流程</a></li>
+						<li><a href="#f2-2">2、	EmployeeListServlet 类</a></li>
+						<li><a href="#f2-3">3、	页面代码</a></li>
+						<li><a href="#f2-4">4、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f3">三、员工修改</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	修改链接</a></li>
+						<li><a href="#f3-2">2、	员工修改页面</a></li>
+						<li><a href="#f3-3">3、	员工修改 Servlet</a></li>
+						<li><a href="#f3-4">4、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、员工删除</a>
+					<ul class="list-unstyled">
+						<li><a href="#f4-1">1、	删除链接</a></li>
+						<li><a href="#f4-2">2、	员工删除 Servlet</a></li>
+						<li><a href="#f4-3">3、	web.xml 配置</a></li>
+					</ul>
+				</li>
+				<li><a href="#f5">五、代码下载</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、员工添加</h4>
+			<h5 id="f1-1" class="title-2th">1、	具体流程</h5>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;首先访问<code>http://localhost:8080/oa/employeeAddUI.do</code>添加员工页面
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;填写信息，提交表单到<code>http://localhost:8080/oa/employeeAdd.do</code>
+			</p>
+			<p>
+				3)&nbsp;&nbsp;&nbsp;&nbsp;<code>EmployeeAddServlet</code>解析请求参数、封装实体对象，调用<code>service</code>层的<code>addEmployee</code>方法添加用户到数据库
+			</p>
+			<p>
+				4)&nbsp;&nbsp;&nbsp;&nbsp;最后重定向到员工列表页面
+			</p>
+
+			<h5 id="f1-2" class="title-2th">2、	servlet 编写</h5>
+
+			<p>
+				<span class="high-light">EmployeeAddUIServlet.java</span>
+			</p>
+			<p>
+				这个类和之前添加部门功能类似
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+DepartmentService departmentService = new DepartmentServiceImpl();
+List&lt;Department&gt; depts = departmentService.getDepartments(1, Integer.MAX_VALUE);
+
+request.setAttribute("departments", depts);
+request.getRequestDispatcher("/views/employee/employee_add.jsp").forward(request, response);</pre>
+
+			<p>
+				<span class="high-light">EmployeeAddServlet.java</span>
+			</p>
+			<p>
+				前端传递的参数比较多，注意不要混了
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+String name = request.getParameter("name");
+Integer gender = Integer.parseInt(request.getParameter("gender"));
+Double salary = Double.parseDouble(request.getParameter("salary"));
+String phone = request.getParameter("phone");
+String email = request.getParameter("email");
+try {
+	Date birthday = sdf.parse(request.getParameter("birthday"));
+	Date joinDate = sdf.parse(request.getParameter("joinDate"));
+	Integer departmentId = Integer.parseInt(request.getParameter("departmentId"));
+	String description = request.getParameter("description");
+
+	Employee emp = new Employee();
+	emp.setName(name);
+	emp.setGender(gender);
+	emp.setSalary(salary);
+	emp.setPhone(phone);
+	emp.setEmail(email);
+	emp.setBirthday(birthday);
+	emp.setJoinDate(joinDate);
+
+	Department dept = new Department();
+	dept.setId(departmentId);
+
+	emp.setDepartment(dept);
+	emp.setDescription(description);
+	emp.setCreateTime(new Date());
+
+	EmployeeService employeeService = new EmployeeServiceImpl();
+
+	employeeService.addEmployee(emp);
+
+	response.sendRedirect(request.getContextPath() + "/views/employee/employee_list.jsp");
+
+} catch (ParseException e) {
+}</pre>
+
+			<h5 id="f1-3" class="title-2th">3、	页面代码</h5>
+
+			<p>
+				<span class="high-light">左侧导航页</span>
+			</p>
+			<p>
+				left.jsp这个页面只是修改了“员工添加”的链接，其余的没有什么变化
+			</p>
+			<p>
+				<span class="high-light">员工添加页</span>
+			</p>
+			<p>
+				employee_add.jsp需要注意获取全部部门的集合，以及页面显示部门选择下拉列表的功能
+			</p>
+
+			<h5 id="f1-4" class="title-2th">4、	web.xml 配置</h5>
+
+			<pre>
+&lt;!-- 员工添加功能 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeAddServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeAddServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeAddServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeAdd.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;!-- 员工添加页面 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeAddUIServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeAddUIServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeAddUIServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeAddUI.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、员工浏览</h4>
+			<h5 id="f2-1" class="title-2th">1、	具体流程</h5>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;首先访问<code>http://localhost:8080/oa/employeeList.do</code>员工浏览页面
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;<code>EmployeeListServlet</code>根据页码、每页数据量获取员工数据，绑定到<code>request</code>域，然后转发到<code>/views/employee/employee_list.jsp</code>
+			</p>
+
+			<h5 id="f2-2" class="title-2th">2、	EmployeeListServlet 类</h5>
+
+			<pre>
+// 设置编码
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+// 获取请求参数
+String pageNumStr = request.getParameter("pageNum");
+String pageSizeStr = request.getParameter("pageSize");
+// 默认第1页、每页显示10条数据
+int pageNum = 1;
+int pageSize = 10;
+
+if (pageNumStr != null && pageNumStr.length() &gt; 0) {
+	pageNum = Integer.parseInt(pageNumStr);
+}
+if (pageSizeStr != null && pageSizeStr.length() &gt; 0) {
+	pageSize = Integer.parseInt(pageSizeStr);
+}
+
+// 分页查询员工数据
+EmployeeService employeeService = new EmployeeServiceImpl();
+List&lt;Employee&gt; emps = employeeService.getEmployees(pageNum, pageSize);
+int count = employeeService.count();
+
+// 把数据绑定到request域
+request.setAttribute("emps", emps);
+request.setAttribute("count", count);
+request.setAttribute("pageNum", pageNum);
+request.setAttribute("pageSize", pageSize);
+
+// 请求转发
+request.getRequestDispatcher("/views/employee/employee_list.jsp").forward(request, response);</pre>
+
+			<h5 id="f2-3" class="title-2th">3、	页面代码</h5>
+
+			<p>
+				<span class="high-light">左侧导航页</span>
+			</p>
+			<p>
+				left.jsp只是修改了“员工管理”的链接，其余的没有什么变化
+			</p>
+			<p>
+				<span class="high-light">员工管理页</span>
+			</p>
+			<p>
+				需要注意request域属性的获取，emp属性的空值判断（这个问题在讲解EL表达式的时候会解决），分页按钮部分和部门管理一样
+			</p>
+
+			<h5 id="f2-4" class="title-2th">4、	web.xml 配置</h5>
+
+			<pre>
+&lt;!-- 员工列表页面 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeListServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeListServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeListServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeList.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、员工修改</h4>
+			<h5 id="f3-1" class="title-2th">1、	修改链接</h5>
+			<p>
+				在员工管理页面的“操作”单元格添加“修改”按钮，链接为加载修改员工数据的<code>Servlet</code>，需要一个 id 参数用于获取待修改的数据。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01012/01012001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	员工修改页面</h5>
+			<p>
+				<span class="high-light">EmployeeUpdateUIServlet</span>
+			</p>
+			<p>
+				这个类接收<code>id</code>参数，调用<code>service</code>方法获取待修改的员工和全部部门集合，绑定到<code>request</code>域，然后转发到<code>/views/employee/employee_upd.jsp</code>
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+Integer id = Integer.parseInt(request.getParameter("id"));
+
+DepartmentService departmentService = new DepartmentServiceImpl();
+List&lt;Department&gt; depts = departmentService.getDepartments(1, Integer.MAX_VALUE);
+
+EmployeeService employeeService = new EmployeeServiceImpl();
+
+Employee emp = employeeService.getEmployee(id);
+
+request.setAttribute("departments", depts);
+request.setAttribute("emp", emp);
+
+request.getRequestDispatcher("/views/employee/employee_upd.jsp").forward(request, response);</pre>
+
+			<p>
+				JSP有两点需要注意：
+			</p>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;首先需要使用隐藏域保存员工id信息；
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;生成部门选择下列框时需要把员工所在部门选中
+			</p>
+
+			<h5 id="f3-3" class="title-2th">3、	员工修改 Servlet</h5>
+			<p>
+				这个<code>servlet</code>和添加员工时使用的<code>servlet</code>类似，把数据获取到创建员工对象，然后调用<code>service</code>层方法进行更新操作，最后转发到员工管理页面即可。
+			</p>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+int id = Integer.parseInt(request.getParameter("id"));
+String name = request.getParameter("name");
+Integer gender = Integer.parseInt(request.getParameter("gender"));
+Double salary = Double.parseDouble(request.getParameter("salary"));
+String phone = request.getParameter("phone");
+String email = request.getParameter("email");
+try {
+	Date birthday = sdf.parse(request.getParameter("birthday"));
+	Date joinDate = sdf.parse(request.getParameter("joinDate"));
+	Integer departmentId = Integer.parseInt(request.getParameter("departmentId"));
+	String description = request.getParameter("description");
+
+	Employee emp = new Employee();
+	emp.setId(id);
+	emp.setName(name);
+	emp.setGender(gender);
+	emp.setSalary(salary);
+	emp.setPhone(phone);
+	emp.setEmail(email);
+	emp.setBirthday(birthday);
+	emp.setJoinDate(joinDate);
+
+	Department dept = new Department();
+	dept.setId(departmentId);
+
+	emp.setDepartment(dept);
+	emp.setDescription(description);
+	emp.setCreateTime(new Date());
+
+	EmployeeService employeeService = new EmployeeServiceImpl();
+
+	employeeService.updateEmployee(emp);
+
+	response.sendRedirect(request.getContextPath() + "/employeeList.do");
+
+} catch (ParseException e) {
+}</pre>
+
+			<h5 id="f3-4" class="title-2th">4、	web.xml 配置</h5>
+			<pre>
+&lt;!-- 员工修改页面 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeUpdateUIServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeUpdateUIServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeUpdateUIServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeUpdateUI.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;!-- 员工修改功能 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeUpdateServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeUpdateServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeUpdateServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeUpdate.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、员工删除</h4>
+			<h5 id="f4-1" class="title-2th">1、	删除链接</h5>
+			<p>
+				在员工管理页面的“操作”单元格添加“删除”链接，点击链接首先弹出确认框让用户确认删除，然后传递id参数删除员工数据。
+			</p>
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01012/01012002.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+			<pre>
+// 删除员工确认函数
+function deleteEmp(name, id) {
+	if(confirm("确认删除员工" + name + "?")) {
+		location.href = "employeeDelete.do?id=" + id;
+	}
+}
+</pre>
+
+			<h5 id="f4-2" class="title-2th">2、	员工删除 Servlet</h5>
+			<pre>
+request.setCharacterEncoding("UTF-8");
+response.setContentType("html/text; charset=utf-8");
+
+int id = Integer.parseInt(request.getParameter("id"));
+
+EmployeeService employeeService = new EmployeeServiceImpl();
+
+try {
+	employeeService.deleteEmployee(id);
+	response.sendRedirect(request.getContextPath() + "/employeeList.do");
+} catch (Exception e) {
+	request.setAttribute("error", e);
+	request.getRequestDispatcher("/views/error/error.jsp").forward(request, response);
+}</pre>
+
+			<h5 id="f4-3" class="title-2th">3、	web.xml 配置</h5>
+			<pre>
+&lt;!-- 员工删除功能 --&gt;
+&lt;servlet&gt;
+	&lt;servlet-name&gt;EmployeeDeleteServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.net5ijy.oa.web.EmployeeDeleteServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;EmployeeDeleteServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/employeeDelete.do&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+
+			<hr />
+
+			<h4 id="f5" class="title-1th">五、代码下载</h4>
+
+			<p>
+				<a href="../attachment/javaweb_12.zip">下载</a>
+			</p>
+
+			<br />
+			<p>
+				<a href="web01011.html" style="font-size:12px;">第十一节&nbsp;&nbsp;&nbsp;&nbsp;案例部门查看、修改、删除功能</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
