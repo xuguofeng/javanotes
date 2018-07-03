@@ -112,6 +112,9 @@ public interface DataSource  extends CommonDataSource, Wrapper {
 				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
 					<table class="table table-bordered table-striped">
 						<tr>
+							<th style="text-align:left;">参数</th><th style="text-align:left;">作用</th>
+						</tr>
+						<tr>
 							<td style="text-align:left;">driverClassName</td><td style="text-align:left;">数据库驱动</td>
 						</tr>
 						<tr>
@@ -364,6 +367,43 @@ public interface ResultSetHandler&lt;T&gt; {
 }</pre>
 
 			<h5 id="f2-4" class="title-2th">4、	内置的 ResultSetHandler 实现</h5>
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th style="text-align:left;">类型</th><th style="text-align:left;">作用</th>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ArrayHandler</td><td style="text-align:left;">把结果集中的第一行数据转成对象数组</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ArrayListHandler</td><td style="text-align:left;">把结果集中的每一行数据都转成一个对象数组，再存放到List中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">BeanHandler</td><td style="text-align:left;">将结果集中的第一行数据封装到一个对应的JavaBean实例中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">BeanListHandler</td><td style="text-align:left;">将结果集中的每一行数据都封装到一个对应的JavaBean实例中，存放到List里</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">MapHandler</td><td style="text-align:left;">将结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">MapListHandler</td><td style="text-align:left;">将结果集中的每一行数据都封装到一个Map里，然后再存放到List</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ColumnListHandler</td><td style="text-align:left;">将结果集中某一列的数据存放到List中</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">KeyedHandler(name)</td><td style="text-align:left;">将结果集中的每一行数据都封装到一个Map里(List&lt;Map&gt;)，再把这些map再存到一个map里，其key为指定的列</td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">ScalarHandler</td><td style="text-align:left;">获取结果集中第一行数据指定列的值，常用来进行单值查询</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 
 			<hr />
 
