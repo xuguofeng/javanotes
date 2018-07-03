@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+		<title>Java Web学习笔记</title>
+		<script type="text/javascript" src="../jquery-1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/net5ijy.js" ></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/net5ijy.css" rel="stylesheet" >
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-target="#navbar-nav" data-toggle="collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">
+					<img src="../img/logo.png" width="50" height="50" class="logo" />
+				</a>
+			</div>
+			<div id="navbar-nav" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="../java/index.html">首页</a></li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							编程
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="../java/index.html">JAVA</a></li>
+							<li><a href="../db/index.html">数据库</a></li>
+						</ul>
+					</li>
+					<li><a href="../java/help.html">帮助</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container main-container">
+			<h4 class="title">第十三节&nbsp;&nbsp;&nbsp;&nbsp;案例 JS 表单验证功能</h4>
+			<br />
+			<ul class="list-unstyled">
+				<li><a href="#f1">一、Validform 简介</a></li>
+				<li><a href="#f2">二、引入 Validform 的 js 和 css</a></li>
+				<li><a href="#f3">三、修改员工添加页面</a>
+					<ul class="list-unstyled">
+						<li><a href="#f3-1">1、	为需要验证的元素设置验证类型和验证信息</a></li>
+						<li><a href="#f3-2">2、	初始化验证插件</a></li>
+						<li><a href="#f3-3">3、	效果</a></li>
+					</ul>
+				</li>
+				<li><a href="#f4">四、代码下载</a></li>
+			</ul>
+			<br />
+
+			<h4 id="f1" class="title-1th">一、Validform 简介</h4>
+
+			<p>
+				<span class="high-light">官网</span>
+			</p>
+			<p>
+				<a href="http://validform.rjboy.cn/" target="_blank">http://validform.rjboy.cn/</a>
+			</p>
+			<p>
+				核心思想就是把所有的验证条件及验证提示信息绑定到每个表单元素，让验证代码在执行时只是核对表单下各元素的值是否跟绑定的验证条件相符，可以随便添加或者去掉任一表单元素而不必修改验证代码。
+			</p>
+			<p>
+				具体功能：
+			</p>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;可以在<code>input</code>上自定义<code>datatype</code>属性，也可以直接使用正则表达式；
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;可以自定义提示方式；
+			</p>
+			<p>
+				3)&nbsp;&nbsp;&nbsp;&nbsp;可以实现实时验证以及表单的<code>ajax</code>提交，可以灵活的设置<code>ajax</code>提交时的参数；
+			</p>
+			<p>
+				4)&nbsp;&nbsp;&nbsp;&nbsp;可以在表单开始检测前和表单检测通过后，提交表单之前绑定事件；
+			</p>
+
+			<hr />
+
+			<h4 id="f2" class="title-1th">二、引入 Validform 的 js 和 css</h4>
+
+			<pre>
+&lt;script type="text/javascript" src="&lt;%=path %&gt;/js/form/Validform_v5.3.2_ncr_min.js" &gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="&lt;%=request.getContextPath() %&gt;/css/form/style.css" /&gt;</pre>
+
+			<hr />
+
+			<h4 id="f3" class="title-1th">三、修改员工添加页面</h4>
+
+			<h5 id="f3-1" class="title-2th">1、	为需要验证的元素设置验证类型和验证信息</h5>
+
+			<p>
+				<span class="high-light">姓名</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;姓&#12288;&#12288;名 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="name" 
+		datatype="zh2-8" sucmsg="姓名验证通过！" nullmsg="请输入姓名！" errormsg="请输入2至8字中文姓名！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">薪水</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;薪&#12288;&#12288;水 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="salary" 
+		onkeyup="this.value=(this.value.match(/[1-9]\d*(\.\d{0,2})?/)||[''])[0]" 
+		onblur="this.value=this.value.replace(/\.$/,'')"
+		datatype="/[1-9]\d*(\.\d{0,2})?/g" sucmsg="薪水验证通过！" nullmsg="请输入薪水！" errormsg="请输入薪水！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">手机号码</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;手&#12288;&#12288;机 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="phone"
+		datatype="m" sucmsg="手机号码验证通过！" nullmsg="请输入手机号码！" errormsg="请输入手机号码！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">邮箱</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;邮&#12288;&#12288;箱 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="email"
+		datatype="e" sucmsg="邮箱验证通过！" nullmsg="请输入邮箱！" errormsg="请输入邮箱！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">生日</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;生&#12288;&#12288;日 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="birthday"
+		class="Wdate" onFocus="WdatePicker({readOnly:true,maxDate:'%y-%M-{%d-1}'})"
+		datatype="*" sucmsg="出生日期验证通过！" nullmsg="请选择出生日期！" errormsg="请选择出生日期！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">入职日期</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;入职日期 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;input name="joinDate" value='' 
+		class="Wdate" onFocus="WdatePicker({readOnly:true,maxDate:'%y-%M-{%d-1}'})"
+		datatype="*" sucmsg="入职日期验证通过！" nullmsg="请选择入职日期！" errormsg="请选择入职日期！" /&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">部门</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;部&#12288;&#12288;门 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;select name="departmentId" 
+		datatype="/[1-9]\d*/g" sucmsg="部门验证通过！" nullmsg="请选择所属部门！" errormsg="请选择所属部门！"&gt;
+		&lt;option value="0"&gt;-- 请选择 --&lt;/option&gt;
+		&lt;%for(Department dept : depts) {%&gt;
+			&lt;option value="&lt;%=dept.getId() %&gt;"&gt;&lt;%=dept.getName() %&gt;&lt;/option&gt;
+		&lt;%}%&gt;
+	&lt;/select&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				<span class="high-light">自我介绍</span>
+			</p>
+			<pre>
+&lt;td class="right"&gt;自我介绍 : &lt;/td&gt;
+&lt;td class="left"&gt;
+	&lt;textarea rows="5" cols="50" name="description" 
+		datatype="*" sucmsg="自我介绍验证通过！" nullmsg="请输入自我介绍！" errormsg="请输入自我介绍！"&gt;&lt;/textarea&gt;
+&lt;/td&gt;</pre>
+
+			<p>
+				其中，以下几个属性<code>validform</code>需要使用：
+			</p>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;datatype: 传入自定义datatype类型，可以是正则，也可以是函数。
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;sucmsg: 当表单元素通过验证时的提示信息，不绑定，默认提示"通过信息验证！"。
+			</p>
+			<p>
+				3)&nbsp;&nbsp;&nbsp;&nbsp;nullmsg: 当表单元素值为空时的提示信息，不绑定，默认提示"请填入信息！"。
+			</p>
+			<p>
+				4)&nbsp;&nbsp;&nbsp;&nbsp;errormsg: 输入内容不能通过验证时的提示信息，默认提示"请输入正确信息！"。
+			</p>
+
+			<h5 id="f3-2" class="title-2th">2、	初始化验证插件</h5>
+
+			<pre>
+&lt;script type="text/javascript"&gt;
+$(function() {
+	// 表单验证
+	$("#emp_add_form").Validform({
+		tiptype: 3,
+		showAllError: true,
+		datatype: {
+			"zh1-6": /^[\u4E00-\u9FA5\uf900-\ufa2d]{1,6}$/
+		}
+	});
+});
+&lt;/script&gt;</pre>
+
+			<p>
+				<span class="high-light">tiptype</span>
+			</p>
+			<p>
+				可用的值有1、2、3、4和function函数，默认tiptype为1。
+			</p>
+			<p>
+				1)&nbsp;&nbsp;&nbsp;&nbsp;1 =&gt; 自定义弹出框提示；
+			</p>
+			<p>
+				2)&nbsp;&nbsp;&nbsp;&nbsp;2 =&gt; 侧边提示(会在当前元素的父级的next对象的子级查找显示提示信息的对象，表单以ajax提交时会弹出自定义提示框显示表单提交状态)；
+			</p>
+			<p>
+				3)&nbsp;&nbsp;&nbsp;&nbsp;3 =&gt; 侧边提示(会在当前元素的siblings对象中查找显示提示信息的对象，表单以ajax提交时会弹出自定义提示框显示表单提交状态)；
+			</p>
+			<p>
+				4)&nbsp;&nbsp;&nbsp;&nbsp;4 =&gt; 侧边提示(会在当前元素的父级的next对象下查找显示提示信息的对象，表单以ajax提交时不显示表单的提交状态)；
+			</p>
+
+			<p>
+				<span class="high-light">showAllError</span>
+			</p>
+			<p>
+				可用值： true | false
+			</p>
+			<p>
+				默认为false。为true时提交表单所有错误提示信息都会显示；为false时碰到验证不通过的对象会停止检测后面的元素，只显示该元素的错误信息。
+			</p>
+
+			<h5 id="f3-3" class="title-2th">3、	效果</h5>
+
+			<p>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 img-container">
+						<img src="../img/javaweb/01013/01013001.jpg" class="img-responsive" />
+					</div>
+				</div>
+			</p>
+
+			<hr />
+
+			<h4 id="f4" class="title-1th">四、代码下载</h4>
+
+			<p>
+				<a href="../attachment/javaweb_13.zip">下载</a>
+			</p>
+
+			<br />
+			<p>
+				<a href="web01012.html" style="font-size:12px;">第十二节&nbsp;&nbsp;&nbsp;&nbsp;案例员工增删改查功能</a>
+			</p>
+			<p>
+				<a href="web01014.html" style="font-size:12px;">第十四节&nbsp;&nbsp;&nbsp;&nbsp;案例数据库连接池和DAO优化</a>
+			</p>
+			<br />
+			<p>
+				加入 QQ 群：5ijy网站开发交流 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=3b6ff2e8f01c493cacf78d8eba9ec6362e85b447be8ed8b895d2da6cd5ae537d"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="5ijy网站开发交流" title="5ijy网站开发交流"></a>，获取更多源代码和开发环境配置信息。
+			</p>
+		</div>
+		<div class="footer">
+			Copyright © 2017-2020 5ijy工作室.<br />
+		</div>
+		<div id="CfloatBtn" class="CfloatBtn" onclick="$('html,body').animate({'scrollTop': '0'},100);"></div>
+	</body>
+</html>
