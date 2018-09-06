@@ -18,7 +18,7 @@ $(function(){
 	// 添加"jQuery插件开发"菜单
 	$("#navbar-nav .navbar-nav .dropdown").eq(0).find("ul.dropdown-menu")
 		.append($("<li></li>")
-			.append($("<a></a>").attr("href", "http://5ijy01.duapp.com/jq-ui/index.html").html("jQuery插件开发")));
+			.append($("<a></a>").attr("href", "/jq-ui/index.html").html("jQuery插件开发")));
 
 	// 添加"JAVA Web"菜单
 	$("<li></li>")
