@@ -38,4 +38,11 @@ $(function(){
 			$(".main-container").height(h - 118);
 		}
 	}, 10);
+
+	// 为页面添加爱心特效
+	// <script type="text/javascript" src="js/heart/heart.js" ></script>
+	var head = $("head").eq(0);
+	var script = $("<script></script>");
+	script.attr("type", "text/javascript").attr("src", "/it/js/heart.js");
+	head.append(script);
 });
