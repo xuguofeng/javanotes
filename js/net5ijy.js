@@ -3,10 +3,21 @@ $(function(){
 
 	$(window || 'body').on('scroll', function(){
 		var top = $(window).scrollTop();
-		if(top >= 50)
+		if(top >= 50) {
 			$("#CfloatBtn").css({'display':'block'});
-		else
+		} else {
 			$("#CfloatBtn").css({'display':'none'});
+		}
+		if(top >= 250) {
+			if(!$("div.catalog-btn")[0]) {
+				$("div.catalog-wrapper").css({'display':'block'});
+			} else if($("div.catalog-btn").is(":hidden")) {
+				$("div.catalog-wrapper").css({'display':'block'});
+			}
+		} else {
+			$("div.catalog-wrapper").css({'display':'none'});
+			$("div.catalog-btn").css("display", "none");
+		}
 	});
 
 	$("a[style]").each(function() {
@@ -44,5 +55,7 @@ $(function(){
 	var head = $("head").eq(0);
 	var script = $("<script></script>");
 	script.attr("type", "text/javascript").attr("src", "/it/js/heart.js");
-	head.append(script);
+	var script2 = $("<script></script>");
+	script2.attr("type", "text/javascript").attr("src", "/it/js/catalog.js");
+	head.append(script).append(script2);
 });
