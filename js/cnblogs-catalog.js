@@ -19,6 +19,10 @@
 	});
 	$("body").append(topBtn.css("display", "block"));
 
+	// github
+	var $github = $("<a></a>").addClass("git-link").attr("target", "_blank").attr("href", "https://github.com/xuguofeng?tab=repositories");
+	$("body").append($github);
+
 	// 用于判断目录层次
 	var f = new Array();
 	for(var i = 1; i <= 6; i++) {

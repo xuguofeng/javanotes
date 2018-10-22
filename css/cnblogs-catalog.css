@@ -5,3 +5,4 @@ div.catalog-close-wrapper span{cursor:pointer;background:#f0eef5;float:right;mar
 div.catalog-btn{position:fixed;right:0px;padding:10px 0px;width:24px;border-bottom-left-radius:5px;border-top-left-radius:5px;color:white;font-family:"微软雅黑";font-weight:bold;text-align:center;cursor:pointer;display:none;background:#333D46;}
 div.catalog-div a.catalog-item{color:#428bca;text-decoration:none;background-color:transparent;cursor:pointer;}
 div.catalog-div a.catalog-item:hover{color:#2a6496;text-decoration:underline;}
+a.git-link{z-index:100;position:fixed;top:0;right:0;border:0;height:149px;width:149px;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);-o-transform:rotate(90deg);-ms-transform:rotate(90deg);background-image:url(http://180.76.54.218/files/img/github.png);}
